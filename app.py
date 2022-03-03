@@ -1,11 +1,12 @@
 from flask import Flask, session, make_response, jsonify, render_template, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
 from flask_bootstrap import Bootstrap
-import pymysql, pyotp
+import pymysql, pyotp, enum
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dataclasses import dataclass
 from forms import LoginForm
+from sqlalchemy import Enum
 from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
 
 conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(DB_USERNAME,DB_PASSWORD,DB_URI,DB_SCHEMA)
@@ -57,6 +58,16 @@ where TABLE_NAME = 'user';
 Flask-Migrate only gets changes in columns but not for Table Create/Deletions
 '''
 
+class MatchResult(enum.Enum):
+    VICTORY = "VICTORY"
+    DEFEAT = "DEFEAT"
+    DRAW = "DRAW"
+
+class MatchPhase(enum.Enum):
+    ATTACK = "VICTORY"
+    DEFEND = "DEFEAT"
+    CONTROL = "CONTROL"
+
 @dataclass
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -67,7 +78,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     username = db.Column(db.String(12), unique=True)
 
-    ranked_matches = db.relationship('RankedMatch', backref='original_user')
+    matches = db.relationship('Match', backref='original_user')
 
 @dataclass
 class HeroRole(db.Model):
@@ -80,6 +91,8 @@ class Hero(db.Model):
     __tablename__ = "ow_hero"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     name = db.Column(db.String(25))
+    hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
+    hero_role = db.relationship("HeroRole")
 
 @dataclass
 class Map(db.Model):
@@ -94,13 +107,25 @@ class MapMode(db.Model):
     name = db.Column(db.String(25))
 
 @dataclass
-class RankedMatch(db.Model):
-    __tablename__ = "ranked_match"
+class Match(db.Model):
+    __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
-    map_played = db.relationship("Map")
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ranked_flag = db.Column(db.Boolean)
+
+    map_played = db.relationship("Map")
+    rounds = db.relationship('Round', backref='match')
+
+    result = db.Column(Enum(MatchResult))
+
+@dataclass
+class MatchRound(db.Model):
+    __tablename__ = "ow_match_round"
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    name = db.Column(db.String(25))
+
+
 
 db.create_all()     
 
