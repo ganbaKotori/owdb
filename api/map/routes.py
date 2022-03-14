@@ -10,21 +10,4 @@ from sqlalchemy import Enum, select
 from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
 from api.user.models import User 
 
-user = Blueprint('user', __name__, url_prefix='/user')
-
-@user.route('/users')
-def get_users():
-    users = User.query.all()
-    return make_response(jsonify(users),200)
-
-@user.post('/login')
-def post_login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        login_data = form.data
-        user = User.query.filter(User.username == login_data["username"]).first()
-        if not user:
-            return 'NO USER FOUND'
-        login_user(user)
-    else: return "FILL IN ALL THE FIELDS"
-    return redirect(url_for('user_dashboard'))
+map = Blueprint('map', __name__, url_prefix='/map')

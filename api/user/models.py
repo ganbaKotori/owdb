@@ -11,7 +11,8 @@ from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
 
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db, login_manager                                       
+from app import db, login_manager
+import api.match.models, api.map.models                             
 
 # @dataclass
 # class Friendship(db.Model):
