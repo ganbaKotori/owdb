@@ -1,4 +1,4 @@
-from flask import Flask, session, make_response, jsonify, render_template, redirect, url_for
+from flask import Flask, session, make_response, jsonify, render_template, redirect, url_for, Blueprint
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
 from flask_bootstrap import Bootstrap
 import pymysql, pyotp, enum
@@ -12,7 +12,9 @@ from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 
-Base= declarative_base()
+
+
+
 
 
 
@@ -39,11 +41,11 @@ migrate = Migrate(app, db)
 
 Bootstrap(app)
 
+
+from api.user.models import User
 login_manager.init_app(app)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+
 
 
 totp = pyotp.TOTP("base32secret3232")
@@ -67,40 +69,10 @@ Flask-Migrate only gets changes in columns but not for Table Create/Deletions
 '''
 
 
+from api.routes import api
 
-friendship = db.Table(
-    'friendship', Base.metadata,
-    db.Column('friend_a_id', db.Integer, db.ForeignKey('user.id'), 
-                                        primary_key=True),
-    db.Column('friend_b_id', db.Integer, db.ForeignKey('user.id'), 
-                                        primary_key=True))
+app.register_blueprint(api)
 
-@dataclass
-class User(UserMixin, db.Model):
-    __tablename__ = "user"
-    id : int
-    email : str
-    
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    email = db.Column(db.String(50), nullable=False, unique=True)
-    username = db.Column(db.String(12), unique=True)
-    password = db.Column(db.String(24))
-
-    matches = db.relationship('Match', backref='original_user')
-
-    friends = db.relationship("User", secondary=friendship, 
-                           primaryjoin=id==friendship.c.friend_a_id,
-                           secondaryjoin=id==friendship.c.friend_b_id)
-
-    def befriend(self, friend):
-        if friend not in self.friends:
-            self.friends.append(friend)
-            friend.friends.append(self)
-
-    def unfriend(self, friend):
-        if friend in self.friends:
-            self.friends.remove(friend)
-            friend.friends.remove(self)
 
 class MatchResult(enum.Enum):
     VICTORY = "VICTORY"
@@ -122,7 +94,7 @@ class Match(db.Model):
     ranked_flag = db.Column(db.Boolean)
 
     map_played = db.relationship("Map")
-    rounds = db.relationship('Round', backref='match')
+    rounds = db.relationship('MatchRound', backref='match')
 
     result = db.Column(Enum(MatchResult))
 
@@ -131,6 +103,7 @@ class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     name = db.Column(db.String(25))
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
 
 @dataclass
 class HeroRole(db.Model):
@@ -213,11 +186,6 @@ def post_login():
         login_user(user)
     else: return "FILL IN ALL THE FIELDS"
     return redirect(url_for('user_dashboard'))
-
-@app.route('/users')
-def get_users():
-    users = User.query.all()
-    return make_response(jsonify(users),200)
 
 @app.route('/logout')
 @login_required
