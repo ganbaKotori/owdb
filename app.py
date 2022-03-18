@@ -60,7 +60,7 @@ def user_dashboard():
     session['name'] = "TESTING"
     return render_template('home/dashboard.html')
 
-@app.route('/register')
+@app.route('/register', methods=('GET', 'POST'))
 def register():
     name = session['name']
     print(name)
