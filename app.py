@@ -13,7 +13,7 @@ conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(DB_USERNAME,DB_PASSWORD,DB_URI,D
 
 login_manager = LoginManager()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='static/templates')
 
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
@@ -62,9 +62,7 @@ def user_dashboard():
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
-    name = session['name']
-    print(name)
-    return '<h1>OWDB Home Page</h1>'
+    return render_template('register.html')
 
 @app.get('/login')
 def get_login():

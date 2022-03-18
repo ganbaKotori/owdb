@@ -1,0 +1,14 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %} 
+    <form method="POST" id="register-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"><br>
+        <label for="confirm-password">Retype password</label>
+        <input type="password" id="confirm-password" name="confirm-password"><br>
+    </form>
+{% endblock content %}
