@@ -1,4 +1,4 @@
-from flask import Flask, session, make_response, jsonify, render_template, redirect, url_for, Blueprint
+from flask import Flask, request, flash, session, make_response, jsonify, render_template, redirect, url_for, Blueprint
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
 import pymysql, pyotp, enum
 from flask_sqlalchemy import SQLAlchemy
@@ -60,8 +60,46 @@ def user_dashboard():
     session['name'] = "TESTING"
     return render_template('home/dashboard.html')
 
-@app.route('/register', methods=('GET', 'POST'))
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST' :
+        new_email = request.form['email']
+        new_username = request.form['username']
+        new_password = request.form['password']
+        password_confirmation = request.form['confirm_password']
+        error = None
+
+        hashed_password = generate_password_hash(new_password)
+
+        print(new_username)
+
+        if not new_email :
+            error = 'Email is required'
+        elif not new_username :
+            error = 'Username is required'
+        elif not new_password :
+            error = 'Password is required'
+        elif not password_confirmation :
+            error = 'You must retype your password'
+        elif hashed_password != generate_password_hash(password_confirmation) :
+            error = 'Passwords must match'
+
+        if error is None :
+            try :
+                new_user = User(email=new_email,
+                username=new_username,
+                password=hashed_password)
+                db.session.add(new_user)
+                db.session.commit()
+
+                flash('Registration Successful!')
+
+                return redirect(url_for('/login'))
+            except Exception as e :
+                print(e)
+
+        flash(error)
+
     return render_template('register.html')
 
 @app.get('/login')
