@@ -69,10 +69,6 @@ def register():
         password_confirmation = request.form['confirm_password']
         error = None
 
-        hashed_password = generate_password_hash(new_password)
-
-        print(new_username)
-
         if not new_email :
             error = 'Email is required'
         elif not new_username :
@@ -81,24 +77,24 @@ def register():
             error = 'Password is required'
         elif not password_confirmation :
             error = 'You must retype your password'
-        elif hashed_password != generate_password_hash(password_confirmation) :
+        elif new_password != password_confirmation :
             error = 'Passwords must match'
+
+        hashed_password = generate_password_hash(new_password)
+
+        print(error)
 
         if error is None :
             try :
-                new_user = User(email=new_email,
-                username=new_username,
-                password=hashed_password)
+                new_user = User(email=new_email, username=new_username, password=hashed_password)
                 db.session.add(new_user)
                 db.session.commit()
 
-                flash('Registration Successful!')
+                print('Registration Successful!')
 
                 return redirect(url_for('/login'))
             except Exception as e :
                 print(e)
-
-        flash(error)
 
     return render_template('register.html')
 
