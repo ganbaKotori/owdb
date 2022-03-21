@@ -60,43 +60,7 @@ def user_dashboard():
     session['name'] = "TESTING"
     return render_template('home/dashboard.html')
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST' :
-        new_email = request.form['email']
-        new_username = request.form['username']
-        new_password = request.form['password']
-        password_confirmation = request.form['confirm_password']
-        error = None
 
-        if not new_email :
-            error = 'Email is required'
-        elif not new_username :
-            error = 'Username is required'
-        elif not new_password :
-            error = 'Password is required'
-        elif not password_confirmation :
-            error = 'You must retype your password'
-        elif new_password != password_confirmation :
-            error = 'Passwords must match'
-
-        hashed_password = generate_password_hash(new_password)
-
-        print(error)
-
-        if error is None :
-            try :
-                new_user = User(email=new_email, username=new_username, password=hashed_password)
-                db.session.add(new_user)
-                db.session.commit()
-
-                print('Registration Successful!')
-
-                return redirect(url_for('get_login'))
-            except Exception as e :
-                print(e)
-
-    return render_template('register.html')
 
 @app.get('/login')
 def get_login():

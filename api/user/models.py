@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
 
     matches = db.relationship('Match', backref='original_user')
 
-    active = db.Column(db.Boolean(), nullable=False, server_default='0')
+    #active = db.Column(db.Boolean(), nullable=False, server_default='0')
 
     # friends = db.relationship("User", secondary=Friendship, 
     #                        primaryjoin=id==Friendship.friend_a_id,

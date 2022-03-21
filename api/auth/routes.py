@@ -1,6 +1,5 @@
 from flask import request, flash, Flask, session, make_response, jsonify, render_template, redirect, url_for, Blueprint
-from flask_login import chec
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_bootstrap import Bootstrap
 import pymysql, pyotp, enum
 from flask_migrate import Migrate
@@ -8,7 +7,8 @@ from dataclasses import dataclass
 from forms import LoginForm
 from sqlalchemy import Enum, select
 from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
-from api.user.models import User 
+from api.user.models import User
+from app import db
 
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -23,3 +23,41 @@ def login():
         flash('Please check your login details and try again.')
         return 'NOT LOGGED IN' # if the user doesn't exist or password is wrong, reload the page
     return 'LOGGED IN'
+
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST' :
+        new_email = request.form['email']
+        new_username = request.form['username']
+        new_password = request.form['password']
+        password_confirmation = request.form['confirm_password']
+        error = None
+
+        if not new_email :
+            error = 'Email is required'
+        elif not new_username :
+            error = 'Username is required'
+        elif not new_password :
+            error = 'Password is required'
+        elif not password_confirmation :
+            error = 'You must retype your password'
+        elif new_password != password_confirmation :
+            error = 'Passwords must match'
+
+        hashed_password = generate_password_hash(new_password)
+
+        print(error)
+
+        if error is None :
+            try :
+                new_user = User(email=new_email, username=new_username, password=hashed_password)
+                db.session.add(new_user)
+                db.session.commit()
+
+                print('Registration Successful!')
+
+                return redirect(url_for('get_login'))
+            except Exception as e :
+                print(e)
+
+    return render_template('register.html')
