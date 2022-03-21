@@ -1,0 +1,20 @@
+from app import db
+from api.map.models import Map
+def add_all_ow_maps():
+    hollywood = Map(name="HOLLYWOOD")
+    db.session.add(hollywood)
+    havana = Map(name="HAVANA")
+    db.session.add(havana)
+    nepal = Map(name="NEPAL")
+    db.session.add(nepal)
+    numbani = Map(name="NUMBANI")
+    db.session.add(numbani)
+    ilios = Map(name="ILIOS")
+    db.session.add(ilios)
+    blizzard_world = Map(name="BLIZZARD WORLD")
+    db.session.add(blizzard_world)
+    volskaya_industries = Map(name="VOLSKAYA INDUSTRIES")
+    db.session.add(volskaya_industries)
+    kings_row = Map(name="KING'S ROW")
+    db.session.add(kings_row)
+    db.session.commit()
