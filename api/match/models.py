@@ -14,6 +14,10 @@ class MatchPhase(enum.Enum):
     DEFEND = "DEFEAT"
     CONTROL = "CONTROL"
 
+class MatchRoundResult(enum.Enum):
+    SUCESS = "SUCESS"
+    FAIL = "FAIL"
+
 
 @dataclass
 class Match(db.Model):
