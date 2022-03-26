@@ -50,7 +50,7 @@ def register():
 
                 print('Registration Successful!')
 
-                return redirect(url_for('get_login'))
+                return redirect(url_for('login'))
             except Exception as e :
                 print(e)
 
