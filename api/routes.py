@@ -7,8 +7,8 @@ from api.auth.routes  import auth
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
+api.register_blueprint(hero)
 api.register_blueprint(match)
 api.register_blueprint(map)
-api.register_blueprint(hero)
 api.register_blueprint(user)
 api.register_blueprint(auth)
