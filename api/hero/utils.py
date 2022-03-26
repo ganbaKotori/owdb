@@ -19,3 +19,7 @@ def add_all_ow_heroes():
     orisa = Hero(name="Orisa")
     db.session.add(orisa)
     db.session.commit()
+    ana = Hero(name='Ana')
+    db.session.add(ana)
+    db.session.commit()
+    
