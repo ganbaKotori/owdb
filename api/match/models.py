@@ -36,7 +36,6 @@ class Match(db.Model):
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     ranked_flag = db.Column(db.Boolean)
-    hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
 
     map_played = db.relationship("Map")
     rounds = db.relationship('MatchRound', backref='match')
