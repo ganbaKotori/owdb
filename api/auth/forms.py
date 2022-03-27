@@ -2,5 +2,5 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 
 class LoginForm(FlaskForm):
-    username = StringField('Username')
+    email = StringField('Email')
     password = StringField('Password')

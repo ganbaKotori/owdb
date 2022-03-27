@@ -1,5 +1,5 @@
 from http import server
-from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
+from flask_login import UserMixin
 
 from dataclasses import dataclass
 from sqlalchemy import Enum, select
@@ -23,7 +23,6 @@ import api.match.models, api.map.models
 
 @login_manager.user_loader
 def load_user(user_id):
-    print(user_id)
     return User.query.get(int(user_id))
 
 @dataclass

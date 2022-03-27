@@ -7,11 +7,47 @@
 
 {% block content %}
 <div class="container">
+    <form method="post" action="/api/match">
     <div class="row">
         <div class="col">
-            Create Match
+
+            Select Role
+
+            {% for role in ow_hero_roles %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}">
+                <label class="form-check-label" for="role-{{role.id}}">
+                    {{role.title}}
+                </label>
+            </div>
+            {% endfor %}
+
+
+
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map">
+                <option selected>Select Map</option>
+                {% for map in ow_maps %}
+                    <option value="{{map.id}}">{{map.name}}</option>
+                {% endfor %}
+            </select>
+
+            {% for hero in ow_heroes %}
+            <div class="form-check">
+               
+                <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
+                <label class="form-check-label" for="hero-{{hero.id}}">
+                    {{hero.name}}
+                </label>
+              </div>
+
+              {% endfor %}
+
+              <button type="submit" class="btn btn-primary">Add Match</button>
+
+
         </div>
     </div>
+</form>
 </div>
 
 {% endblock content %}

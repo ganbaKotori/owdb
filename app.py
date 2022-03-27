@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='static/templates')
 
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
-app.config['TESTING'] = True
+app.config['TESTING'] = False
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

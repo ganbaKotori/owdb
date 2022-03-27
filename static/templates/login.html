@@ -29,18 +29,18 @@
                                     {% endif %}                                     
                                 </p> 
                             </div>
-                            <form method="post" action="{{post_login}}" class="mt-4">
+                            <form method="post" action="/api/auth/login" class="mt-4">
                                 
                                 {{ form.csrf_token }}
 
                                 <!-- Form -->
                                 <div class="form-group mb-4">
-                                    <label for="email">Username</label>
+                                    <label for="email">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">
                                             <span class="fas fa-user-circle"></span>
                                         </span>
-                                        {{ form.username(placeholder="Username", class="form-control") }}
+                                        {{ form.email(placeholder="Email", class="form-control") }}
                                     </div>  
                                 </div>
                                 <!-- End of Form -->

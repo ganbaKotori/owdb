@@ -10,6 +10,8 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
+    print(email)
+    print(password)
     user = User.query.filter(User.email==email).first()
 
     if not user or not check_password_hash(user.password, password):
@@ -60,4 +62,4 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('get_login'))
+    return redirect(url_for('client.auth.get_login'))

@@ -3,6 +3,9 @@ from app import db
 
 @dataclass
 class Map(db.Model):
+    id : int
+    name : str
+    
     __tablename__ = "ow_map"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     name = db.Column(db.String(25))

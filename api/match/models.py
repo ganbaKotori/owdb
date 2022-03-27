@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from sqlalchemy import Enum
 from app import db
 from api.hero.models import Hero
+from api.map.models import Map
+from typing import List
 
 
 class MatchResult(enum.Enum):
@@ -22,6 +24,13 @@ class MatchRoundResult(enum.Enum):
 
 @dataclass
 class Match(db.Model):
+    id: int
+    map_played : Map
+    heroes_played : List[Hero]
+    ranked_flag : bool
+    result : MatchResult
+
+
     __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
@@ -46,6 +55,8 @@ class MatchRound(db.Model):
 
 @dataclass
 class MatchHero(db.Model):
+    hero : Hero
+
     __tablename__ = 'ow_match_hero'
     hero_id = db.Column(db.ForeignKey('ow_hero.id'), primary_key=True)
     match_id = db.Column(db.ForeignKey('ow_match.id'), primary_key=True)
