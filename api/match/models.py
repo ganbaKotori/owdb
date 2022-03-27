@@ -39,7 +39,6 @@ class Match(db.Model):
 
     map_played = db.relationship("Map")
     rounds = db.relationship('MatchRound', backref='match')
-    hero_role = db.relationship('HeroRole', backref='hero_role')
     
     heroes_played = db.relationship("MatchHero")
 

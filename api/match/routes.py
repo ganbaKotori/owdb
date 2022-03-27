@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for,  jsonify
 from app import db
 from api.match.models import Match, MatchPhase, MatchResult, MatchRound, MatchHero
 from api.map.models import Map
@@ -29,3 +29,9 @@ def add_match():
     db.session.add(new_match)
     db.session.commit()
     return redirect(url_for('client.dashboard.user_dashboard')) 
+
+@match.get('')
+@login_required
+def get_matches():
+    current_user_matches = Match.query.filter(Match.user_id==current_user.id).all()
+    return jsonify(current_user_matches)
