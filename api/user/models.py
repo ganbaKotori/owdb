@@ -23,6 +23,7 @@ import api.match.models, api.map.models
 
 @login_manager.user_loader
 def load_user(user_id):
+    print(user_id)
     return User.query.get(int(user_id))
 
 @dataclass
