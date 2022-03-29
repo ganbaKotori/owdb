@@ -41,7 +41,8 @@ def register():
             error = 'Passwords must match'
 
         hashed_password = generate_password_hash(new_password)
-
+        
+        flash(error, 'error')
         print(error)
 
         if error is None :
