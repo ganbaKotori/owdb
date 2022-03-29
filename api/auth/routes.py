@@ -20,7 +20,7 @@ def login():
     login_user(user)
     return redirect(url_for('client.dashboard.user_dashboard'))
 
-@auth.route('/register', methods=['GET', 'POST'])
+@auth.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST' :
         new_email = request.form['email']
@@ -53,7 +53,7 @@ def register():
 
                 print('Registration Successful!')
 
-                return redirect(url_for('login'))
+                return redirect(url_for('client.auth.get_login'))
             except Exception as e :
                 print(e)
 

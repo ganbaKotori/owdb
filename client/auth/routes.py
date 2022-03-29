@@ -9,3 +9,7 @@ auth = Blueprint('auth', __name__)
 def get_login():
     form = LoginForm()
     return render_template('login.html', form=form)
+
+@auth.get('/register')
+def register() :
+    return render_template('register.html')
