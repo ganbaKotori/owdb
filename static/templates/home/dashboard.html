@@ -83,7 +83,9 @@
                                 {{match.map_played.name}}
                             </th>
                             <td class="fw-bolder text-gray-500">
-                                Role goes here
+                                {% for role in match.roles %}
+                                {{role}} 
+                                {% endfor %}
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 {% for hero_played in match.heroes_played %}
@@ -92,7 +94,7 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
-                                    {{match.result}}
+                                    {{match.result_formatted}}
                                 </div>
                             </td>
                         </tr>
