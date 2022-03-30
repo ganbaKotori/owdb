@@ -1,5 +1,6 @@
 from app import db
 from api.map.models import Map
+
 def add_all_ow_maps():
     hollywood = Map(name="HOLLYWOOD")
     db.session.add(hollywood)
@@ -17,4 +18,27 @@ def add_all_ow_maps():
     db.session.add(volskaya_industries)
     kings_row = Map(name="KING'S ROW")
     db.session.add(kings_row)
+    busan = Map(name='BUSAN')
+    db.session.add(busan)
+    dorado = Map(name='DORADO')
+    db.session.add(dorado)
+    hanamura = Map(name='HANAMURA')
+    db.session.add(hanamura)
+    junkertown = Map(name='JUNKERTOWN')
+    db.session.add(junkertown)
+    lijiang = Map(name='LIJIANG TOWER')
+    db.session.add(lijiang)
+    oasis = Map(name='OASIS')
+    db.session.add(oasis)
+    rialto = Map(name='RIALTO')
+    db.session.add(rialto)
+    route_66 = Map(name='ROUTE 66')
+    db.session.add(route_66)
+    temple_anubis = Map(name='TEMPLE OF ANUBIS')
+    db.session.add(temple_anubis)
+    gibraltar = Map(name='WATCHPOINT: GIBRALTAR')
+    db.session.add(gibraltar)
+    eichenwalde = Map(name='EICHENWALDE')
+    db.session.add(eichenwalde)
+
     db.session.commit()
