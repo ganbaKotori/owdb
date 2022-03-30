@@ -7,6 +7,7 @@ from api.map.models import Map
 from typing import List
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import select, func
+from datetime import datetime
 
 
 class MatchResult(enum.Enum):
@@ -39,6 +40,7 @@ class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    date_played = db.Column(db.DateTime(), default=datetime.utcnow())
     ranked_flag = db.Column(db.Boolean)
 
     map_played = db.relationship("Map")
