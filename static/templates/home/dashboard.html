@@ -59,7 +59,7 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h2 class="fs-5 fw-bold mb-0">Your Matches</h2>
+                            <h2 class="fs-5 fw-bold mb-0">Your Recent Matches</h2>
                         </div>
                         <div class="col text-end">
                             <a href="#" class="btn btn-sm btn-primary">See all</a>
@@ -74,6 +74,8 @@
                             <th class="border-bottom" scope="col">Role</th>
                             <th class="border-bottom" scope="col">Heroes</th>
                             <th class="border-bottom" scope="col">Result</th>
+                            <th class="border-bottom" scope="col">Ranked</th>
+                            <th class="border-bottom" scope="col"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -96,6 +98,12 @@
                                 <div class="d-flex">
                                     {{match.result_formatted}}
                                 </div>
+                            </td>
+                            <td class="fw-bolder text-gray-500">
+                               Maybe
+                            </td>
+                            <td class="fw-bolder text-gray-500">
+                                <button class="btn btn-info" type="button">View</button>
                             </td>
                         </tr>
                         {% endfor %}
