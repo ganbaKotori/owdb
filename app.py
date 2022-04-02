@@ -49,7 +49,7 @@ Flask-Migrate only gets changes in columns but not for Table Create/Deletions
 login_manager.init_app(app)
 app.register_blueprint(api)
 app.register_blueprint(client)
-db.create_all()     
+#db.create_all()     
 
 if __name__ == '__main__':
     app.run( debug = True)

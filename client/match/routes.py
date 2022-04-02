@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, Blueprint
-from flask_login import login_required, logout_user
+from flask_login import login_required, current_user
 from api.map.models import Map
 from api.hero.models import Hero, HeroRole
+from api.match.models import Match
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
@@ -12,3 +13,9 @@ def get_create_match_page():
     ow_heroes = Hero.query.all()
     ow_hero_roles = HeroRole.query.all()
     return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles)
+
+@match.get('/all')
+@login_required
+def get_all_matches_page():
+    current_user_matches = Match.query.filter(Match.user_id==current_user.id).all()
+    return render_template('match/all_matches.html', current_user_matches=current_user_matches)
