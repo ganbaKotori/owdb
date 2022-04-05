@@ -14,6 +14,7 @@
         </div>
     </div>
     <form method="post" action="/api/match">
+        {{form.hidden_tag()}}
     <div class="row">
         <div class="col">
             <h6>Select Role</h6>
@@ -22,12 +23,12 @@
     <div class="row">
         <div class="col">
             {% for role in ow_hero_roles %}
-            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off">
+            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
             <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
             {% endfor %}
 
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map">
-                <option selected>Select Map</option>
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required>
+                <option value="" selected>Select Map</option>
                 {% for map in ow_maps %}
                     <option value="{{map.id}}">{{map.name}}</option>
                 {% endfor %}

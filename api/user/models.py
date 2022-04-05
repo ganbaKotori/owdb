@@ -21,6 +21,13 @@ import api.match.models, api.map.models
 #                             ['user.id', 'user.id']), 
 #                   )
 
+
+@dataclass
+class Friend(db.Model):
+    __tablename__ = 'friend'
+    user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    friend_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -37,6 +44,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(256), server_default='')
 
     matches = db.relationship('Match', backref='original_user')
+
+    requested_friends = db.relationship('Friend',backref='to', primaryjoin=id==Friend.user_id)
+    receieved_friends = db.relationship('Friend',backref='from', primaryjoin=id==Friend.friend_id )
 
     #active = db.Column(db.Boolean(), nullable=False, server_default='0')
 

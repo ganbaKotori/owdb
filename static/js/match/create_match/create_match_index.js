@@ -1,6 +1,7 @@
 class Match {
 	constructor() {
 		this.round_count = 0;
+		this.round_id_count = 0;
 		this.add_round();
 	}
 
@@ -10,23 +11,38 @@ class Match {
 		<li class="list-group-item">
 			<div class="row ml-2">
 				<div class="col">
-					<h6><i> Round Phase</i></h6>
-					<input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
-					<label class="btn btn-outline-danger" for="success-outlined">ATTACK</label>
+					<h6><i>Select Round Phase</i></h6>
+					<input type="radio" 
+						   class="btn-check"
+						   name="match_rounds-${this.round_id_count}-phase"
+						   id="match_rounds-${this.round_id_count}-phase-attack"
+						   autocomplete="off"
+						   value="ATTACK"
+						   checked>
+					<label class="btn btn-outline-danger" for="match_rounds-${this.round_id_count}-phase-attack">ATTACK</label>
 
-					<input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
-					<label class="btn btn-outline-info" for="danger-outlined">DEFEND</label>
+					<input type="radio" 
+						   class="btn-check" 
+						   name="match_rounds-${this.round_id_count}-phase" 
+						   id="match_rounds-${this.round_id_count}-phase-defend"
+						   autocomplete="off"
+						   value="DEFEND"  
+						   >
+					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">DEFEND</label>
 				</div>
 				<div class="col">
-					<h6><i>Round Result</i></h6>
-					<input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+					<h6><i>Select Round Result</i></h6>
+					<input type="radio" class="btn-check" name="match_rounds-${this
+						.round_id_count}-result" id="success-outlined" autocomplete="off" value="SUCESS" checked>
 					<label class="btn btn-outline-danger" for="success-outlined">All Objectives Cleared</label>
 
-					<input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+					<input type="radio" class="btn-check" name="match_rounds-${this
+						.round_id_count}-result" id="danger-outlined" autocomplete="off" value="FAIL">
 					<label class="btn btn-outline-info" for="danger-outlined">Out of Time</label>
 				</div>
 			</div>
 	  	</li>`);
+		this.round_id_count++;
 	}
 
 	remove_round(round) {
