@@ -48,6 +48,9 @@ class User(UserMixin, db.Model):
     requested_friends = db.relationship('Friend',backref='to', primaryjoin=id==Friend.user_id)
     receieved_friends = db.relationship('Friend',backref='from', primaryjoin=id==Friend.friend_id )
 
+    def send_friend_request(self, requested_friend_id):
+        self.requested_friends.append(Friend(user_id=self.id, friend_id=requested_friend_id))
+
     #active = db.Column(db.Boolean(), nullable=False, server_default='0')
 
     # friends = db.relationship("User", secondary=Friendship, 
