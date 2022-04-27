@@ -7,11 +7,70 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col">
+            <table id="myTable" class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>MAP</th>
+                        <th>ROLE</th>
+                        <th>HEROES</th>
+                        <th>RESULT</th>
+                        <th>RANKED</th>
+                        <th>DATE</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in current_user_matches %}
+                    <tr>
+                        <th class="text-gray-900" scope="row">
+                            {{match.map_played.name}}
+                        </th>
+                        <td class="fw-bolder text-gray-500">
+                            {% for role in match.roles %}
+                            {{role}} 
+                            {% endfor %}
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            {% for hero_played in match.heroes_played %}
+                                {{hero_played.hero.name}} , 
+                            {% endfor %}
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            <div class="d-flex">
+                                {{match.result_formatted}}
+                            </div>
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                           Maybe
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            Today
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            View
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
 
 </div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+
+{% endblock javascripts %}
