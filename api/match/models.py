@@ -102,7 +102,6 @@ class Match(db.Model):
 class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    name = db.Column(db.String(25))
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
 
 @dataclass

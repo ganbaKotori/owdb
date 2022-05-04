@@ -23,10 +23,12 @@ import api.match.models, api.map.models
 
 
 @dataclass
-class Friend(db.Model):
-    __tablename__ = 'friend'
+class Friendship(db.Model):
+    __tablename__ = 'friendship'
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     friend_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
+    request_accepted = db.Column(db.Boolean, nullable=False, default=False)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -45,11 +47,11 @@ class User(UserMixin, db.Model):
 
     matches = db.relationship('Match', backref='original_user')
 
-    requested_friends = db.relationship('Friend',backref='to', primaryjoin=id==Friend.user_id)
-    receieved_friends = db.relationship('Friend',backref='from', primaryjoin=id==Friend.friend_id )
+    requested_friends = db.relationship('Friendship',backref='to', primaryjoin=id==Friendship.user_id)
+    receieved_friends = db.relationship('Friendship',backref='from', primaryjoin=id==Friendship.friend_id )
 
     def send_friend_request(self, requested_friend_id):
-        self.requested_friends.append(Friend(user_id=self.id, friend_id=requested_friend_id))
+        self.requested_friends.append(Friendship(user_id=self.id, friend_id=requested_friend_id))
 
     #active = db.Column(db.Boolean(), nullable=False, server_default='0')
 
