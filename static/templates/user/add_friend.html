@@ -11,14 +11,14 @@
     <div class="row mt-4">
         <div class="col">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                <input id="user-keyword-input" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="find-users-btn">Search</button>
               </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <ul class="list-group list-group-flush">
+            <ul class="list-group list-group-flush" id="user_list">
                 <li class="list-group-item">An item</li>
             </ul>
         </div>
@@ -29,4 +29,44 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
+<script>
+    $(document).on('click', '#find-users-btn', async function(){
+        let keyword_input = $('#user-keyword-input').val();
+        let results = await search_users(keyword_input);
+        console.log(results)
+        render_users(results)
+    })
+
+    $(document).on('click', '.send-friend-request-btn', async function(){
+        let user_username = $(this).data('user-username');
+        let results = await send_friend_request(user_username);
+        console.log(results)
+        alert('Request Sent!')
+    })
+
+    const search_users = async keyword => {
+        const response = await fetch(`/api/user?keyword=${keyword}`, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        });
+        return response.json();
+    }
+
+    const render_users = users => {
+        $('#user_list').empty()
+        users.forEach(user => {
+            $('#user_list').append(`<li class="list-group-item">
+                                        <span>${user.username}</span>
+                                        <button type="button" data-user-username="${user.username}" class="btn btn-primary send-friend-request-btn">Send Friend Request</button>
+                                    </li>`)
+        });
+    }
+
+    const send_friend_request = async username => {
+        const response = await fetch(`/api/user/${username}/send_friend_request`, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        });
+        return response.json();
+    }
+</script>
 {% endblock javascripts %}

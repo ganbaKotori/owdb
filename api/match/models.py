@@ -1,9 +1,12 @@
 import enum
+from api.user.models import User
 from dataclasses import dataclass
 from sqlalchemy import Enum
 from app import db
 from api.hero.models import Hero
 from api.map.models import Map
+
+
 from typing import List
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import select, func
@@ -47,6 +50,7 @@ class Match(db.Model):
     rounds = db.relationship('MatchRound', backref='match')
     
     heroes_played = db.relationship("MatchHero")
+    tagged_users = db.relationship("MatchTaggedUser")
 
     result = db.Column(Enum(MatchResult))
 
@@ -98,6 +102,10 @@ class Match(db.Model):
                 label("support_hero_count")
                 )
 
+    def add_tagged_user(self):
+        self.tagged_users.append()
+        self.requested_friends.append(MatchTaggedUser(user_id=self.id))
+
 @dataclass
 class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
@@ -109,6 +117,14 @@ class MatchHero(db.Model):
     hero : Hero
 
     __tablename__ = 'ow_match_hero'
-    hero_id = db.Column(db.ForeignKey('ow_hero.id'), primary_key=True)
-    match_id = db.Column(db.ForeignKey('ow_match.id'), primary_key=True)
+    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
     hero = db.relationship("Hero")
+
+@dataclass
+class MatchTaggedUser(db.Model):
+
+    __tablename__ = "ow_match_tagged_user"
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

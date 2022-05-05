@@ -14,6 +14,7 @@ def get_create_match_page():
     ow_heroes = Hero.query.all()
     ow_hero_roles = HeroRole.query.all()
     form = CreateMatchForm()
+    print('create match page')
     return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
 
 @match.get('/all')
