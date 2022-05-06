@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="row mt-2">
         <div class="col">
             <h5>Create Match</h5>
@@ -15,57 +15,110 @@
     </div>
     <form method="post" action="/api/match">
         {{form.hidden_tag()}}
-    <div class="row">
-        <div class="col">
-            <h6>Select Role</h6>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            {% for role in ow_hero_roles %}
-            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
-            <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
-            {% endfor %}
+        <div class="row">
+            <div class="col-7">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Select Heroes
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            {% for role in ow_hero_roles %}
+                            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
+                            <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
+                            {% endfor %}
 
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required>
-                <option value="" selected>Select Map</option>
-                {% for map in ow_maps %}
-                    <option value="{{map.id}}">{{map.name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            {% for hero in ow_heroes %}
-            <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
-               
-                <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
-                <label class="form-check-label" for="hero-{{hero.id}}">
-                    {{hero.name}}
-                </label>
+                            <div class="row">
+                                <div class="col">
+                                    {% for hero in ow_heroes %}
+                                    <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
+                                    
+                                        <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
+                                        <label class="form-check-label" for="hero-{{hero.id}}">
+                                            {{hero.name}}
+                                        </label>
+                                    </div>
+            
+                                    {% endfor %}
+            
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Select Map
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required>
+                                <option value="" selected>Select Map</option>
+                                {% for map in ow_maps %}
+                                    <option value="{{map.id}}">{{map.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Match Rounds
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary add-round-btn">Add Round</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <ol class="list-group list-group-numbered match-round-list">
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </div>
-
-            {% endfor %}
-
+            <div class="col-5">
+                <div class="card">
+                    <div class="card bg-dark text-white">
+                        <img src="https://external-preview.redd.it/rASnjOpswxDNUMpLITuc6zwcfxzba9ZmC4m513HKd3M.jpg?width=640&crop=smart&auto=webp&s=d7e44b85986b32f561f16aeb959d38469b7dbdf3" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                          <h5 class="card-title">Card title</h5>
+                          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                          <p class="card-text">Last updated 3 mins ago</p>
+                        </div>
+                      </div>
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">An item</li>
+                      <li class="list-group-item">A second item</li>
+                      <li class="list-group-item">A third item</li>
+                    </ul>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-block">Submit Match</button>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
         </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col">
-            <button type="button" class="btn btn-primary add-round-btn">Add Round</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <ol class="list-group list-group-numbered match-round-list">
-              </ol>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button type="submit" class="btn btn-success btn-block">Submit Match</button>
-        </div>
-    </div>
 </form>
 </div>
 
