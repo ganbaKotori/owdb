@@ -16,7 +16,7 @@
     <form method="post" action="/api/match">
         {{form.hidden_tag()}}
         <div class="row">
-            <div class="col-7">
+            <div class="col-12 col-md-7 mb-3">
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingOne">
@@ -57,7 +57,7 @@
                       </h2>
                       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
                                 <option value="" selected>Select Map</option>
                                 {% for map in ow_maps %}
                                     <option value="{{map.id}}">{{map.name}}</option>
@@ -78,6 +78,12 @@
                                 <div class="col">
                                     <button type="button" class="btn btn-primary add-round-btn">Add Round</button>
                                 </div>
+                                <div class="col">
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Quick Play</label>
+                                  </div>
+                              </div>
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -90,14 +96,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-5">
+            <div class="col-12 col-md-5 mb-3">
                 <div class="card">
                     <div class="card bg-dark text-white">
                         <img src="https://external-preview.redd.it/rASnjOpswxDNUMpLITuc6zwcfxzba9ZmC4m513HKd3M.jpg?width=640&crop=smart&auto=webp&s=d7e44b85986b32f561f16aeb959d38469b7dbdf3" class="card-img" alt="...">
                         <div class="card-img-overlay">
-                          <h5 class="card-title">Card title</h5>
+                          <h5 class="card-title" id="map-title-text">Map Title</h5>
                           <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                          <p class="card-text">Last updated 3 mins ago</p>
                         </div>
                       </div>
                     <div class="card-body">

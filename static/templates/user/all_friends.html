@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mt-4">
         <div class="col">
             <a href="/add_friend"><button type="button" class="btn btn-primary">Add Friend</button></a>
@@ -15,7 +15,7 @@
     </div>
     <div class="row mt-4">
         <div class="col">
-            <ul class="list-group list-group-flush">
+            <ul class="list-group">
                 {% for friend in current_user_friends %}
                     <li class="list-group-item">{{friend}}</li>
                 {% endfor %}

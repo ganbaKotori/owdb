@@ -12,6 +12,6 @@ dashboard = Blueprint('dashboard', __name__)
 def user_dashboard():
     # current_user.send_friend_request(7)
     # db.session.commit()
-    current_user_matches = Match.query.filter(Match.user_id==current_user.id).limit(10).all()
+    current_user_matches = Match.query.filter(Match.user_id==current_user.id).limit(5).all()
     print(current_user_matches)
     return render_template('home/dashboard.html', current_user_matches=current_user_matches)

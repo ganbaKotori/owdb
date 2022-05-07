@@ -10,8 +10,8 @@ class Match {
 		$('.match-round-list').append(`
 		<li class="list-group-item">
 			<div class="row ml-2">
-				<div class="col">
-					<h6><i>Select Round Phase</i></h6>
+				<div class="col-5">
+					<h6><i>Phase</i></h6>
 					<input type="radio" 
 						   class="btn-check"
 						   name="match_rounds-${this.round_id_count}-phase"
@@ -19,7 +19,7 @@ class Match {
 						   autocomplete="off"
 						   value="ATTACK"
 						   checked>
-					<label class="btn btn-outline-danger" for="match_rounds-${this.round_id_count}-phase-attack">ATTACK</label>
+					<label class="btn btn-outline-danger" for="match_rounds-${this.round_id_count}-phase-attack">Attack</label>
 
 					<input type="radio" 
 						   class="btn-check" 
@@ -28,17 +28,35 @@ class Match {
 						   autocomplete="off"
 						   value="DEFEND"  
 						   >
-					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">DEFEND</label>
+					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">Defend</label>
 				</div>
-				<div class="col">
-					<h6><i>Select Round Result</i></h6>
-					<input type="radio" class="btn-check" name="match_rounds-${this
-						.round_id_count}-result" id="success-outlined" autocomplete="off" value="SUCESS" checked>
-					<label class="btn btn-outline-danger" for="success-outlined">All Objectives Cleared</label>
+				<div class="col-6">
+					<h6><i>Result</i></h6>
+					<input type="radio" 
+						   class="btn-check"
+						   name="match_rounds-${this.round_id_count}-result"
+						   id="match_rounds-${this.round_id_count}-result-captured"
+						   autocomplete="off"
+						   value=1
+						   checked>
+					<label class="btn btn-outline-success btn-sm" for="match_rounds-${this.round_id_count}-result-captured">
+						Objectives Captured
+						<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+					</label>
 
-					<input type="radio" class="btn-check" name="match_rounds-${this
-						.round_id_count}-result" id="danger-outlined" autocomplete="off" value="FAIL">
-					<label class="btn btn-outline-info" for="danger-outlined">Out of Time</label>
+					<input type="radio"
+						   class="btn-check"
+						   name="match_rounds-${this.round_id_count}-result"
+						   id="match_rounds-${this.round_id_count}-result-lost"
+						   autocomplete="off"
+						   value=0>
+					<label class="btn btn-outline-danger btn-sm" for="match_rounds-${this.round_id_count}-result-lost">
+						Objectives Lost
+						<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+					</label>
+				</div>
+				<div class="col-1">
+					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
 				</div>
 			</div>
 	  	</li>`);
@@ -81,4 +99,14 @@ $(document).ready(function() {
 	$('.add-round-btn').on('click', function() {
 		match.add_round();
 	});
+
+	$(document).on('click', '.delete-match-round-btn', function() {
+		match.remove_round($(this).parent().parent().parent());
+	});
+
+	$('#ow_map_select').on('change', function() {
+		console.log($( "#ow_map_select option:selected" ).text())
+		$('#map-title-text').text($( "#ow_map_select option:selected" ).text())
+	});
+	
 });

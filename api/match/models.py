@@ -8,10 +8,9 @@ from api.map.models import Map
 
 
 from typing import List
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import select, func
 from datetime import datetime
-
 
 class MatchResult(enum.Enum):
     VICTORY = "VICTORY"
@@ -19,14 +18,8 @@ class MatchResult(enum.Enum):
     DRAW = "DRAW"
 
 class MatchPhase(enum.Enum):
-    ATTACK = "VICTORY"
-    DEFEND = "DEFEAT"
-    CONTROL = "CONTROL"
-
-class MatchRoundResult(enum.Enum):
-    SUCESS = "SUCESS"
-    FAIL = "FAIL"
-
+    ATTACK = "ATTACK"
+    DEFEND = "DEFEND"
 
 @dataclass
 class Match(db.Model):
@@ -44,7 +37,7 @@ class Match(db.Model):
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     date_played = db.Column(db.DateTime(), default=datetime.utcnow())
-    ranked_flag = db.Column(db.Boolean)
+    ranked_flag = db.Column(db.Boolean, nullable=False, default=True)
 
     map_played = db.relationship("Map")
     rounds = db.relationship('MatchRound', backref='match')
@@ -106,11 +99,26 @@ class Match(db.Model):
         self.tagged_users.append()
         self.requested_friends.append(MatchTaggedUser(user_id=self.id))
 
+    def add_round(self, objectives_captured, phase):
+        if phase == "ATTACK":
+            phase_value = MatchPhase.ATTACK
+        elif phase == "DEFEND":
+            phase_value = MatchPhase.DEFEND
+        if objectives_captured == "1":
+            objs_captured_value = True
+        elif objectives_captured == "0":
+            objs_captured_value = False
+        new_round = MatchRound(objectives_captured=objs_captured_value, phase=phase_value)
+        self.rounds.append(new_round)
+
+
 @dataclass
 class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+    objectives_captured = db.Column(db.Boolean, nullable=False, default=False)
+    phase = db.Column(Enum(MatchPhase))
 
 @dataclass
 class MatchHero(db.Model):
