@@ -86,6 +86,28 @@ class MatchRound {
 
 const match = new Match();
 
+const map_images = {
+"HOLLYWOOD" : "\\static\\assets\\img\\ow_map_img\\hollywood.jpg",
+"HAVANA" : "\\static\\assets\\img\\ow_map_img\\default.jpg",
+"NEPAL" : "\\static\\assets\\img\\ow_map_img\\nepal.jpg",
+"NUMBANI" : "\\static\\assets\\img\\ow_map_img\\numbani.jpg",
+"ILIOS" : "\\static\\assets\\img\\ow_map_img\\ilios.jpg",
+"BLIZZARD WORLD" : "\\static\\assets\\img\\ow_map_img\\blizzard-world.jpg",
+"VOLSKAYA INDUSTRIES" : "\\static\\assets\\img\\ow_map_img\\volskaya-industries.jpg",
+"KING'S ROW" :  "\\static\\assets\\img\\ow_map_img\\kings-row.jpg",
+"BUSAN"  : "\\static\\assets\\img\\ow_map_img\\busan.jpg",
+"DORADO" : "\\static\\assets\\img\\ow_map_img\\dorado.jpg",
+"HANAMURA" : "\\static\\assets\\img\\ow_map_img\\hanamura.jpg",
+"JUNKERTOWN" : "\\static\\assets\\img\\ow_map_img\\junkertown.jpg",
+"LIJIANG TOWER" : "\\static\\assets\\img\\ow_map_img\\lijiang-tower.jpg",
+"OASIS" : "\\static\\assets\\img\\ow_map_img\\oasis.jpg",
+"RIALTO" : "\\static\\assets\\img\\ow_map_img\\rialto.jpg",
+"ROUTE 66" : "\\static\\assets\\img\\ow_map_img\\route-66.jpg",
+"TEMPLE OF ANUBIS" : "\\static\\assets\\img\\ow_map_img\\temple-of-anubis.jpg",
+"WATCHPOINT: GIBRALTAR" : "\\static\\assets\\img\\ow_map_img\\watchpoint-gibraltar.jpg",
+"EICHENWALDE" :  "\\static\\assets\\img\\ow_map_img\\eichenwalde.jpg"
+}
+
 $(document).ready(function() {
 	$('.ow-hero-check').hide();
 	console.log('starting');
@@ -106,6 +128,7 @@ $(document).ready(function() {
 
 	$('#ow_map_select').on('change', function() {
 		console.log($( "#ow_map_select option:selected" ).text())
+		$('#map-image').attr('src',map_images[$( "#ow_map_select option:selected" ).text()])
 		$('#map-title-text').text($( "#ow_map_select option:selected" ).text())
 	});
 	
