@@ -10,7 +10,7 @@ class Match {
 		$('.match-round-list').append(`
 		<li class="list-group-item">
 			<div class="row ml-2">
-				<div class="col-5">
+				<div class="col-4">
 					<h6><i>Phase</i></h6>
 					<input type="radio" 
 						   class="btn-check"
@@ -30,7 +30,37 @@ class Match {
 						   >
 					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">Defend</label>
 				</div>
-				<div class="col-6">
+				<div class="col-4">
+					<h6><i>Score</i></h6>
+					<input type="text" 
+						name="match_rounds-${this.round_id_count}-score"
+						id="match_rounds-${this.round_id_count}-score-obtained"
+						>
+				</div>
+				<div class="col-4">
+					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+				</div>
+			</div>
+	  	</li>`);
+		this.round_id_count++;
+	}
+
+	remove_round(round) {
+		if (this.round_count > 1) {
+			this.round_count--;
+			round.remove();
+		}
+	}
+
+	_check_round_count() {
+		if (this.round_count == 0) {
+			console.log('no rounds!');
+		}
+	}
+}
+
+/*
+				<div class="col-3">
 					<h6><i>Result</i></h6>
 					<input type="radio" 
 						   class="btn-check"
@@ -55,27 +85,7 @@ class Match {
 						<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 					</label>
 				</div>
-				<div class="col-1">
-					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-				</div>
-			</div>
-	  	</li>`);
-		this.round_id_count++;
-	}
-
-	remove_round(round) {
-		if (this.round_count > 1) {
-			this.round_count--;
-			round.remove();
-		}
-	}
-
-	_check_round_count() {
-		if (this.round_count == 0) {
-			console.log('no rounds!');
-		}
-	}
-}
+*/
 
 class MatchRound {
 	constructor(phase, result) {

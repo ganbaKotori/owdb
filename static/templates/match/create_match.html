@@ -60,7 +60,7 @@
                             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
                                 <option value="" selected>Select Map</option>
                                 {% for map in ow_maps %}
-                                    <option value="{{map.id}}">{{map.name}}</option>
+                                    <option value="{{map.id}}">{{map.name}} Max Score: {{map.map_mode.max_score}}</option>
                                 {% endfor %}
                             </select>
                         </div>

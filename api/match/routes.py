@@ -29,7 +29,7 @@ def add_match():
             a.hero = Hero.query.filter(Hero.id==int(hero)).first_or_404()
             new_match.heroes_played.append(a)
         for round in form.data['match_rounds']:
-            new_match.add_round(phase=round['phase'], score=3)
+            new_match.add_round(phase=round['phase'], score=round['score'])
             #objectives_captured=round['result']
         #new_match.rounds[0].score = 1
         db.session.add(new_match)
