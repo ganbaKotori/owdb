@@ -11,6 +11,7 @@ from typing import List
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import select, func
 from datetime import datetime
+from sqlalchemy.sql import case
 
 class MatchResult(enum.Enum):
     VICTORY = "VICTORY"
@@ -27,7 +28,7 @@ class Match(db.Model):
     map_played : Map
     heroes_played : List[Hero]
     ranked_flag : bool
-    result : MatchResult
+    # result : MatchResult
     result_formatted : str
 
     roles : List[str]
@@ -45,8 +46,6 @@ class Match(db.Model):
     heroes_played = db.relationship("MatchHero")
     tagged_users = db.relationship("MatchTaggedUser")
 
-    result = db.Column(Enum(MatchResult))
-
     @property
     def roles(self):
         match_roles = []
@@ -58,10 +57,12 @@ class Match(db.Model):
             match_roles.append("Support")
         return match_roles
 
+    # @property
+    # def result_formatted(self):
+    #     return self.result.value
     @property
     def result_formatted(self):
-        return self.result.value
-
+        return self.match_result.value
     @hybrid_property
     def tank_hero_count(self):
         return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Tank"])   # @note: use when non-dynamic relationship
@@ -90,7 +91,7 @@ class Match(db.Model):
 
     @support_hero_count.expression
     def support_hero_count(cls):
-        return (select([func.count(MatchHero.hero_id)]).
+        return (select([func.sum(MatchHero.hero_id)]).
                 where(MatchHero.match_id == cls.id).
                 label("support_hero_count")
                 )
@@ -99,17 +100,84 @@ class Match(db.Model):
         self.tagged_users.append()
         self.requested_friends.append(MatchTaggedUser(user_id=self.id))
 
-    def add_round(self, objectives_captured, phase):
+    def add_round(self, score, phase):
         if phase == "ATTACK":
             phase_value = MatchPhase.ATTACK
         elif phase == "DEFEND":
             phase_value = MatchPhase.DEFEND
-        if objectives_captured == "1":
-            objs_captured_value = True
-        elif objectives_captured == "0":
-            objs_captured_value = False
-        new_round = MatchRound(objectives_captured=objs_captured_value, phase=phase_value)
+        new_round = MatchRound(score=score, phase=phase_value)
         self.rounds.append(new_round)
+
+    # @hybrid_property
+    # def result(self):
+    #     user_team_score = 0
+    #     enemy_team_score = 0
+    #     for round in self.rounds:
+    #         if round.phase == MatchPhase.ATTACK:
+    #             user_team_score += round.score
+    #         elif round.phase == MatchPhase.DEFEND:
+    #             enemy_team_score += round.score
+        
+
+    # @result.expression
+    # def result(cls):
+    #     return (select([func.count(MatchHero.hero_id)]).
+    #             where(MatchHero.match_id == cls.id).
+    #             label("support_hero_count")
+    #             )   
+
+    @hybrid_property
+    def team_score(self):
+        user_team_score = 0
+        for round in self.rounds:
+            if round.phase == MatchPhase.ATTACK:
+                user_team_score += round.score
+        return user_team_score
+        
+    #team score and enemy score
+    
+    @team_score.expression
+    def team_score(cls):
+        return (select([func.sum(MatchRound.score)]).
+                where(MatchRound.phase == MatchPhase.ATTACK).
+                where(MatchRound.match_id == cls.id).
+                label("match_round_team_score")
+                )   
+    
+    @hybrid_property
+    def enemy_team_score(self):
+        enemy_team_score = 0
+        for round in self.rounds:
+            if round.phase == MatchPhase.DEFEND:
+                enemy_team_score += round.score
+        return enemy_team_score
+        
+    #team score and enemy score
+    
+    @enemy_team_score.expression
+    def enemy_team_score(cls):
+        return (select([func.sum(MatchRound.score)]).
+                where(MatchRound.phase == MatchPhase.DEFEND).
+                where(MatchRound.match_id == cls.id).
+                label("match_round_enemy_score")
+                )   
+
+    @hybrid_property
+    def match_result(self):
+        if self.team_score > self.enemy_team_score:
+            return MatchResult.VICTORY
+        elif self.team_score < self.enemy_team_score:
+            return MatchResult.DEFEAT
+        else: return MatchResult.DRAW
+        
+    #team score and enemy score
+    
+    @match_result.expression
+    def match_result(cls):
+        return case([
+            (cls.team_score > cls.enemy_team_score, MatchResult.VICTORY),
+            (cls.team_score < cls.enemy_team_score, MatchResult.DEFEAT),
+        ], else_ = MatchResult.DRAW)
 
 
 @dataclass
@@ -117,8 +185,9 @@ class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-    objectives_captured = db.Column(db.Boolean, nullable=False, default=False)
     phase = db.Column(Enum(MatchPhase))
+
+    score = db.Column(db.Integer, nullable=False, default=0)
 
 @dataclass
 class MatchHero(db.Model):

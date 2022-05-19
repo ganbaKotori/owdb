@@ -1,11 +1,13 @@
 from app import db
 from api.map.models import Map, MapMode
 
+
+
 def add_all_ow_maps():
-    control = MapMode(name='Control')
-    hybrid = MapMode(name='Hybrid')
-    escort = MapMode(name='Escort')
-    assault = MapMode(name='Assault')
+    control = MapMode(name='Control', max_score=100)
+    hybrid = MapMode(name='Hybrid', max_score = 3)
+    escort = MapMode(name='Escort', max_score = 3)
+    assault = MapMode(name='Assault', max_score = 2)
 
     db.session.add(control)
     db.session.add(hybrid)

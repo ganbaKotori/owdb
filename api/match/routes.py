@@ -23,13 +23,15 @@ def add_match():
         # print(ow_map)
         # print(heroes)
         map_played = Map.query.filter(Map.id==int(ow_map)).first_or_404()
-        new_match = Match(user_id=current_user.id, ranked_flag=True, map_played=map_played, result=MatchResult.VICTORY)
+        new_match = Match(user_id=current_user.id, ranked_flag=True, map_played=map_played)
         for hero in heroes:
             a = MatchHero()
             a.hero = Hero.query.filter(Hero.id==int(hero)).first_or_404()
             new_match.heroes_played.append(a)
         for round in form.data['match_rounds']:
-            new_match.add_round(phase=round['phase'],objectives_captured=round['result'])
+            new_match.add_round(phase=round['phase'], score=3)
+            #objectives_captured=round['result']
+        #new_match.rounds[0].score = 1
         db.session.add(new_match)
         db.session.commit()
         return redirect(url_for('client.dashboard.user_dashboard')) 

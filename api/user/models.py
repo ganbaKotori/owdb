@@ -1,11 +1,6 @@
-from http import server
 from flask_login import UserMixin
 
 from dataclasses import dataclass
-from sqlalchemy import Enum, select
-
-from sqlalchemy.ext.declarative import declarative_base
-from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager    
 from typing import List                       
 
@@ -58,6 +53,9 @@ class User(UserMixin, db.Model):
     requested_friends = db.relationship('Friendship',backref='to', primaryjoin=id==Friendship.user_id)
     receieved_friends = db.relationship('Friendship',backref='from', primaryjoin=id==Friendship.friend_id)
 
+    user_avatar_id = db.Column(db.Integer, db.ForeignKey('user_avatar.id'))
+    user_avatar_image = db.relationship("UserAvatar")
+
     def send_friend_request(self, requested_friend_id):
         self.requested_friends.append(Friendship(user_id=self.id, friend_id=requested_friend_id))
 
@@ -78,4 +76,16 @@ class User(UserMixin, db.Model):
     #     if friend in self.friends:
     #         self.friends.remove(friend)
     #         friend.friends.remove(self)
+
+@dataclass
+class UserAvatar(db.Model):
+    __tablename__ = "user_avatar"
+
+    id : int
+    title : str
+    image_location : str
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    title = db.Column(db.String(50), nullable=False, unique=True)
+    image_location = db.Column(db.String(200), nullable=False)
 

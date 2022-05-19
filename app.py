@@ -25,6 +25,9 @@ from api.user.models import User
 from api.routes import api
 from client.routes import client
 
+from api.map.utils import add_all_ow_maps
+from api.hero.utils import add_all_ow_heroes
+
 '''
 SET ENVIRONMENT AS DEVELOPMENT IN POWERSHELL:
     $env:FLASK_ENV = "development"
@@ -49,7 +52,10 @@ Flask-Migrate only gets changes in columns but not for Table Create/Deletions
 login_manager.init_app(app)
 app.register_blueprint(api)
 app.register_blueprint(client)
-db.create_all()     
+db.create_all()  
+
+#add_all_ow_maps()
+#add_all_ow_heroes()
 
 if __name__ == '__main__':
     app.run()
