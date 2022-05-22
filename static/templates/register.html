@@ -3,15 +3,6 @@
 {% block title %}Register{% endblock title %}
 
 {% block content %} 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class=flashes>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
 
     <div style="text-align: center; width: 500px; margin: 0 auto; margin-top: 170px;">
         <form action="api/auth/register" method="POST" style="border: 3px solid black; width: 500px;
