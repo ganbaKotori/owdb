@@ -2,6 +2,8 @@ class Match {
 	constructor() {
 		this.round_count = 0;
 		this.round_id_count = 0;
+		this.total_player_team_score = 0;
+		this.total_enemy_team_score = 0;
 		this.add_round();
 	}
 
@@ -88,9 +90,16 @@ class Match {
 */
 
 class MatchRound {
-	constructor(phase, result) {
+	constructor(phase, score) {
 		this.phase = phase;
-		this.result = result;
+		this.score = score;
+	}
+}
+
+class Map {
+	constructor(name, max_score) {
+		this.name = name;
+		this.max_score = max_score;
 	}
 }
 
