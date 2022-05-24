@@ -4,7 +4,13 @@ class Match {
 		this.round_id_count = 0;
 		this.total_player_team_score = 0;
 		this.total_enemy_team_score = 0;
+		this.current_map_id = null;
+		this.current_map_selected = null;
 		this.add_round();
+	}
+
+	set_current_ow_map(ow_map) {
+		this.current_map_selected = ow_map;
 	}
 
 	add_round() {
@@ -32,14 +38,15 @@ class Match {
 						   >
 					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">Defend</label>
 				</div>
-				<div class="col-4">
-					<h6><i>Score</i></h6>
-					<input type="text" 
-						name="match_rounds-${this.round_id_count}-score"
-						id="match_rounds-${this.round_id_count}-score-obtained"
-						>
+				<div class="col-6">
+					<h6><i><span id="match_rounds-${this.round_id_count}-score-text"></span> Score</i></h6>
+					<div class="input-group">
+						<button class="btn btn-primary" type="button" id="button-addon1">-</button>
+						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score">
+						<button class="btn btn-primary" type="button" id="button-addon1">+</button>
+					</div>
 				</div>
-				<div class="col-4">
+				<div class="col-2">
 					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
 				</div>
 			</div>
@@ -96,14 +103,26 @@ class MatchRound {
 	}
 }
 
-class Map {
-	constructor(name, max_score) {
+class OverwatchMap {
+	constructor(id, name, map_mode, max_score) {
+		this.id = id;
 		this.name = name;
+		this.map_mode = map_mode;
 		this.max_score = max_score;
 	}
 }
 
 const match = new Match();
+const ow_maps = [];
+
+ow_maps_data.forEach(ow_map => {
+	let new_map = new OverwatchMap(ow_map.id, ow_map.name, ow_map.map_mode.name, ow_map.map_mode.max_score);
+	ow_maps.push(new_map)
+});
+
+console.log(ow_maps)
+
+
 
 const map_images = {
 "HOLLYWOOD" : "\\static\\assets\\img\\ow_map_img\\hollywood.jpg",
@@ -147,8 +166,24 @@ $(document).ready(function() {
 
 	$('#ow_map_select').on('change', function() {
 		console.log($( "#ow_map_select option:selected" ).text())
-		$('#map-image').attr('src',map_images[$( "#ow_map_select option:selected" ).text()])
-		$('#map-title-text').text($( "#ow_map_select option:selected" ).text())
+		$('#map-image').attr('src',map_images[$( "#ow_map_select option:selected" ).text()]);
+		$('#map-title-text').text($( "#ow_map_select option:selected" ).text());
+		let current_map_id = parseInt($('#ow_map_select').val());
+		console.log(current_map_id)
+		let map_selected = ow_maps.find(ow_map => ow_map.id === current_map_id);
+		match.set_current_ow_map(map_selected)
+		console.log(match.current_map_selected)
+	});
+
+	$('.match-round-score').on('change', function() {
+		let current_max_score = match.current_map_selected.max_score;
+		console.log(current_max_score);
+		let current_score = $(this).val();
+		console.log(current_score)
+		if (current_score > current_max_score){
+			$(this).val(current_max_score)
+		}
+
 	});
 	
 });

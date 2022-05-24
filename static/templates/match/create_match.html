@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Sign IN {% endblock %} 
+{% block title %} Create Match {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -60,7 +60,7 @@
                             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
                                 <option value="" selected>Select Map</option>
                                 {% for map in ow_maps %}
-                                    <option value="{{map.id}}">{{map.name}} Max Score: {{map.map_mode.max_score}}</option>
+                                    <option value="{{map.id}}">{{map.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -132,9 +132,9 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script type=text/javascript>
-  const ow_maps = {{ ow_maps|tojson|safe }};
+  const ow_maps_data = {{ ow_maps|tojson|safe }};
 
-  console.log(ow_maps);
+  console.log(ow_maps_data);
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 {% endblock javascripts %}

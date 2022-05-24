@@ -14,3 +14,8 @@ def get_friends_page():
 @login_required
 def get_add_friend_page():
     return render_template('user/add_friend.html')
+
+# @friend.get('/pending')
+# @login_required
+# def get_pending_requests_page():
+#     return render_template('user/add_friend.html')

@@ -37,7 +37,8 @@ class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    date_played = db.Column(db.DateTime(), default=datetime.utcnow())
+    date_match_played = db.Column(db.DateTime(), default=datetime.utcnow())
+    date_match_created = db.Column(db.DateTime(), default=datetime.utcnow())
     ranked_flag = db.Column(db.Boolean, nullable=False, default=True)
 
     map_played = db.relationship("Map")
@@ -61,8 +62,13 @@ class Match(db.Model):
     # def result_formatted(self):
     #     return self.result.value
     @property
+    def ranked_flag_formatted(self):
+        return "Yes" if self.ranked_flag is True else "No"
+
+    @property
     def result_formatted(self):
         return self.match_result.value
+
     @hybrid_property
     def tank_hero_count(self):
         return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Tank"])   # @note: use when non-dynamic relationship
