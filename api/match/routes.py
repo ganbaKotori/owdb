@@ -32,6 +32,7 @@ def add_match():
             new_match.add_round(phase=round['phase'], score=round['score'])
             #objectives_captured=round['result']
         #new_match.rounds[0].score = 1
+        new_match.add_user(user=current_user, accepted_flag=True)
         db.session.add(new_match)
         db.session.commit()
         return redirect(url_for('client.dashboard.user_dashboard')) 

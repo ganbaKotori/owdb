@@ -36,7 +36,7 @@ class Match(db.Model):
     __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_by_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     date_match_played = db.Column(db.DateTime(), default=datetime.utcnow())
     date_match_created = db.Column(db.DateTime(), default=datetime.utcnow())
     ranked_flag = db.Column(db.Boolean, nullable=False, default=True)
@@ -46,6 +46,7 @@ class Match(db.Model):
     
     heroes_played = db.relationship("MatchHero")
     tagged_users = db.relationship("MatchTaggedUser")
+    users = db.relationship("MatchUser")
 
     @property
     def roles(self):
@@ -104,7 +105,18 @@ class Match(db.Model):
 
     def add_tagged_user(self):
         self.tagged_users.append()
-        self.requested_friends.append(MatchTaggedUser(user_id=self.id))
+        #self.requested_friends.append(MatchTaggedUser(user_id=self.id))
+
+    def add_user(self, user, accepted_flag):
+        # __tablename__ = "ow_match_user"
+        # id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+        # match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+        # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+        # accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
+
+        # heroes_played = db.relationship("MatchUserHero")
+        match_user = MatchUser(match_id = self.id, user_id = user.id, accepted_flag = accepted_flag)
+        self.users.append(match_user)
 
     def add_round(self, score, phase):
         if phase == "ATTACK":
@@ -211,3 +223,26 @@ class MatchTaggedUser(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+@dataclass
+class MatchUserHero(db.Model):
+    hero : Hero
+
+    __tablename__ = 'ow_match_user_hero'
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    #match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
+    match_user_id = db.Column(db.Integer, db.ForeignKey('ow_match_user.id'), primary_key=True)
+    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
+
+    hero = db.relationship("Hero")
+
+@dataclass
+class MatchUser(db.Model):
+
+    __tablename__ = "ow_match_user"
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
+
+    heroes_played = db.relationship("MatchUserHero")

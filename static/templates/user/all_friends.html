@@ -8,24 +8,56 @@
 {% block content %}
 
 <div class="container">
-    <div class="row mt-4">
-        <div class="col-2">
-            <a href="/add_friend"><button type="button" class="btn btn-primary">Add Friend</button></a>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All Friends</button>
+          <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Pending Requests</button>
+          <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Add Friend</button>
         </div>
-        <div class="col-2">
-            <a href="/add_friend"><button type="button" class="btn btn-primary">Pending Requests</button></a>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col">
-            <ul class="list-group">
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            {% if current_user_friends|length == 0 %}
+                <h1 class="text-center mt-4">You have no friends!</h1>
+            {% endif %}
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
                 {% for friend in current_user_friends %}
-                    <li class="list-group-item">{{friend}}</li>
+                <div class="col">
+                    <div class="card" style="max-width: 590px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/7RTX92EKZMZB1516142180655.png" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h5 class="card-title">{{friend}}</h5>
+                              <!-- <p class="card-text">This is a wider card with supporting text.</p> -->
+                              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
                 {% endfor %}
-                
-            </ul>
+            </div>
         </div>
-    </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row mt-4">
+                <div class="col-2">
+                    <a href="/add_friend"><button type="button" class="btn btn-primary">Pending Requests</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div class="row mt-4">
+                <div class="col-2">
+                    <a href="/add_friend"><button type="button" class="btn btn-primary">Add Friend</button></a>
+                </div>
+            </div>
+        </div>
+      </div>
+
+
 </div>
 
 {% endblock content %}
