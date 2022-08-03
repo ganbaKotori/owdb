@@ -2,7 +2,9 @@ from flask_login import UserMixin
 
 from dataclasses import dataclass
 from app import db, login_manager    
-from typing import List                       
+from typing import List
+from sqlalchemy import and_
+from marshmallow import Schema, fields                
 
 # @dataclass
 # class Friendship(db.Model):
@@ -16,18 +18,28 @@ from typing import List
 #                             ['user.id', 'user.id']), 
 #                   )
 
+class UserSchema(Schema):
+    username = fields.String()
+class FriendshipSchema(Schema):
+    id = fields.Integer()
+    user = fields.Nested(UserSchema)
 
-@dataclass
+
+# @dataclass
 class Friendship(db.Model):
-    user_id : int
-    friend_id: int
-    request_accepted : bool
+    # id: int
+    # user_id : int
+    # friend_id: int
+    # request_accepted : bool
 
     __tablename__ = 'friendship'
-    
+
+    id = db.Column(db.Integer, autoincrement= True)
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     friend_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     request_accepted = db.Column(db.Boolean, nullable=False, default=False)
+
+    user = db.relationship('User',primaryjoin="User.id == Friendship.user_id")
 
 
 @login_manager.user_loader
@@ -58,6 +70,20 @@ class User(UserMixin, db.Model):
 
     def send_friend_request(self, requested_friend_id):
         self.requested_friends.append(Friendship(user_id=self.id, friend_id=requested_friend_id))
+
+    def accept_friend_request(self, friendship_id):
+        friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==False)).first()
+        friendship.request_accepted = True
+
+    def get_friend_requests(self):
+        pending_requests = Friendship.query.filter(and_(Friendship.friend_id==self.id, Friendship.request_accepted==False)).all()
+        pr_dict_list = []
+        for p in pending_requests:
+            friendship_schema = FriendshipSchema()
+            friendship_dict = friendship_schema.dump(p)
+            pr_dict_list.append(friendship_dict)
+        return pr_dict_list
+
 
     
 

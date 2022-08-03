@@ -3,12 +3,29 @@
 {% block title %} Create Match {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+	/* Custom style */
+    .accordion-button::after {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+      transform: scale(.7) !important;
+      content: '' !important;
+    }
+    .accordion-button:not(.collapsed)::after {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+      content: '' !important;
+    }
+
+    .accordian-button {
+      content: '' !important;
+    }
+</style>
+{% endblock stylesheets %}
 
 {% block content %}
 
 <div class="container-fluid">
-    <div class="row mt-2">
+    <div class="row mt-4">
         <div class="col">
             <h5>Create Match</h5>
         </div>
@@ -21,7 +38,7 @@
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingOne">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Select Heroes
+                            1. Select Heroes
                         </button>
                       </h2>
                       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -52,7 +69,7 @@
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                          Select Map
+                          2. Select Map
                         </button>
                       </h2>
                       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -69,7 +86,7 @@
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Match Rounds
+                          3. Match Rounds
                         </button>
                       </h2>
                       <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
@@ -89,6 +106,22 @@
                                 <div class="col">
                                     <ol class="list-group list-group-numbered match-round-list">
                                     </ol>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                          4. Tag Friends (Optional)
+                        </button>
+                      </h2>
+                      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col">
+                                  No Friends Available
                                 </div>
                             </div>
                         </div>
@@ -116,6 +149,19 @@
                     </ul> -->
                     <div class="card-body">
                       <div class="row">
+                        <div class="col d-grid gap-2">
+                          <div class="input-group">
+                              <span class="input-group-text">
+                                  Match Played On
+                              </span>
+                              <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <button type="button" class="btn btn-primary">Today</button>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
                         <div class="col d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-block">Submit Match</button>
                         </div>

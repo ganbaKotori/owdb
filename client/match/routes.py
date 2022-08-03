@@ -17,6 +17,15 @@ def get_create_match_page():
     print('create match page')
     return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
 
+@match.get('/<int:match_id>')
+@login_required
+def get_edit_match_page(match_id):
+    ow_maps = Map.query.all()
+    ow_heroes = Hero.query.all()
+    ow_hero_roles = HeroRole.query.all()
+    form = CreateMatchForm()
+    return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
+
 @match.get('/all')
 @login_required
 def get_all_matches_page():

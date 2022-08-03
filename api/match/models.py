@@ -30,6 +30,7 @@ class Match(db.Model):
     ranked_flag : bool
     # result : MatchResult
     result_formatted : str
+    date_match_played : datetime
 
     roles : List[str]
 

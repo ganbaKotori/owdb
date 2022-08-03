@@ -5,6 +5,7 @@ from api.map.models import Map
 from api.hero.models import Hero
 from flask_login import current_user, login_required
 from api.match.forms import CreateMatchForm
+from datetime import datetime
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
@@ -19,11 +20,13 @@ def add_match():
         hero_role = request.form.get('ow_hero_role')
         ow_map = request.form.get('ow_map')
         heroes = request.form.getlist('ow_heroes')
+        date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
+        print(date_match_played)
         # print(hero_role)
         # print(ow_map)
         # print(heroes)
         map_played = Map.query.filter(Map.id==int(ow_map)).first_or_404()
-        new_match = Match(user_id=current_user.id, ranked_flag=True, map_played=map_played)
+        new_match = Match(created_by_user_id=current_user.id, ranked_flag=True, map_played=map_played, date_match_played=date_match_played)
         for hero in heroes:
             a = MatchHero()
             a.hero = Hero.query.filter(Hero.id==int(hero)).first_or_404()

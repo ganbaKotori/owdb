@@ -1,7 +1,8 @@
 from flask import make_response, jsonify, redirect, url_for, Blueprint, request
 from flask_login import current_user
-from api.user.models import User 
+from api.user.models import User, Friendship
 from app import db
+from sqlalchemy import and_
 
 
 user = Blueprint('user', __name__, url_prefix='/user')
@@ -19,3 +20,14 @@ def send_friend_request(user_username):
     current_user.send_friend_request(requested_user.id)
     db.session.commit()
     return make_response(jsonify(requested_user),200)
+
+@user.post('/friendship/<int:friendship_id>/accept')
+def accept_friend_request(friendship_id):
+    current_user.accept_friend_request(friendship_id)
+    db.session.commit()
+    return make_response("accepted",200)
+
+@user.get('/friendship/requests')
+def get_friend_requests():
+    pending_requests = current_user.get_friend_requests()
+    return make_response(jsonify(pending_requests),200)

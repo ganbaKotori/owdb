@@ -97,7 +97,16 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
-                                    {{match.result_formatted}}
+                                    <h5>
+                                        {% if match.result_formatted == "VICTORY" %}
+                                            <span class="badge bg-success">{{match.result_formatted}}</span>
+                                        {% elif match.result_formatted == "DEFEAT" %}
+                                            <span class="badge bg-danger">{{match.result_formatted}}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">{{match.result_formatted}}</span>
+                                        {% endif %}
+                                        
+                                    </h5>
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
@@ -106,10 +115,12 @@
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                Today
+                                <div class="d-flex">
+                                    {{match.date_match_played}}
+                                </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                <button class="btn btn-info" type="button">View</button>
+                                <a href="/match/{{match.id}}"><button class="btn btn-info" type="button">View</button></a>
                             </td>
                         </tr>
                         {% endfor %}

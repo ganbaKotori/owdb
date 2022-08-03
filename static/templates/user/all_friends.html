@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container mt-4">
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
           <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All Friends</button>
@@ -32,7 +32,15 @@
                             <div class="card-body">
                               <h5 class="card-title">{{friend}}</h5>
                               <!-- <p class="card-text">This is a wider card with supporting text.</p> -->
-                              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                              <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Options
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                  <li><a class="dropdown-item" href="#">View Profile</a></li>
+                                  <li><a class="dropdown-item" href="#">Remove Friend</a></li>
+                                </ul>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -42,10 +50,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            <div class="row mt-4">
-                <div class="col-2">
-                    <a href="/add_friend"><button type="button" class="btn btn-primary">Pending Requests</button></a>
-                </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-4 pending-request-cards">
             </div>
         </div>
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
@@ -56,12 +61,62 @@
             </div>
         </div>
       </div>
-
-
 </div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script>
+    const get_friend_requests = async () => {
+        const response = await fetch(`/api/user/friendship/requests`, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        });
+        return response.json();
+    }
+
+    const accept_friend_request = async friendship_id => {
+        const response = await fetch(`/api/user/friendship/${friendship_id}/accept`, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        });
+        return response.json();
+    }
+
+    $('#nav-profile-tab').on('click', async function(){
+        let results = await get_friend_requests();
+        render_friend_request_cards(results)
+        console.log(results);
+    })
+
+    $('.pending-request-cards').on('click', '.accept-btn',  async function(){
+        let friendship_id = $(this).data("friendship-id")
+        let results = await accept_friend_request(friendship_id);
+        // render_friend_request_cards(results)
+        // console.log(results);
+    })
+
+    const render_friend_request_cards = pending_requests => {
+        $('.pending-request-cards').empty()
+        pending_requests.forEach(p_request => {
+            $('.pending-request-cards').append(`
+            <div class="col">
+                    <div class="card" style="max-width: 590px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/7RTX92EKZMZB1516142180655.png" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h5 class="card-title">${p_request.user.username}</h5>
+                              <button type="button" data-friendship-id=${p_request.id} class="btn btn-primary accept-btn">Accept</button>
+                              <button type="button" data-friendship-id=${p_request.id} class="btn btn-primary decline-btn">Decline</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div> 
+            `)
+        });
+    }
+</script>
 {% endblock javascripts %}
