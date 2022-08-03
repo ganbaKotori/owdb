@@ -185,5 +185,11 @@ $(document).ready(function() {
 		}
 
 	});
+
+	$('.tag-friends-btn').on('click', async function() {
+		const friends = await get_current_user_friends();
+		console.log(friends)
+
+	});
 	
 });

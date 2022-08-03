@@ -31,6 +31,7 @@ class Match(db.Model):
     # result : MatchResult
     result_formatted : str
     date_match_played : datetime
+    date_match_played_formatted : str
 
     roles : List[str]
 
@@ -70,6 +71,11 @@ class Match(db.Model):
     @property
     def result_formatted(self):
         return self.match_result.value
+
+    @property
+    def date_match_played_formatted(self):
+        print(type(self.date_match_played))
+        return self.date_match_played.strftime("%B %d, %Y @ %H:%M%p")
 
     @hybrid_property
     def tank_hero_count(self):
