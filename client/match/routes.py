@@ -29,5 +29,5 @@ def get_edit_match_page(match_id):
 @match.get('/all')
 @login_required
 def get_all_matches_page():
-    current_user_matches = Match.query.filter(Match.user_id==current_user.id).all()
+    current_user_matches = Match.query.filter(Match.created_by_user_id==current_user.id).all()
     return render_template('match/all_matches.html', current_user_matches=current_user_matches)

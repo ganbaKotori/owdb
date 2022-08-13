@@ -7,6 +7,24 @@
 
 {% block content %}
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Removal</h5>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove <span></span> as a friend?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container mt-4">
     <!-- <div class="d-flex align-items-start">
         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -52,8 +70,8 @@
                                   Options
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                  <li><a class="dropdown-item" href="#">View Profile</a></li>
-                                  <li><a class="dropdown-item" href="#">Remove Friend</a></li>
+                                  <li><a class="dropdown-item" href="{{ url_for('client.user.get_user_profile_page', username=friend) }}">View Profile</a></li>
+                                  <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Remove Friend</a></li>
                                 </ul>
                               </div>
                             </div>

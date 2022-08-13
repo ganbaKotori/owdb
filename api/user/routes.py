@@ -27,6 +27,12 @@ def accept_friend_request(friendship_id):
     db.session.commit()
     return make_response("accepted",200)
 
+@user.delete('/friendship/<int:friendship_id>')
+def remove_friend(friendship_id):
+    current_user.remove_friend(friendship_id)
+    db.session.commit()
+    return make_response("deleted",200)
+
 @user.get('/friendship/requests')
 def get_friend_requests():
     pending_requests = current_user.get_friend_requests()

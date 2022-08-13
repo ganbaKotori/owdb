@@ -1,0 +1,127 @@
+{% if current_user.is_authenticated %}
+{% extends "layouts/base.html" %}
+{% else %}
+{% extends "layouts/base-fullscreen.html" %}
+{% endif %}
+
+{% block title %} Your Friends {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-xl-12">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card shadow border-0 text-center p-0">
+                    <div class="profile-cover rounded-top" data-background="/static/assets/img/ow_map_img/default.jpg"></div>
+                    <div class="card-body pb-5">
+                        <img src="https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/7RTX92EKZMZB1516142180655.png" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
+                        <h4 class="h3">
+                            {{ user.username }}
+                        </h4>
+                        <!-- <h5 class="fw-normal">
+                            Text
+                        </h5>
+                        <p class="text-gray mb-4">
+                            text 2
+                        </p> -->
+                        <a class="btn btn-sm btn-gray-800 d-inline-flex align-items-center me-2" href="#">
+                            <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path></svg>
+                            Add User
+                        </a>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="fs-5 fw-bold mb-0">Last 5 Matches</h2>
+                    </div>
+                    <div class="col text-end">
+                        <!-- <a href="/match/all" class="btn btn-sm btn-primary">See all</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="border-bottom" scope="col">Map</th>
+                        <th class="border-bottom" scope="col">Role</th>
+                        <th class="border-bottom" scope="col">Heroes</th>
+                        <th class="border-bottom" scope="col">Result</th>
+                        <th class="border-bottom" scope="col">Ranked</th>
+                        <th class="border-bottom" scope="col">Date</th>
+                        <th class="border-bottom" scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for match in current_user_matches %}
+                    <tr>
+                        <th class="text-gray-900" scope="row">
+                            {{match.map_played.name}}
+                        </th>
+                        <td class="fw-bolder text-gray-500">
+                            {% for role in match.roles %}
+                            {{role}} 
+                            {% endfor %}
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            {% for hero_played in match.heroes_played %}
+                                {{hero_played.hero.name}} , 
+                            {% endfor %}
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            <div class="d-flex">
+                                <h5>
+                                    {% if match.result_formatted == "VICTORY" %}
+                                        <span class="badge bg-success">{{match.result_formatted}}</span>
+                                    {% elif match.result_formatted == "DEFEAT" %}
+                                        <span class="badge bg-danger">{{match.result_formatted}}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">{{match.result_formatted}}</span>
+                                    {% endif %}
+                                    
+                                </h5>
+                            </div>
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            <div class="d-flex">
+                                {{match.ranked_flag_formatted}}
+                            </div>
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            <div class="d-flex">
+                                {{match.date_match_played_formatted}}
+                            </div>
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            <a href="/match/{{match.id}}"><button class="btn btn-info" type="button">View</button></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+
+</script>
+{% endblock javascripts %}

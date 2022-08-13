@@ -75,6 +75,10 @@ class User(UserMixin, db.Model):
         friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==False)).first()
         friendship.request_accepted = True
 
+    def remove_friend(self, friendship_id):
+        friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==False)).first()
+        db.session.delete(friendship)
+
     def get_friend_requests(self):
         pending_requests = Friendship.query.filter(and_(Friendship.friend_id==self.id, Friendship.request_accepted==False)).all()
         pr_dict_list = []
