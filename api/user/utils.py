@@ -20,9 +20,20 @@ def get_current_user_sent_friend_requests():
     friends = db.session.query(User.username).filter(User.id.in_(current_to_friend_ids)).all()
     return [i[0] for i in friends]
 
-def is_current_user_friends_with_user(user_id):
-    friendship = Friendship.query.filter(or_(and_(Friendship.user_id==current_user.id, Friendship.friend_id==user_id, Friendship.request_accepted==True),
-                                             and_(Friendship.user_id==user_id, Friendship.friend_id==current_user.id, Friendship.request_accepted==True))).first()
-    if friendship is None:
-        return False
-    return friendship.request_accepted
+def get_current_user_relationship_status(user_id):
+    relationship = {
+        "following": False,
+        "followed_by": False,
+        "following_received": False,
+        "following_requested": False,
+    }
+
+    following_status = Friendship.query.filter(and_(Friendship.user_id==current_user.id, Friendship.friend_id==user_id)).first()
+    followed_by_status = Friendship.query.filter(and_(Friendship.user_id==user_id, Friendship.friend_id==current_user.id)).first()
+
+    relationship["following"] = True if following_status else False
+    relationship["following_received"] = following_status.request_accepted if following_status else False
+    relationship["followed_by"] = True if followed_by_status else False
+    relationship["following_requested"] = followed_by_status.request_accepted if followed_by_status else False
+
+    return relationship

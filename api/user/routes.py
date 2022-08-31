@@ -19,7 +19,7 @@ def send_friend_request(user_username):
     print(requested_user)
     current_user.send_friend_request(requested_user.id)
     db.session.commit()
-    return make_response(jsonify(requested_user),200)
+    return make_response({"response" : "Friend Request Sent!"},200)
 
 @user.post('/friendship/<int:friendship_id>/accept')
 def accept_friend_request(friendship_id):
