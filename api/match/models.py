@@ -1,5 +1,4 @@
 import enum
-from api.user.models import User
 from dataclasses import dataclass
 from sqlalchemy import Enum
 from app import db
@@ -115,13 +114,6 @@ class Match(db.Model):
         #self.requested_friends.append(MatchTaggedUser(user_id=self.id))
 
     def add_user(self, user, accepted_flag):
-        # __tablename__ = "ow_match_user"
-        # id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-        # match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-        # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-        # accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
-
-        # heroes_played = db.relationship("MatchUserHero")
         match_user = MatchUser(match_id = self.id, user_id = user.id, accepted_flag = accepted_flag)
         self.users.append(match_user)
 
@@ -251,5 +243,11 @@ class MatchUser(db.Model):
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
+    #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
 
     heroes_played = db.relationship("MatchUserHero")
+
+    def add_hero(self, hero_id):
+        match_user_hero = MatchUserHero()
+        match_user_hero.hero = Hero.query.filter(Hero.id==int(hero_id)).first_or_404()
+        self.heroes_played.append(match_user_hero)

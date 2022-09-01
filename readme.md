@@ -8,3 +8,4 @@ source venv/bin/activate
 
 Windows:
 owdb-env\Scripts\activate
+$env FLASK_APP=app

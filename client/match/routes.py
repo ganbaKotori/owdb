@@ -1,9 +1,11 @@
+from urllib import request
 from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
 from api.map.models import Map
 from api.hero.models import Hero, HeroRole
 from api.match.models import Match
 from api.match.forms import CreateMatchForm
+import api.user.utils as user_utils
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
@@ -13,7 +15,13 @@ def get_create_match_page():
     ow_maps = Map.query.all()
     ow_heroes = Hero.query.all()
     ow_hero_roles = HeroRole.query.all()
+    friends = user_utils.get_current_user_friends()
+    print(friends)
+    current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
+    print(current_user_friends)
     form = CreateMatchForm()
+    form.tagged_friends[0].username.choices = current_user_friends
+    print(form.tagged_friends[0].username)
     print('create match page')
     return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
 

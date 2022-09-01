@@ -32,6 +32,7 @@
     </div>
     <form method="post" action="/api/match">
         {{form.hidden_tag()}}
+        {{form.tagged_friends}}
         <div class="row">
             <div class="col-12 col-md-7 mb-3">
                 <div class="accordion" id="accordionExample">
@@ -122,6 +123,9 @@
                             <div class="row">
                                 <div class="col">
                                   No Friends Available
+                                  <div class="tagged_friends">
+
+                                  </div>
                                 </div>
                             </div>
                         </div>

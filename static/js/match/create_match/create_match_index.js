@@ -68,6 +68,36 @@ class Match {
 	}
 }
 
+class User {
+	constructor(id) {
+		this.id = id;
+		this.heroes_played = [];
+		this.hero_role = null;
+
+	}
+
+	constructor(id, heroes_played, hero_role) {
+		this.id = id;
+		this.heroes_played = heroes_played;
+		this.hero_role = hero_role;
+	}
+
+	add_hero(hero_id){
+		this.heroes_played.push(hero_id);
+	}
+
+
+
+}
+
+class Hero {
+	constructor(id){
+		this.id = id;
+	}
+
+
+}
+
 /*
 				<div class="col-3">
 					<h6><i>Result</i></h6>
