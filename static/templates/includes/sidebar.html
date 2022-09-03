@@ -58,6 +58,14 @@
                   <span class="sidebar-text">Matches</span>
                 </a>
               </li>
+              <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+                <a href="/match/invites" class="nav-link">
+                  <span class="sidebar-icon">
+                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  </span>
+                  <span class="sidebar-text">Match Invites <span class="badge bg-secondary text-black">0</span></span>
+                </a>
+              </li>
               <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="/friends" class="nav-link">
                   <span class="sidebar-icon">
@@ -66,6 +74,7 @@
                   <span class="sidebar-text">Friends</span>
                 </a>
               </li>
+              
               <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
                 <a href="/match/all" class="nav-link">
                   <span class="sidebar-icon">

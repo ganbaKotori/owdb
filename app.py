@@ -28,6 +28,16 @@ from client.routes import client
 from api.map.utils import add_all_ow_maps
 from api.hero.utils import add_all_ow_heroes
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('home/page-404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    # note that we set the 404 status explicitly
+    return render_template('home/page-500.html'), 500
+
 '''
 SET ENVIRONMENT AS DEVELOPMENT IN POWERSHELL:
     $env:FLASK_ENV = "development"

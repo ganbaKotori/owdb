@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from app import db, login_manager    
 from typing import List
 from sqlalchemy import and_
-from marshmallow import Schema, fields                
+from marshmallow import Schema, fields
+from flask import redirect       
 
 # @dataclass
 # class Friendship(db.Model):
@@ -45,6 +46,10 @@ class Friendship(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/login')
 
 @dataclass
 class User(UserMixin, db.Model):
