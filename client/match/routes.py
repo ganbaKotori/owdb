@@ -3,9 +3,12 @@ from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
 from api.map.models import Map
 from api.hero.models import Hero, HeroRole
-from api.match.models import Match
+from api.match.models import Match, MatchUser, MatchUserHero, Hero
 from api.match.forms import CreateMatchForm
 import api.user.utils as user_utils
+from app import db
+from sqlalchemy.orm import joinedload
+from api.user.models import User
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
@@ -37,5 +40,24 @@ def get_edit_match_page(match_id):
 @match.get('/all')
 @login_required
 def get_all_matches_page():
-    current_user_matches = Match.query.filter(Match.created_by_user_id==current_user.id).all()
-    return render_template('match/all_matches.html', current_user_matches=current_user_matches)
+    #current_user_matches = Match.query.filter(MatchUser.user_id==current_user.id).all()
+    #current_user_matches = Match.query.join(MatchUser, Match.users).filter(MatchUser.user_id==current_user.id).all()
+    results = db.session.query(Match.id, Map.name, Match.match_result, Match.ranked_flag, Match.date_match_played, User.username)\
+                        .join(MatchUser, Match.users)\
+                        .join(Map, Match.map_played)\
+                        .join(User, Match.created_by_user)\
+                        .filter(MatchUser.user_id==current_user.id)\
+                        .all()
+    matches = [] 
+    for match_id, map_name, match_result, ranked_flag, date_match_played, submitted_by_username in results:
+        matches.append({
+            "match_id" : match_id,
+            "map_name" : map_name,
+            "match_result" : match_result,
+            "ranked_flag" : ranked_flag,
+            "date_match_played" : date_match_played,
+            "submitted_by_username" : submitted_by_username
+        })
+    print(matches)
+
+    return render_template('match/all_matches.html', current_user_matches=[], all_matches=matches)

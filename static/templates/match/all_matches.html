@@ -19,37 +19,37 @@
                         <th>RESULT</th>
                         <th>RANKED</th>
                         <th>DATE</th>
+                        <th>SUBMITTED BY</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for match in current_user_matches %}
+                    {% for match in all_matches %}
                     <tr>
                         <th class="text-gray-900" scope="row">
-                            {{match.map_played.name}}
+                            {{match.map_name}}
                         </th>
                         <td class="fw-bolder text-gray-500">
-                            {% for role in match.roles %}
-                            {{role}} 
-                            {% endfor %}
+                            Role goes here
                         </td>
                         <td class="fw-bolder text-gray-500">
-                            {% for hero_played in match.heroes_played %}
-                                {{hero_played.hero.name}} , 
-                            {% endfor %}
+                            Heroes go here
                         </td>
                         <td class="fw-bolder text-gray-500">
                             <div class="d-flex">
-                                {{match.result_formatted}}
+                                {{match.match_result}}
                             </div>
                         </td>
                         <td class="fw-bolder text-gray-500">
                             <div class="d-flex">
-                                {{match.ranked_flag_formatted}}
+                                {{match.ranked_flag}}
                             </div>
                         </td>
                         <td class="fw-bolder text-gray-500">
-                            Today
+                            {{match.date_match_played}}
+                        </td>
+                        <td class="fw-bolder text-gray-500">
+                            {{match.submitted_by_username}}
                         </td>
                         <td class="fw-bolder text-gray-500">
                             View

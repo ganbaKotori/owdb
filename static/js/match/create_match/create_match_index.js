@@ -7,6 +7,8 @@ class Match {
 		this.current_map_id = null;
 		this.current_map_selected = null;
 		this.add_round();
+
+		this.tagged_friend_id_count = 0;
 	}
 
 	set_current_ow_map(ow_map) {
@@ -54,6 +56,55 @@ class Match {
 		this.round_id_count++;
 	}
 
+	add_tagged_friend() {
+		$('.tagged-friends-list').append(`
+		<li class="list-group-item">
+			<div class="row ml-2">
+				<div class="col-5">
+					<h6><i>Role</i></h6>
+					<input
+						class="btn-check"
+						id="tagged_friends-${this.tagged_friend_id_count}-role-damage"
+						name="tagged_friends-${this.tagged_friend_id_count}-role" 
+						type="radio"
+						value="DAMAGE"
+					>
+					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-damage">Damage</label>
+					<input 
+						class="btn-check"
+						id="tagged_friends-${this.tagged_friend_id_count}-role-tank"
+						name="tagged_friends-${this.tagged_friend_id_count}-role"
+						type="radio"
+						value="TANK"
+					>
+					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-tank">Tank</label>
+					<input
+						class="btn-check"
+						id="tagged_friends-${this.tagged_friend_id_count}-role-support"
+						name="tagged_friends-${this.tagged_friend_id_count}-role"
+						type="radio"
+						value="SUPPORT"
+					>
+					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-support">Support</label>
+				</div>
+				<div class="col-5">
+					<h6><i><span id="tagged_friends-${this.tagged_friend_id_count}-score-text"></span>Friend</i></h6>
+					<select 
+						class="form-select form-select-lg"
+						id="tagged_friends-${this.tagged_friend_id_count}-username"
+						name="tagged_friends-${this.tagged_friend_id_count}-username">
+						<option value="kotori1338">kotori1338</option>
+						<option value="DaBestRein">DaBestRein</option>
+					</select>
+				</div>
+				<div class="col-2">
+					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+				</div>
+			</div>
+	  	</li>`);
+		this.tagged_friend_id_count++;
+	}
+
 	remove_round(round) {
 		if (this.round_count > 1) {
 			this.round_count--;
@@ -76,11 +127,11 @@ class User {
 
 	}
 
-	constructor(id, heroes_played, hero_role) {
-		this.id = id;
-		this.heroes_played = heroes_played;
-		this.hero_role = hero_role;
-	}
+	// constructor(id, heroes_played, hero_role) {
+	// 	this.id = id;
+	// 	this.heroes_played = heroes_played;
+	// 	this.hero_role = hero_role;
+	// }
 
 	add_hero(hero_id){
 		this.heroes_played.push(hero_id);
@@ -190,6 +241,10 @@ $(document).ready(function() {
 		match.add_round();
 	});
 
+	$('.add_tagged-friend-btn').on('click', function() {
+		match.add_tagged_friend();
+	});
+
 	$(document).on('click', '.delete-match-round-btn', function() {
 		match.remove_round($(this).parent().parent().parent());
 	});
@@ -217,8 +272,8 @@ $(document).ready(function() {
 	});
 
 	$('.tag-friends-btn').on('click', async function() {
-		const friends = await get_current_user_friends();
-		console.log(friends)
+		// const friends = await get_current_user_friends();
+		// console.log(friends)
 
 	});
 	

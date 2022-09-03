@@ -11,6 +11,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import select, func
 from datetime import datetime
 from sqlalchemy.sql import case
+from flask_login import current_user
 
 class MatchResult(enum.Enum):
     VICTORY = "VICTORY"
@@ -20,6 +21,35 @@ class MatchResult(enum.Enum):
 class MatchPhase(enum.Enum):
     ATTACK = "ATTACK"
     DEFEND = "DEFEND"
+
+@dataclass
+class MatchUserHero(db.Model):
+    hero : Hero
+
+    __tablename__ = 'ow_match_user_hero'
+    #id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    #match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
+    match_user_id = db.Column(db.Integer, db.ForeignKey('ow_match_user.id'), primary_key=True)
+    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
+
+    hero = db.relationship("Hero")
+
+@dataclass
+class MatchUser(db.Model):
+
+    __tablename__ = "ow_match_user"
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
+    #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
+
+    heroes_played = db.relationship("MatchUserHero")
+
+    def add_hero(self, hero_id):
+        match_user_hero = MatchUserHero()
+        match_user_hero.hero = Hero.query.filter(Hero.id==int(hero_id)).first_or_404()
+        self.heroes_played.append(match_user_hero)
 
 @dataclass
 class Match(db.Model):
@@ -33,6 +63,10 @@ class Match(db.Model):
     date_match_played_formatted : str
 
     roles : List[str]
+
+    users : MatchUser
+
+    current_user_heroes: List[MatchUserHero]
 
     __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
@@ -48,6 +82,7 @@ class Match(db.Model):
     heroes_played = db.relationship("MatchHero")
     tagged_users = db.relationship("MatchTaggedUser")
     users = db.relationship("MatchUser")
+    created_by_user = db.relationship("User")
 
     @property
     def roles(self):
@@ -75,6 +110,10 @@ class Match(db.Model):
     def date_match_played_formatted(self):
         print(type(self.date_match_played))
         return self.date_match_played.strftime("%B %d, %Y @ %H:%M%p")
+
+    @property
+    def current_user_heroes(self):
+        return next((x.heroes_played for x in self.users if x.user_id == current_user.id), None)
 
     @hybrid_property
     def tank_hero_count(self):
@@ -113,8 +152,10 @@ class Match(db.Model):
         self.tagged_users.append()
         #self.requested_friends.append(MatchTaggedUser(user_id=self.id))
 
-    def add_user(self, user, accepted_flag):
+    def add_user(self, user, accepted_flag, heroes_played = []):
         match_user = MatchUser(match_id = self.id, user_id = user.id, accepted_flag = accepted_flag)
+        for hero_id in heroes_played:
+            match_user.add_hero(hero_id=hero_id)
         self.users.append(match_user)
 
     def add_round(self, score, phase):
@@ -223,31 +264,3 @@ class MatchTaggedUser(db.Model):
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-@dataclass
-class MatchUserHero(db.Model):
-    hero : Hero
-
-    __tablename__ = 'ow_match_user_hero'
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    #match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
-    match_user_id = db.Column(db.Integer, db.ForeignKey('ow_match_user.id'), primary_key=True)
-    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
-
-    hero = db.relationship("Hero")
-
-@dataclass
-class MatchUser(db.Model):
-
-    __tablename__ = "ow_match_user"
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
-    #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
-
-    heroes_played = db.relationship("MatchUserHero")
-
-    def add_hero(self, hero_id):
-        match_user_hero = MatchUserHero()
-        match_user_hero.hero = Hero.query.filter(Hero.id==int(hero_id)).first_or_404()
-        self.heroes_played.append(match_user_hero)
