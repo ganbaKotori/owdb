@@ -43,8 +43,10 @@ class MatchUser(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
     #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
+    hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
 
     heroes_played = db.relationship("MatchUserHero")
+    hero_role = db.relationship("HeroRole")
 
     def add_hero(self, hero_id):
         match_user_hero = MatchUserHero()
@@ -80,7 +82,6 @@ class Match(db.Model):
     rounds = db.relationship('MatchRound', backref='match')
     
     heroes_played = db.relationship("MatchHero")
-    tagged_users = db.relationship("MatchTaggedUser")
     users = db.relationship("MatchUser")
     created_by_user = db.relationship("User")
 
@@ -148,12 +149,8 @@ class Match(db.Model):
                 label("support_hero_count")
                 )
 
-    def add_tagged_user(self):
-        self.tagged_users.append()
-        #self.requested_friends.append(MatchTaggedUser(user_id=self.id))
-
-    def add_user(self, user, accepted_flag, heroes_played = []):
-        match_user = MatchUser(match_id = self.id, user_id = user.id, accepted_flag = accepted_flag)
+    def add_user(self, user, accepted_flag, hero_role_id, heroes_played = []):
+        match_user = MatchUser(match_id = self.id, user_id = user.id, accepted_flag = accepted_flag, hero_role_id = hero_role_id)
         for hero_id in heroes_played:
             match_user.add_hero(hero_id=hero_id)
         self.users.append(match_user)
@@ -255,12 +252,3 @@ class MatchHero(db.Model):
     hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
     hero = db.relationship("Hero")
-
-@dataclass
-class MatchTaggedUser(db.Model):
-
-    __tablename__ = "ow_match_tagged_user"
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-

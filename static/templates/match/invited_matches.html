@@ -10,7 +10,9 @@
 <div class="container-fluid">
     <div class="row mt-4">
         <div class="col">
-            
+            {% for match in match_invites %} 
+                <h6>{{match.match_id}} | {{match.submitted_by_username}} | {{match.date_match_played}}</h6>
+            {% endfor %}           
         </div>
     </div>
 

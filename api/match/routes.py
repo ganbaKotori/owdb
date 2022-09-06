@@ -21,7 +21,7 @@ def add_match():
         f.username.choices = current_user_friends
     if form.validate_on_submit():
         print(form.data)
-        hero_role = request.form.get('ow_hero_role')
+        hero_role = int(request.form.get('ow_hero_role'))
         ow_map = request.form.get('ow_map')
         heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
         date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
@@ -39,10 +39,17 @@ def add_match():
             new_match.add_round(phase=round['phase'], score=round['score'])
             #objectives_captured=round['result']
         #new_match.rounds[0].score = 1
-        new_match.add_user(user=current_user, accepted_flag=True, heroes_played=heroes)
+        new_match.add_user(user=current_user, accepted_flag=True, hero_role_id=hero_role, heroes_played=heroes)
         for friend in form.data['tagged_friends']:
+            if friend['role'] == 'DAMAGE':
+                hero_role = 1
+            elif friend['role'] == 'SUPPORT':
+                hero_role = 2
+            elif ['role'] == 'TANK':
+                hero_role = 3
+
             friend = User.query.filter(User.username==friend['username']).first_or_404()
-            new_match.add_user(user=friend, accepted_flag=False)
+            new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)
         db.session.add(new_match)
         db.session.commit()
         return redirect(url_for('client.dashboard.user_dashboard')) 

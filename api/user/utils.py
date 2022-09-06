@@ -26,6 +26,8 @@ def get_current_user_relationship_status(user_id):
         "followed_by": False,
         "following_received": False,
         "following_requested": False,
+        "following_friendship_id" : None,
+        "followed_by_friendship_id" : None
     }
 
     following_status = Friendship.query.filter(and_(Friendship.user_id==current_user.id, Friendship.friend_id==user_id)).first()
@@ -35,5 +37,6 @@ def get_current_user_relationship_status(user_id):
     relationship["following_received"] = following_status.request_accepted if following_status else False
     relationship["followed_by"] = True if followed_by_status else False
     relationship["following_requested"] = followed_by_status.request_accepted if followed_by_status else False
-
+    relationship["following_friendship_id"] = following_status.id if following_status else False
+    relationship["followed_by_friendship_id"] = followed_by_status.id if followed_by_status else False
     return relationship

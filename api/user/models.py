@@ -3,9 +3,10 @@ from flask_login import UserMixin
 from dataclasses import dataclass
 from app import db, login_manager    
 from typing import List
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from marshmallow import Schema, fields
-from flask import redirect       
+from flask import redirect
+from api.match.models import Match, MatchUser
 
 # @dataclass
 # class Friendship(db.Model):
@@ -80,8 +81,12 @@ class User(UserMixin, db.Model):
         friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==False)).first()
         friendship.request_accepted = True
 
-    def remove_friend(self, friendship_id):
+    def decline_friend_request(self, friendship_id):
         friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==False)).first()
+        db.session.delete(friendship)
+
+    def remove_friend(self, friendship_id):
+        friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==True)).first()
         db.session.delete(friendship)
 
     def get_friend_requests(self):
@@ -92,6 +97,18 @@ class User(UserMixin, db.Model):
             friendship_dict = friendship_schema.dump(p)
             pr_dict_list.append(friendship_dict)
         return pr_dict_list
+
+    def get_match_invite_count(self):
+        k = db.session.execute(
+                    db.session
+                        .query(Match)
+                        .join(MatchUser, Match.users)
+                        .filter(MatchUser.user_id == self.id)
+                        .filter(MatchUser.accepted_flag == False)
+                        .statement.with_only_columns([func.count()]).order_by(None)
+                    ).scalar()
+        return k
+
 
 
     
