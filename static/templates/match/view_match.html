@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Pending Matches {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow border-0 text-center p-0">
+                <div class="profile-cover rounded-top" data-background="/static/assets/img/ow_map_img/default.jpg"></div>
+                <div class="card-img-overlay text-white">
+                    <h5 class="card-title">{{match.result_formatted}}</h5>
+                    <p class="card-text">Score: {{match.team_score_formatted}} - {{match.enemy_score_formatted}}</p>
+                    <p class="card-text">{{match.date_match_played_formatted}}</p>
+                </div>
+                <div class="card-body pb-5">
+                    <h4 class="h3">
+                        {{match.map_played.name}}
+                    </h4>
+                </div>
+            </div>
+        </div>   
+    </div>
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+//     $(document).ready( function () {
+//     $('#myTable').DataTable();
+// } );
+</script>
+
+{% endblock javascripts %}

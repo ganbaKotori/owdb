@@ -70,6 +70,9 @@ class Match(db.Model):
 
     current_user_heroes: List[MatchUserHero]
 
+    team_score_formatted : int
+    enemy_score_formatted : int
+
     __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))
@@ -198,6 +201,10 @@ class Match(db.Model):
                 where(MatchRound.match_id == cls.id).
                 label("match_round_team_score")
                 )   
+
+    @property
+    def team_score_formatted(self):
+        return self.team_score
     
     @hybrid_property
     def enemy_team_score(self):
@@ -215,7 +222,11 @@ class Match(db.Model):
                 where(MatchRound.phase == MatchPhase.DEFEND).
                 where(MatchRound.match_id == cls.id).
                 label("match_round_enemy_score")
-                )   
+                )
+
+    @property
+    def enemy_score_formatted(self):
+        return self.enemy_team_score
 
     @hybrid_property
     def match_result(self):
