@@ -4,6 +4,7 @@ from api.match.models import Match
 from api.user.models import User
 from app import db
 from sqlalchemy import desc
+import api.match.utils as match_utils
 
 
 dashboard = Blueprint('dashboard', __name__)
@@ -13,6 +14,7 @@ dashboard = Blueprint('dashboard', __name__)
 def user_dashboard():
     # current_user.send_friend_request(7)
     # db.session.commit()
-    current_user_matches = Match.query.filter(Match.created_by_user_id==current_user.id).order_by(desc(Match.date_match_played)).limit(5).all()
-    print(current_user_matches)
-    return render_template('home/dashboard.html', current_user_matches=current_user_matches)
+    #current_user_matches = Match.query.filter(Match.created_by_user_id==current_user.id).order_by(desc(Match.date_match_played)).limit(5).all()
+    #print(current_user_matches)
+    recent_matches = match_utils.get_current_user_matches(5)
+    return render_template('home/dashboard.html', current_user_matches=recent_matches)

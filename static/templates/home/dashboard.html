@@ -83,27 +83,25 @@
                             {% for match in current_user_matches %}
                         <tr>
                             <th class="text-gray-900" scope="row">
-                                {{match.map_played.name}}
+                                {{match.map_name}}
                             </th>
                             <td class="fw-bolder text-gray-500">
-                                {% for role in match.roles %}
-                                {{role}} 
-                                {% endfor %}
+                                {{match.hero_role}}
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                {% for hero_played in match.heroes_played %}
-                                    {{hero_played.hero.name}} , 
+                                {% for hero in match.heroes_played %}
+                                    {{hero}} , 
                                 {% endfor %}
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
                                     <h5>
-                                        {% if match.result_formatted == "VICTORY" %}
-                                            <span class="badge bg-success">{{match.result_formatted}}</span>
-                                        {% elif match.result_formatted == "DEFEAT" %}
-                                            <span class="badge bg-danger">{{match.result_formatted}}</span>
+                                        {% if match.match_result == "VICTORY" %}
+                                            <span class="badge bg-success">{{match.match_result}}</span>
+                                        {% elif match.match_result == "DEFEAT" %}
+                                            <span class="badge bg-danger">{{match.match_result}}</span>
                                         {% else %}
-                                            <span class="badge bg-warning text-dark">{{match.result_formatted}}</span>
+                                            <span class="badge bg-warning text-dark">{{match.match_result}}</span>
                                         {% endif %}
                                         
                                     </h5>
@@ -111,17 +109,17 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
-                                    {{match.ranked_flag_formatted}}
+                                    {{match.ranked_flag}}
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
-                                    {{match.date_match_played_formatted}}
+                                    {{match.date_match_played}}
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                <a href="/match/{{match.id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
-                                <a href="/match/{{match.id}}"><button class="btn btn-info" type="button">View</button></a>
+                                <a href="/match/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
+                                <a href="/match/{{match.match_id}}"><button class="btn btn-info" type="button">View</button></a>
                             </td>
                         </tr>
                         {% endfor %}
