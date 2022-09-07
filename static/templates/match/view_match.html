@@ -25,6 +25,15 @@
             </div>
         </div>   
     </div>
+    <div class="row mt-2">
+        <div class="col">
+            <ol class="list-group">
+                {% for round in match.rounds%}
+                    <li class="list-group-item">{{round.phase}}:  {{round.score}}</li>
+                {% endfor %}
+              </ol>
+        </div>
+    </div>
 
 </div>
 
