@@ -93,8 +93,7 @@ class Match {
 						class="form-select form-select-lg"
 						id="tagged_friends-${this.tagged_friend_id_count}-username"
 						name="tagged_friends-${this.tagged_friend_id_count}-username">
-						<option value="kotori1338">kotori1338</option>
-						<option value="DaBestRein">DaBestRein</option>
+							${get_friends_options(current_user_friends)}
 					</select>
 				</div>
 				<div class="col-2">
@@ -225,6 +224,15 @@ const map_images = {
 "TEMPLE OF ANUBIS" : "\\static\\assets\\img\\ow_map_img\\temple-of-anubis.jpg",
 "WATCHPOINT: GIBRALTAR" : "\\static\\assets\\img\\ow_map_img\\watchpoint-gibraltar.jpg",
 "EICHENWALDE" :  "\\static\\assets\\img\\ow_map_img\\eichenwalde.jpg"
+}
+
+
+const get_friends_options = friends => {
+	let friends_options_str = ''
+	friends.forEach(friend => {
+		friends_options_str += `<option value="${friend}">${friend}</option>`;
+	})
+	return friends_options_str
 }
 
 $(document).ready(function() {

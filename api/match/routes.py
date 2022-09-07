@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 from api.match.forms import CreateMatchForm
 import api.user.utils as user_utils
 from datetime import datetime
+from sqlalchemy import and_
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
@@ -62,3 +63,20 @@ def add_match():
 def get_matches():
     current_user_matches = Match.query.filter(MatchUser.user_id==current_user.id).all()
     return jsonify(current_user_matches)
+
+@match.post('/<int:match_id>/accept')
+@login_required
+def accept_match_invite(match_id):
+    print(match_id)
+    match_user = MatchUser.query.filter(and_(MatchUser.match_id==int(match_id), MatchUser.user_id==current_user.id, MatchUser.accepted_flag==False)).first_or_404()
+    match_user.accepted_flag = True
+    db.session.commit()
+    return redirect(request.referrer)
+
+@match.post('/<int:match_id>/decline')
+@login_required
+def decline_match_invite(match_id):
+    match_user = MatchUser.query.filter(and_(MatchUser.match_id==match_id, MatchUser.user_id==current_user.id, MatchUser.accepted_flag==False)).first_or_404()
+    db.session.delete(match_user)
+    db.session.commit()
+    return redirect(request.referrer)

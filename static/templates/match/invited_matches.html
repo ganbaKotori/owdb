@@ -8,12 +8,30 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div class="row mt-4">
-        <div class="col">
-            {% for match in match_invites %} 
-                <h6>{{match.match_id}} | {{match.submitted_by_username}} | {{match.date_match_played}}</h6>
-            {% endfor %}           
-        </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+        {% for match in match_invites %} 
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{match.map_name}} </h5>
+                        <p class="card-text">Submitted by {{match.submitted_by_username}}</p>
+                        <p class="card-text">Match played on {{match.date_match_played}}</p>
+                        <div class="row justify-content-center">
+                            <div class="col-2">
+                                <form method="post" action="/api/match/{{match.match_id}}/accept">
+                                    <button type="submit" class="btn btn-success text-white">Accept</button>
+                                </form>
+                            </div>
+                            <div class="col-2">
+                                <form method="post" action="/api/match/{{match.match_id}}/decline">
+                                    <button type="submit" class="btn btn-danger">Decline</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}    
     </div>
 
 </div>

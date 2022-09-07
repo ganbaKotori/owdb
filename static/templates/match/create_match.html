@@ -185,8 +185,9 @@
 {% block javascripts %}
 <script type=text/javascript>
   const ow_maps_data = {{ ow_maps|tojson|safe }};
+  const current_user_friends = {{ friends|tojson|safe }};
 
-  console.log(ow_maps_data);
+  console.log(current_user_friends);
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>

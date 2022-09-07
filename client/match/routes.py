@@ -26,8 +26,7 @@ def get_create_match_page():
     form = CreateMatchForm()
     form.tagged_friends[0].username.choices = current_user_friends
     print(form.tagged_friends[0].username)
-    print('create match page')
-    return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
+    return render_template('match/create_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles,form=form,friends=friends)
 
 @match.get('/<int:match_id>')
 @login_required
