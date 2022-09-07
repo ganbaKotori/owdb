@@ -33,7 +33,9 @@
                             {{match.hero_role}}
                         </td>
                         <td class="fw-bolder text-gray-500">
-                            Heroes go here
+                            {% for hero in match.heroes_played %}
+                                {{hero}} , 
+                            {% endfor %}
                         </td>
                         <td class="fw-bolder text-gray-500">
                             <div class="d-flex">

@@ -1,0 +1,191 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Create Match {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+	/* Custom style */
+    .accordion-button::after {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+      transform: scale(.7) !important;
+      content: '' !important;
+    }
+    .accordion-button:not(.collapsed)::after {
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23333' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z' clip-rule='evenodd'/%3e%3c/svg%3e");
+      content: '' !important;
+    }
+
+    .accordian-button {
+      content: '' !important;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h5>Create Match</h5>
+        </div>
+    </div>
+    <form method="post" action="/api/match">
+        {{form.hidden_tag()}}
+        <div class="row">
+            <div class="col-12 col-md-7 mb-3">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            1. Select Heroes
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            {% for role in ow_hero_roles %}
+                            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
+                            <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
+                            {% endfor %}
+
+                            <div class="row">
+                                <div class="col">
+                                    {% for hero in ow_heroes %}
+                                    <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
+                                    
+                                        <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
+                                        <label class="form-check-label" for="hero-{{hero.id}}">
+                                            {{hero.name}}
+                                        </label>
+                                    </div>
+            
+                                    {% endfor %}
+            
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          2. Select Map
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
+                                <option value="" selected>Select Map</option>
+                                {% for map in ow_maps %}
+                                    <option value="{{map.id}}">{{map.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          3. Match Rounds
+                        </button>
+                      </h2>
+                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary add-round-btn">Add Round</button>
+                                </div>
+                                <div class="col">
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" disabled>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Quick Play</label>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <ol class="list-group list-group-numbered match-round-list">
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed tag-friends-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                          4. Tag Friends (Optional)
+                        </button>
+                      </h2>
+                      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <div class="row mb-3">
+                            <div class="col">
+                                <button type="button" class="btn btn-primary add_tagged-friend-btn">Tag Friend</button>
+                            </div>
+                        </div>
+                          <div class="row">
+                            <div class="col">
+                                <ol class="list-group list-group-numbered tagged-friends-list">
+                                </ol>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5 mb-3">
+                <div class="card">
+                    <div class="card bg-dark text-white">
+                        <img id="map-image" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" src="\static\assets\img\ow_map_img\default.jpg" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                          <h5 class="card-title" id="map-title-text">Select Map</h5>
+                          <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
+                        </div>
+                      </div>
+                    <!-- <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div> -->
+                    <!-- <ul class="list-group list-group-flush">
+                      <li class="list-group-item">An item</li>
+                      <li class="list-group-item">A second item</li>
+                      <li class="list-group-item">A third item</li>
+                    </ul> -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col d-grid gap-2">
+                          <div class="input-group">
+                              <span class="input-group-text">
+                                  Match Played On
+                              </span>
+                              <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <button type="button" class="btn btn-primary">Today</button>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-block text-white">Submit Match</button>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+</form>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script type=text/javascript>
+  const ow_maps_data = {{ ow_maps|tojson|safe }};
+</script>
+<script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
+{% endblock javascripts %}
