@@ -76,6 +76,7 @@
                             <th class="border-bottom" scope="col">Result</th>
                             <th class="border-bottom" scope="col">Ranked</th>
                             <th class="border-bottom" scope="col">Date</th>
+                            <th class="border-bottom" scope="col">Submitted By</th>
                             <th class="border-bottom" scope="col"></th>
                         </tr>
                         </thead>
@@ -115,6 +116,11 @@
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
                                     {{match.date_match_played}}
+                                </div>
+                            </td>
+                            <td class="fw-bolder text-gray-500">
+                                <div class="d-flex">
+                                    {{match.submitted_by_username}}
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">

@@ -16,7 +16,8 @@ def get_users():
 @user.post('/<string:user_username>/send_friend_request')
 def send_friend_request(user_username):
     requested_user = User.query.filter(User.username==user_username).first()
-    print(requested_user)
+    if requested_user.id == current_user.id:
+        return make_response({"response" : "Cannot send a friend request to yourself!"},400)
     current_user.send_friend_request(requested_user.id)
     db.session.commit()
     return make_response({"response" : "Friend Request Sent!"},200)

@@ -8,11 +8,13 @@ def add_all_ow_maps():
     hybrid = MapMode(name='Hybrid', max_score = 3)
     escort = MapMode(name='Escort', max_score = 3)
     assault = MapMode(name='Assault', max_score = 2)
+    push = MapMode(name='Assault', max_score = 1)
 
     db.session.add(control)
     db.session.add(hybrid)
     db.session.add(escort)
     db.session.add(assault)
+    db.session.add(push)
 
     hollywood = Map(name="HOLLYWOOD", map_mode=hybrid)
     db.session.add(hollywood)
@@ -52,5 +54,10 @@ def add_all_ow_maps():
     db.session.add(gibraltar)
     eichenwalde = Map(name='EICHENWALDE', map_mode=hybrid)
     db.session.add(eichenwalde)
+
+    rome = Map(name='ROME', map_mode=push)
+    db.session.add(rome)
+    toronto = Map(name='TORONTO', map_mode=push)
+    db.session.add(toronto)
 
     db.session.commit()
