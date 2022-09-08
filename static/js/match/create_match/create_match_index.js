@@ -1,5 +1,6 @@
+const MAX_TAGGED_FRIENDS = 5;
 class Match {
-	constructor() {
+	constructor(friends) {
 		this.round_count = 0;
 		this.round_id_count = 0;
 		this.total_player_team_score = 0;
@@ -8,11 +9,34 @@ class Match {
 		this.current_map_selected = null;
 		this.add_round();
 
+		this.tagged_friend_count = 0;
 		this.tagged_friend_id_count = 0;
+		//this.tagged_friends = tagged_friends;
+		this.all_friends = friends;
 	}
 
 	set_current_ow_map(ow_map) {
 		this.current_map_selected = ow_map;
+	}
+	
+	get_friends_options() {
+		let friends_options_str = '';
+		let current_tagged_friends = [];
+
+
+		$(".tagged-friend-select").each(function () {
+			if($(this).val() != null){
+				current_tagged_friends.push($(this).val());
+			}
+		})
+
+		this.all_friends.forEach(friend => {
+			if (!current_tagged_friends.includes(friend)){
+				friends_options_str += `<option value="${friend}">${friend}</option>`;
+			}
+			
+		})
+		return friends_options_str
 	}
 
 	add_round() {
@@ -57,51 +81,55 @@ class Match {
 	}
 
 	add_tagged_friend() {
-		$('.tagged-friends-list').append(`
-		<li class="list-group-item">
-			<div class="row ml-2">
-				<div class="col-5">
-					<h6><i>Role</i></h6>
-					<input
-						class="btn-check"
-						id="tagged_friends-${this.tagged_friend_id_count}-role-damage"
-						name="tagged_friends-${this.tagged_friend_id_count}-role" 
-						type="radio"
-						value="DAMAGE"
-					>
-					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-damage">Damage</label>
-					<input 
-						class="btn-check"
-						id="tagged_friends-${this.tagged_friend_id_count}-role-tank"
-						name="tagged_friends-${this.tagged_friend_id_count}-role"
-						type="radio"
-						value="TANK"
-					>
-					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-tank">Tank</label>
-					<input
-						class="btn-check"
-						id="tagged_friends-${this.tagged_friend_id_count}-role-support"
-						name="tagged_friends-${this.tagged_friend_id_count}-role"
-						type="radio"
-						value="SUPPORT"
-					>
-					<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-support">Support</label>
+		if(this.tagged_friend_count < MAX_TAGGED_FRIENDS){
+			$('.tagged-friends-list').append(`
+			<li class="list-group-item">
+				<div class="row ml-2">
+					<div class="col-5">
+						<h6><i>Role</i></h6>
+						<input
+							class="btn-check"
+							id="tagged_friends-${this.tagged_friend_id_count}-role-damage"
+							name="tagged_friends-${this.tagged_friend_id_count}-role" 
+							type="radio"
+							value="DAMAGE"
+							checked
+						>
+						<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-damage">Damage</label>
+						<input 
+							class="btn-check"
+							id="tagged_friends-${this.tagged_friend_id_count}-role-tank"
+							name="tagged_friends-${this.tagged_friend_id_count}-role"
+							type="radio"
+							value="TANK"
+						>
+						<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-tank">Tank</label>
+						<input
+							class="btn-check"
+							id="tagged_friends-${this.tagged_friend_id_count}-role-support"
+							name="tagged_friends-${this.tagged_friend_id_count}-role"
+							type="radio"
+							value="SUPPORT"
+						>
+						<label class="btn btn-outline-danger" for="tagged_friends-${this.tagged_friend_id_count}-role-support">Support</label>
+					</div>
+					<div class="col-5">
+						<h6><i><span id="tagged_friends-${this.tagged_friend_id_count}-score-text"></span>Friend</i></h6>
+						<select 
+							class="form-select form-select-lg tagged-friend-select"
+							id="tagged_friends-${this.tagged_friend_id_count}-username"
+							name="tagged_friends-${this.tagged_friend_id_count}-username">
+								${this.get_friends_options()}
+						</select>
+					</div>
+					<div class="col-2">
+						<svg class="icon icon-xs me-2 mt-4 delete-tagged-friend-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+					</div>
 				</div>
-				<div class="col-5">
-					<h6><i><span id="tagged_friends-${this.tagged_friend_id_count}-score-text"></span>Friend</i></h6>
-					<select 
-						class="form-select form-select-lg"
-						id="tagged_friends-${this.tagged_friend_id_count}-username"
-						name="tagged_friends-${this.tagged_friend_id_count}-username">
-							${get_friends_options(current_user_friends)}
-					</select>
-				</div>
-				<div class="col-2">
-					<svg class="icon icon-xs me-2 mt-4 delete-match-round-btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-				</div>
-			</div>
-	  	</li>`);
-		this.tagged_friend_id_count++;
+			  </li>`);
+			this.tagged_friend_id_count++;
+			this.tagged_friend_count++;
+		}
 	}
 
 	remove_round(round) {
@@ -109,6 +137,12 @@ class Match {
 			this.round_count--;
 			round.remove();
 		}
+	}
+
+	remove_tagged_friend(tagged_friend) {
+		tagged_friend.remove();
+		this.tagged_friend_count--;
+
 	}
 
 	_check_round_count() {
@@ -131,50 +165,16 @@ class User {
 	// 	this.heroes_played = heroes_played;
 	// 	this.hero_role = hero_role;
 	// }
-
 	add_hero(hero_id){
 		this.heroes_played.push(hero_id);
 	}
-
-
-
 }
 
 class Hero {
 	constructor(id){
 		this.id = id;
 	}
-
-
 }
-
-/*
-				<div class="col-3">
-					<h6><i>Result</i></h6>
-					<input type="radio" 
-						   class="btn-check"
-						   name="match_rounds-${this.round_id_count}-result"
-						   id="match_rounds-${this.round_id_count}-result-captured"
-						   autocomplete="off"
-						   value=1
-						   checked>
-					<label class="btn btn-outline-success btn-sm" for="match_rounds-${this.round_id_count}-result-captured">
-						Objectives Captured
-						<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-					</label>
-
-					<input type="radio"
-						   class="btn-check"
-						   name="match_rounds-${this.round_id_count}-result"
-						   id="match_rounds-${this.round_id_count}-result-lost"
-						   autocomplete="off"
-						   value=0>
-					<label class="btn btn-outline-danger btn-sm" for="match_rounds-${this.round_id_count}-result-lost">
-						Objectives Lost
-						<svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-					</label>
-				</div>
-*/
 
 class MatchRound {
 	constructor(phase, score) {
@@ -192,15 +192,13 @@ class OverwatchMap {
 	}
 }
 
-const match = new Match();
+const match = new Match(current_user_friends);
 const ow_maps = [];
 
 ow_maps_data.forEach(ow_map => {
 	let new_map = new OverwatchMap(ow_map.id, ow_map.name, ow_map.map_mode.name, ow_map.map_mode.max_score);
 	ow_maps.push(new_map)
 });
-
-console.log(ow_maps)
 
 
 
@@ -236,8 +234,9 @@ const get_friends_options = friends => {
 }
 
 $(document).ready(function() {
+	var date = new Date();
 	$('.ow-hero-check').hide();
-	console.log('starting');
+	$('#date-match-played').val(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
 
 	$('.ow-hero-role-radio-btn').on('change', function() {
 		console.log($(this).val());
@@ -250,11 +249,21 @@ $(document).ready(function() {
 	});
 
 	$('.add_tagged-friend-btn').on('click', function() {
+		$(".tagged-friend-select").each(function () {
+
+			console.log($(this).val());
+		
+		})
 		match.add_tagged_friend();
 	});
 
 	$(document).on('click', '.delete-match-round-btn', function() {
 		match.remove_round($(this).parent().parent().parent());
+	});
+
+	$(document).on('click', '.delete-tagged-friend-btn', function() {
+		console.log('clicked')
+		match.remove_tagged_friend($(this).parent().parent().parent());
 	});
 
 	$('#ow_map_select').on('change', function() {

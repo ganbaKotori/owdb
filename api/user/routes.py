@@ -3,6 +3,7 @@ from flask_login import current_user
 from api.user.models import User
 from app import db
 import api.user.utils as utils
+from api.user.schema import UserSchema
 
 
 user = Blueprint('user', __name__, url_prefix='/user')
@@ -10,8 +11,16 @@ user = Blueprint('user', __name__, url_prefix='/user')
 @user.get('')
 def get_users():
     keyword = request.args.get('keyword')
+    if len(keyword) < 5:
+        return make_response({'MESSAGE': 'MUST BE GREATER THAN 5 CHARACTERS'},400)
     users = User.query.filter(User.username.ilike(f'%{keyword}%')).all()
-    return make_response(jsonify(users),200)
+    pr_dict_list = []
+    for p in users:
+        friendship_schema = UserSchema()
+        friendship_dict = friendship_schema.dump(p)
+        pr_dict_list.append(friendship_dict)
+    #return pr_dict_list
+    return make_response(jsonify(pr_dict_list),200)
 
 @user.post('/<string:user_username>/send_friend_request')
 def send_friend_request(user_username):

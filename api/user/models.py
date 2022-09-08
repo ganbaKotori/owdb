@@ -26,14 +26,7 @@ class FriendshipSchema(Schema):
     id = fields.Integer()
     user = fields.Nested(UserSchema)
 
-
-# @dataclass
 class Friendship(db.Model):
-    # id: int
-    # user_id : int
-    # friend_id: int
-    # request_accepted : bool
-
     __tablename__ = 'friendship'
 
     id = db.Column(db.Integer, autoincrement= True)

@@ -17,7 +17,7 @@ match = Blueprint('match', __name__, url_prefix='/match')
 def add_match():
     #print(request.form)
     form = CreateMatchForm()
-    current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
+    current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()] + [None]
     for f in form.tagged_friends:
         f.username.choices = current_user_friends
     if form.validate_on_submit():
@@ -26,10 +26,6 @@ def add_match():
         ow_map = request.form.get('ow_map')
         heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
         date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
-        print(date_match_played)
-        # print(hero_role)
-        # print(ow_map)
-        # print(heroes)
         map_played = Map.query.filter(Map.id==int(ow_map)).first_or_404()
         new_match = Match(created_by_user_id=current_user.id, ranked_flag=True, map_played=map_played, date_match_played=date_match_played)
         for hero in heroes:
