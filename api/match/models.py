@@ -112,7 +112,6 @@ class Match(db.Model):
 
     @property
     def date_match_played_formatted(self):
-        print(type(self.date_match_played))
         return self.date_match_played.strftime("%B %d, %Y @ %H:%M%p")
 
     @property

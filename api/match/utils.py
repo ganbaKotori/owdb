@@ -48,7 +48,7 @@ def get_current_user_matches(match_count = None):
             "map_name" : map_name,
             "match_result" : match_result.split('.')[1],
             "ranked_flag" : ranked_flag,
-            "date_match_played" : date_match_played,
+            "date_match_played" : date_match_played.strftime("%B %d, %Y @ %H:%M%p"),
             "submitted_by_username" : submitted_by_username,
             "hero_role" : hero_role,
             "heroes_played" : []
