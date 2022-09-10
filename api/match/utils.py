@@ -6,14 +6,14 @@ from app import db
 from api.user.models import User
 from sqlalchemy import and_
 
-def get_current_user_matches(match_count = None):
+def get_current_user_matches(user_id, match_count = None):
     if match_count:
         subq = db.session.query(MatchUser.id)\
-            .filter(MatchUser.user_id==current_user.id)\
+            .filter(MatchUser.user_id==user_id)\
             .limit(match_count).subquery()
     else:
         subq = db.session.query(MatchUser.id)\
-        .filter(MatchUser.user_id==current_user.id)\
+        .filter(MatchUser.user_id==user_id)\
         .subquery()     
 
     match_results = db.session.query(Match.id, Map.name, Match.match_result, Match.ranked_flag, Match.date_match_played, User.username, HeroRole.title)\
