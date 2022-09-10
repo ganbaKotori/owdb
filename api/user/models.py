@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from dataclasses import dataclass
 from app import db, login_manager    
 from typing import List
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, or_
 from marshmallow import Schema, fields
 from flask import redirect
 from api.match.models import Match, MatchUser
@@ -80,6 +80,14 @@ class User(UserMixin, db.Model):
 
     def remove_friend(self, friendship_id):
         friendship = Friendship.query.filter(and_(Friendship.id==friendship_id, Friendship.friend_id==self.id, Friendship.request_accepted==True)).first()
+        db.session.delete(friendship)
+
+    def remove_friend_by_username(self, friend_username):
+        friend = User.query.filter(User.username==friend_username).first_or_404()
+        friendship = Friendship.query.filter(or_(
+                                                    and_(Friendship.user_id==friend.id, Friendship.friend_id==self.id, Friendship.request_accepted==True),
+                                                    and_(Friendship.user_id==self.id, Friendship.friend_id==friend.id, Friendship.request_accepted==True),
+                                                )).first_or_404()
         db.session.delete(friendship)
 
     def get_friend_requests(self):

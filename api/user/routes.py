@@ -43,11 +43,11 @@ def decline_friend_request(friendship_id):
     db.session.commit()
     return redirect(request.referrer)
 
-@user.delete('/friendship/<int:friendship_id>')
-def remove_friend(friendship_id):
-    current_user.remove_friend(friendship_id)
+@user.post('/friendship/<string:friend_username>/remove_friend')
+def remove_friend(friend_username):
+    current_user.remove_friend_by_username(friend_username)
     db.session.commit()
-    return make_response("deleted",200)
+    return redirect(request.referrer)
 
 @user.get('/friendship/requests')
 def get_friend_requests():
