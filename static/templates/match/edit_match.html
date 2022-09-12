@@ -30,7 +30,7 @@
             <h5>Create Match</h5>
         </div>
     </div>
-    <form method="post" action="/api/match">
+    <form method="post" action="/api/match/{{match.id}}">
         {{form.hidden_tag()}}
         <div class="row">
             <div class="col-12 col-md-7 mb-3">
@@ -44,20 +44,37 @@
                       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             {% for role in ow_hero_roles %}
-                            <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
-                            <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
+                              {% if role.id == c_u_hero_role_id %}
+                                  <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required checked>
+                                  <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
+                              {% else %}
+                                  <input type="radio" class="btn-check ow-hero-role-radio-btn" name="ow_hero_role" id="role-{{role.id}}" value="{{role.id}}" autocomplete="off" required>
+                                  <label class="btn btn-outline-primary" for="role-{{role.id}}">{{role.title}}</label>
+                              {% endif %}
+
                             {% endfor %}
 
                             <div class="row">
                                 <div class="col">
                                     {% for hero in ow_heroes %}
-                                    <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
-                                    
-                                        <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
-                                        <label class="form-check-label" for="hero-{{hero.id}}">
-                                            {{hero.name}}
-                                        </label>
-                                    </div>
+                                        {% if hero.id in c_u_heroes %}
+                                          <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
+                                      
+                                            <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes" checked>
+                                            <label class="form-check-label" for="hero-{{hero.id}}">
+                                                {{hero.name}}
+                                            </label>
+                                          </div>
+                                        {% else %}
+                                          <div class="form-check ow-hero-check ow-hero-check-role-{{hero.hero_role.id}}" style="display: none;">
+                                        
+                                            <input class="form-check-input" type="checkbox" value="{{hero.id}}" id="hero-{{hero.id}}" name="ow_heroes">
+                                            <label class="form-check-label" for="hero-{{hero.id}}">
+                                                {{hero.name}}
+                                            </label>
+                                          </div>
+                                        {% endif %}
+
             
                                     {% endfor %}
             
@@ -77,7 +94,12 @@
                             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
                                 <option value="" selected>Select Map</option>
                                 {% for map in ow_maps %}
-                                    <option value="{{map.id}}">{{map.name}}</option>
+                                    {% if map.id == match_map_id %}
+                                      <option value="{{map.id}}" selected>{{map.name}}</option>
+                                    {% else %}
+                                      <option value="{{map.id}}">{{map.name}}</option>
+                                    {% endif %}
+                                    
                                 {% endfor %}
                             </select>
                         </div>
@@ -185,6 +207,7 @@
 {% block javascripts %}
 <script type=text/javascript>
   const ow_maps_data = {{ ow_maps|tojson|safe }};
+  const current_user_friends = [];
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>

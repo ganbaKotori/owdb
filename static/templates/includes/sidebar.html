@@ -1,3 +1,4 @@
+        {% set match_invite_count = current_user.get_match_invite_count() %}
         <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
             <a class="navbar-brand me-lg-5" href="/">
                 <img class="navbar-brand-dark" src="/static/assets/img/brand/light.svg" alt="Volt logo" /> <img class="navbar-brand-light" src="/static/assets/img/brand/dark.svg" alt="Volt logo" />
@@ -51,6 +52,14 @@
                 </a>
               </li>
               <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
+                <a href="/match/create" class="nav-link">
+                  <span class="sidebar-icon">
+                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  </span>
+                  <span class="sidebar-text">New Match</span>
+                </a>
+              </li>
+              <li class="nav-item {% if 'settings' in segment %} active {% endif %}">
                 <a href="/match/all" class="nav-link">
                   <span class="sidebar-icon">
                     <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -63,7 +72,11 @@
                   <span class="sidebar-icon">
                     <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                   </span>
-                  <span class="sidebar-text">Match Invites <span class="badge bg-secondary text-black">{{current_user.get_match_invite_count()}}</span></span>
+                  <span class="sidebar-text">Match Invites
+                    {% if match_invite_count > 0 %}
+                      <span class="badge bg-secondary text-black">{{match_invite_count}}</span>
+                    {% endif %}
+                  </span>
                 </a>
               </li>
               <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">

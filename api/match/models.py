@@ -45,7 +45,8 @@ class MatchUser(db.Model):
     #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
     hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
 
-    heroes_played = db.relationship("MatchUserHero")
+    heroes_played = db.relationship("MatchUserHero",cascade="save-update, merge, "
+                                                "delete, delete-orphan")
     hero_role = db.relationship("HeroRole")
 
     def add_hero(self, hero_id):
@@ -243,6 +244,9 @@ class Match(db.Model):
             (cls.team_score > cls.enemy_team_score, MatchResult.VICTORY),
             (cls.team_score < cls.enemy_team_score, MatchResult.DEFEAT),
         ], else_ = MatchResult.DRAW)
+
+    def set_ow_map(self, map_id):
+        self.map_played = Map.query.filter(Map.id==map_id).first_or_404()
 
 
 @dataclass

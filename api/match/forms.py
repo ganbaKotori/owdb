@@ -17,4 +17,8 @@ class TaggedUser(Form):
 
 class CreateMatchForm(FlaskForm):
     match_rounds = FieldList(FormField(MatchRound), min_entries=1, max_entries=10)
-    tagged_friends = FieldList(FormField(TaggedUser), min_entries=1, max_entries=5)
+    tagged_friends = FieldList(FormField(TaggedUser), min_entries=0, max_entries=5)
+
+class EditMatchForm(FlaskForm):
+    #match_rounds = FieldList(FormField(MatchRound), min_entries=1, max_entries=10)
+    tagged_friends = FieldList(FormField(TaggedUser), min_entries=0, max_entries=5)

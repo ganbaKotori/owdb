@@ -68,7 +68,7 @@ class Match {
 					<h6><i><span id="match_rounds-${this.round_id_count}-score-text"></span> Score</i></h6>
 					<div class="input-group">
 						<button class="btn btn-primary" type="button" id="button-addon1">-</button>
-						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score">
+						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" required>
 						<button class="btn btn-primary" type="button" id="button-addon1">+</button>
 					</div>
 				</div>

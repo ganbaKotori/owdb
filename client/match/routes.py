@@ -47,7 +47,22 @@ def get_edit_match_page(match_id):
     match = Match.query.join(MatchUser, Match.users)\
                        .filter(and_(Match.id==match_id, MatchUser.user_id==current_user.id, MatchUser.accepted_flag==True))\
                        .first_or_404()
-    return render_template('match/edit_match.html', ow_maps=ow_maps, ow_heroes=ow_heroes, ow_hero_roles=ow_hero_roles, form=form)
+    c_u_match_info = next(user for user in match.users if user.user_id == current_user.id)
+    c_u_heroes = [match_hero.hero.id for match_hero in c_u_match_info.heroes_played]
+    c_u_hero_role_id = c_u_match_info.hero_role.id
+    match_map_id = match.map_played.id
+    print(c_u_heroes)
+    print(c_u_hero_role_id)
+    
+    return render_template('match/edit_match.html',
+                            match=match,
+                            ow_maps=ow_maps,
+                            ow_heroes=ow_heroes,
+                            ow_hero_roles=ow_hero_roles,
+                            form=form,
+                            c_u_heroes=c_u_heroes,
+                            c_u_hero_role_id=c_u_hero_role_id,
+                            match_map_id=match_map_id)
 
 @match.get('/all')
 @login_required
