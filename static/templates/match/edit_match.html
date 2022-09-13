@@ -27,9 +27,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <h5>Create Match</h5>
+            <h3>Edit Match</h3>
         </div>
     </div>
+    <div class="row">
+      <div class="col">
+          <h5>Submitted by {{match.created_by_user.username}} on {{match.date_match_created}}</h5>
+      </div>
+  </div>
     <form method="post" action="/api/match/{{match.id}}">
         {{form.hidden_tag()}}
         <div class="row">

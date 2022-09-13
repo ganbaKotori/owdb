@@ -60,11 +60,12 @@ def update_match(match_id):
     print(request.form)
     match = Match.query.filter(Match.id==match_id).first_or_404()
     match.set_ow_map(int(request.form.get('ow_map')))
+    match.date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
     c_u_match_info = MatchUser.query.filter(and_(MatchUser.match_id==match_id, MatchUser.user_id==current_user.id)).first_or_404()
-    print(c_u_match_info)
     c_u_match_info.heroes_played = []
     for hero in [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]:
         c_u_match_info.add_hero(hero_id=int(hero))
+    c_u_match_info.hero_role_id = int(request.form.get('ow_hero_role'))
     db.session.commit()
     return redirect(url_for('client.dashboard.user_dashboard')) 
 
