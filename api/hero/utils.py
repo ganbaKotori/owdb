@@ -1,4 +1,3 @@
-from turtle import title
 from app import db
 from api.hero.models import Hero, HeroRole
 
