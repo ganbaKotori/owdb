@@ -1,9 +1,17 @@
 from flask import Flask, session, render_template, redirect, url_for
 from flask_login import LoginManager, login_required, logout_user
-import pymysql
+import pymysql, os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
+#from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+DB_USERNAME =os.getenv('DB_USERNAME')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_URI = os.getenv('DB_URI')
+DB_SCHEMA = os.getenv('DB_SCHEMA')
+SECRET_KEY = os.getenv('SECRET_KEY')
 conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(DB_USERNAME,DB_PASSWORD,DB_URI,DB_SCHEMA)
 
 login_manager = LoginManager()
