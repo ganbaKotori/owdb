@@ -141,7 +141,9 @@
 
     $('#nav-profile-tab').on('click', async function(){
         let results = await get_friend_requests();
-        render_friend_request_cards(results)
+        if(results.length == 0){
+          $('.pending-request-cards').html('<h3 class="text-center mt-4">You have no friend requests!</h3>');
+        } else render_friend_request_cards(results);
         console.log(results);
     })
 
