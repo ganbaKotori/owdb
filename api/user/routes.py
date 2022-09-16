@@ -1,6 +1,6 @@
 from flask import make_response, jsonify, redirect, url_for, Blueprint, request, flash
 from flask_login import current_user
-from api.user.models import User
+from api.user.models import User, UserAvatar
 from app import db
 import api.user.utils as utils
 from api.user.schema import UserSchema
@@ -60,4 +60,9 @@ def get_friend_requests():
 def get_current_user_friends():
     current_user_friends = utils.get_current_user_friends()
     return make_response(jsonify(current_user_friends),200)
+
+@user.get('/avatars')
+def get_avatars():
+    avatar_results = db.session.query(UserAvatar.id, UserAvatar.title, UserAvatar.image_location).all()
+    #return make_response(jsonify(pr_dict_list),200)
     
