@@ -22,6 +22,7 @@ from api.match.models import Match, MatchUser
 
 class UserSchema(Schema):
     username = fields.String()
+    
 class FriendshipSchema(Schema):
     id = fields.Integer()
     user = fields.Nested(UserSchema)
@@ -29,7 +30,7 @@ class FriendshipSchema(Schema):
 class Friendship(db.Model):
     __tablename__ = 'friendship'
 
-    id = db.Column(db.Integer, autoincrement= True)
+    id = db.Column(db.Integer, autoincrement= True, nullable=False)
     user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     friend_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     request_accepted = db.Column(db.Boolean, nullable=False, default=False)

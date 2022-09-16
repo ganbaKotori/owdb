@@ -3,7 +3,17 @@
 {% block title %} Your Friends {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+<style>
+
+  .form-inline{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+</style>
+
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -124,7 +134,9 @@
         const response = await fetch(`/api/user/friendship/${friendship_id}/accept`, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
         });
-        return response.json();
+        console.log(response.status);
+        location.reload();
+        //return response.json();
     }
 
     $('#nav-profile-tab').on('click', async function(){
@@ -135,7 +147,7 @@
 
     $('.pending-request-cards').on('click', '.accept-btn',  async function(){
         let friendship_id = $(this).data("friendship-id")
-        let results = await accept_friend_request(friendship_id);
+        await accept_friend_request(friendship_id);
         // render_friend_request_cards(results)
         // console.log(results);
     })
@@ -150,7 +162,7 @@
         $('.pending-request-cards').empty()
         pending_requests.forEach(p_request => {
             $('.pending-request-cards').append(`
-            <div class="col">
+                <div class="col">
                     <div class="card" style="max-width: 590px;">
                         <div class="row g-0">
                           <div class="col-md-4">
@@ -159,12 +171,16 @@
                           <div class="col-md-8">
                             <div class="card-body">
                               <h5 class="card-title">${p_request.user.username}</h5>
-                              <button type="button" data-friendship-id=${p_request.id} class="btn btn-primary accept-btn">Accept</button>
-                              <button type="button" data-friendship-id=${p_request.id} class="btn btn-primary decline-btn">Decline</button>
+                              <form style="margin: 0; padding: 0;" method="post" action="/api/user/friendship/${p_request.id}/accept">
+                              <button style="display: inline;" type="submit" data-friendship-id=${p_request.id} class="btn btn-primary">Accept</button>
+                              </form>
+                              <form style="margin: 0; padding: 0;" method="post" action="/api/user/friendship/${p_request.id}/decline">
+                              <button style="display: inline;"type="submit" data-friendship-id=${p_request.id} class="btn btn-primary">Decline</button>
+                              </form>
                             </div>
                           </div>
                         </div>
-                      </div>
+                    </div>
                 </div> 
             `)
         });

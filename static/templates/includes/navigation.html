@@ -2,6 +2,28 @@
               <div class="container-fluid px-0">
                 <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
                   <div class="d-flex align-items-center">
+                    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                      {% if errors %}
+                      <div class="alert-message block-message error">
+                        <a class="close" href="#">×</a>
+                        <ul>
+                          {%- for msg in errors %}
+                          <li>{{ msg }}</li>
+                          {% endfor -%}
+                        </ul>
+                      </div>
+                      {% endif %}
+                    {% endwith %}
+                    {% with successes = get_flashed_messages(category_filter=["success"]) %}
+                      {% if successes %}
+                        <div class="alert alert-success d-flex align-items-center" role="alert" style="max-width: 100%;">
+                              {%- for msg in successes %}
+                                <span class="mr-2">{{ msg }}</span>
+                              {% endfor -%}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      {% endif %}
+                    {% endwith %}
                     <!-- Search form -->
                     <!-- <form class="navbar-search form-inline" id="navbar-search-main">
                       <div class="input-group input-group-merge search-bar">

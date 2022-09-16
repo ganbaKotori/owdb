@@ -1,4 +1,4 @@
-from flask import make_response, jsonify, redirect, url_for, Blueprint, request
+from flask import make_response, jsonify, redirect, url_for, Blueprint, request, flash
 from flask_login import current_user
 from api.user.models import User
 from app import db
@@ -35,6 +35,7 @@ def send_friend_request(user_username):
 def accept_friend_request(friendship_id):
     current_user.accept_friend_request(friendship_id)
     db.session.commit()
+    flash('Friend Request successfully accepted!', 'success')
     return redirect(request.referrer)
 
 @user.post('/friendship/<int:friendship_id>/decline')
@@ -52,6 +53,7 @@ def remove_friend(friend_username):
 @user.get('/friendship/requests')
 def get_friend_requests():
     pending_requests = current_user.get_friend_requests()
+    print(pending_requests)
     return make_response(jsonify(pending_requests),200)
 
 @user.get('/friendship')
