@@ -61,8 +61,24 @@ def get_current_user_friends():
     current_user_friends = utils.get_current_user_friends()
     return make_response(jsonify(current_user_friends),200)
 
-@user.get('/avatars')
+@user.get('/avatar')
 def get_avatars():
     avatar_results = db.session.query(UserAvatar.id, UserAvatar.title, UserAvatar.image_location).all()
-    #return make_response(jsonify(pr_dict_list),200)
+    avatars = []
+    for id, title, image_location in avatar_results:
+        avatars.append({
+            'id' : id,
+            'title' : title,
+            'image_location' : image_location
+        })
+    print(avatars)
+    return make_response(jsonify(avatars),200)
+
+@user.post('/avatar/change')
+def change_current_user_avatar():
+    avatar_image = UserAvatar.query.filter(UserAvatar.id==int(request.form['avatar-id'])).first_or_404()
+    current_user.user_avatar_image = avatar_image
+    db.session.commit()
+    flash('Avatar updated!', 'sucess')
+    return redirect(request.referrer)
     

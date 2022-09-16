@@ -10,23 +10,28 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="modal fade" id="avatar-model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Select an Avatar</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<form action="/api/user/avatar/change" method="post">
+    <div class="modal fade" id="avatar-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Select an Avatar</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body avatar-modal-body">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
-        <div class="modal-body">
-          ...
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
+</form>
 
 <div class="row">
     <div class="col-12 col-xl-12">
@@ -73,7 +78,7 @@
                             </button>
                             {% endif %}
                         {% else %}
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                            <button type="button" class="btn btn-primary avatar-model-btn" data-bs-toggle="modal" data-bs-target="#avatar-modal">
                                 Change Avatar
                             </button>
                         {% endif %}
@@ -174,11 +179,48 @@
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
 <script>
     let get_avatar_icon_locations = async () => {
-        const response = await fetch(`/api/user/avatars`, {
+        const response = await fetch(`/api/user/avatar`, {
             method: 'GET',
         });
         return response.json();
     }
+
+    $(document).ready(function() {
+        $('.avatar-model-btn').on('click', async () => {
+            $('.avatar-modal-body').html(`
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `);
+            let results = await get_avatar_icon_locations();
+            console.log(results);
+            $('.avatar-modal-body').html(`
+                <div class="row">
+                    <div class="col">
+                        <select name="avatar-id" class="form-select form-select-lg mb-3 mx-auto" aria-label=".form-select-lg example" id="avatar-select">
+                        </select>
+                    </div>
+                    <div class="col">
+                        <img src="" class="rounded mx-auto d-block select-avatar-img" alt="...">
+                    </div>
+                </div>
+            `);
+            results.forEach(a => {
+                    $('#avatar-select').append(`<option value="${a.id}" data-image-location="${a.image_location}">${a.title}</option>`);
+                    })
+            if(results.length > 0){
+                $('.select-avatar-img').attr('src', results[0].image_location)
+            }
+            
+        });
+
+        $('.avatar-modal-body').on('change', '#avatar-select', function() {
+        $('.select-avatar-img').attr('src', $( "#avatar-select option:selected" ).data('image-location'))
+
+	    });
+    })
 
 </script>
 {% endblock javascripts %}
