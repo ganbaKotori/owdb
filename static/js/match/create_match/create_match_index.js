@@ -68,7 +68,7 @@ class Match {
 					<h6><i><span id="match_rounds-${this.round_id_count}-score-text"></span> Score</i></h6>
 					<div class="input-group">
 						<button class="btn btn-primary" type="button" id="button-addon1">-</button>
-						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" required>
+						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" value="0" required>
 						<button class="btn btn-primary" type="button" id="button-addon1">+</button>
 					</div>
 				</div>
@@ -292,6 +292,10 @@ $(document).ready(function() {
 		// const friends = await get_current_user_friends();
 		// console.log(friends)
 
+	});
+
+	$('.today-btn').on('click', async function() {
+		$('#date-match-played').val(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
 	});
 	
 });

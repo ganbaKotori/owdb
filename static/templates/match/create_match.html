@@ -95,16 +95,10 @@
                                 <div class="col">
                                     <button type="button" class="btn btn-primary add-round-btn">Add Round</button>
                                 </div>
-                                <div class="col">
-                                  <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" disabled>
-                                    <label class="form-check-label" for="flexSwitchCheckDefault">Quick Play</label>
-                                  </div>
-                              </div>
                             </div>
                             <div class="row">
-                                <div class="col">
-                                    <ol class="list-group list-group-numbered match-round-list">
+                                <div class="col p-0 m-0">
+                                    <ol class="list-group list-group-numbered match-round-list p-0 m-0">
                                     </ol>
                                 </div>
                             </div>
@@ -125,9 +119,7 @@
                             </div>
                         </div>
                           <div class="row">
-                            <div class="col">
-                                <ol class="list-group list-group-numbered tagged-friends-list">
-                                </ol>
+                            <div class="col tagged-friends-list">
                             </div>
                           </div>
                         </div>
@@ -155,18 +147,42 @@
                     </ul> -->
                     <div class="card-body">
                       <div class="row">
+                        <div class="col">
+                          <h6>Select Mode</h6>
+                          <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+                          <label class="btn btn-outline-primary" for="success-outlined">Competitive</label>
+                          
+                          <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="danger-outlined">Quick Play</label>
+                        </div>
+                      </div>
+                      <hr/>
+                      <div class="row mt-2">
                         <div class="col d-grid gap-2">
                           <div class="input-group">
                               <span class="input-group-text">
-                                  Match Played On
+                                  Match Date
                               </span>
                               <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required>
                           </div>
                         </div>
-                        <div class="col">
-                          <button type="button" class="btn btn-primary">Today</button>
+                      </div>
+                      <!-- <div class="row mt-2">
+                        <div class="col d-grid gap-2">
+                          <div class="input-group">
+                              <span class="input-group-text">
+                                  Match Time
+                              </span>
+                              <input class="form-control" id="time-match-played" name="time-match-played" type="text" placeholder="" required>
+                          </div>
+                        </div>
+                      </div> -->
+                      <div class="row mt-2">
+                        <div class="col d-grid gap-2">
+                          <button type="button" class="btn btn-primary btn-block today-btn">Today</button>
                         </div>
                       </div>
+                      <hr/>
                       <div class="row mt-3">
                         <div class="col d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-block text-white">Submit Match</button>

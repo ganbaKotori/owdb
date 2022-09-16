@@ -10,6 +10,24 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Select an Avatar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div class="row">
     <div class="col-12 col-xl-12">
@@ -55,6 +73,10 @@
                                 Add User
                             </button>
                             {% endif %}
+                        {% else %}
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Change Avatar
+                            </button>
                         {% endif %}
                     </div>
                 </div>
@@ -152,6 +174,12 @@
 {% block javascripts %}
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
 <script>
+    let get_avatar_icon_locations = async () => {
+        const response = await fetch(`/api/user/avatars`, {
+            method: 'GET',
+        });
+        return response.json();
+    }
 
 </script>
 {% endblock javascripts %}
