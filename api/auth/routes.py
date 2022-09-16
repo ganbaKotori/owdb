@@ -8,11 +8,11 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth.post('/login')
 def login():
-    email = request.form.get('email')
+    username = request.form.get('username')
     password = request.form.get('password')
-    print(email)
+    print(username)
     print(password)
-    user = User.query.filter(User.email==email).first()
+    user = User.query.filter(User.username==username).first()
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
@@ -20,7 +20,7 @@ def login():
     login_user(user)
     return redirect(url_for('client.dashboard.user_dashboard'))
 
-@auth.route('/register', methods=['POST'])
+@auth.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST' :
         new_email = request.form['email']
@@ -28,21 +28,40 @@ def register():
         new_password = request.form['password']
         password_confirmation = request.form['confirm_password']
         error = None
+        errors = []
+        form_data = {}
 
         if not new_email :
             error = 'Email is required'
-        elif not new_username :
+            errors.append(error)
+        else:
+            form_data['email'] = new_email
+
+        if not new_username :
             error = 'Username is required'
-        elif not new_password :
+            errors.append(error)
+        else:
+            form_data['username'] = new_username
+
+        if not new_password :
             error = 'Password is required'
-        elif not password_confirmation :
+            errors.append(error)
+        else:
+            form_data['password'] = new_password
+
+        if not password_confirmation :
             error = 'You must retype your password'
-        elif new_password != password_confirmation :
-            error = 'Passwords must match'
+            errors.append(error)
+        else:
+            form_data['confirm_password'] = password_confirmation
 
         hashed_password = generate_password_hash(new_password)
-        
-        print(error)
+
+        if db.session.query(User.id).filter_by(username=new_username).first():
+            errors.append('Username already is use')
+
+        if db.session.query(User.id).filter_by(email=new_email).first():
+            errors.append('Email already is use')
 
         if error is None :
             try :
@@ -55,8 +74,8 @@ def register():
                 return redirect(url_for('client.auth.get_login'))
             except Exception as e :
                 print(e)
-
-    return render_template('register.html')
+        print(errors)
+        return render_template('register.html',errors=errors, form_data=form_data)
 
 @auth.route('/logout')
 @login_required

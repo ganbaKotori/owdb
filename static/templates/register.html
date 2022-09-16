@@ -5,10 +5,22 @@
 {% block content %} 
 
     <div style="text-align: center; width: 500px; margin: 0 auto; margin-top: 170px;">
-        <form action="api/auth/register" method="POST" style="border: 3px solid black; width: 500px;
+        <form action="/api/auth/register" method="POST" style="border: 3px solid black; width: 500px;
         border-radius: 5px; padding-top: 20px; padding-bottom: 20px;">
+            {% if errors %}
+                {% for error in errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+            {% endif %}
             <label for="email" style="display: inline-block; width: 110px;">Email</label>
-            <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;"><br>
+            {% if form_data %}
+                {% if form_data['email'] %}
+                    <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;" value="{{form_data['email']}}"><br>
+                {% endif %}
+            {% else %}
+                <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;">
+            {% endif %}
+            <br>
             <label for="username" style="display: inline-block; width: 110px;">Username</label>
             <input type="text" id="username" name="username" placeholder="noobmaster69" style="padding: 5px 10px"><br>
             <label for="password" style="display: inline-block; width: 110px;">Password</label>

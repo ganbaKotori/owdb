@@ -65,7 +65,7 @@ class User(UserMixin, db.Model):
     requested_friends = db.relationship('Friendship',backref='to', primaryjoin=id==Friendship.user_id)
     receieved_friends = db.relationship('Friendship',backref='from', primaryjoin=id==Friendship.friend_id)
 
-    user_avatar_id = db.Column(db.Integer, db.ForeignKey('user_avatar.id'))
+    user_avatar_id = db.Column(db.Integer, db.ForeignKey('user_avatar.id'),default=0) #NOTE: this may not work
     user_avatar_image = db.relationship("UserAvatar")
 
     def send_friend_request(self, requested_friend_id):
@@ -107,6 +107,16 @@ class User(UserMixin, db.Model):
                         .join(MatchUser, Match.users)
                         .filter(MatchUser.user_id == self.id)
                         .filter(MatchUser.accepted_flag == False)
+                        .statement.with_only_columns([func.count()]).order_by(None)
+                    ).scalar()
+        return k
+
+    def get_friend_request_count(self):
+        k = db.session.execute(
+                    db.session
+                        .query(Friendship)
+                        .filter(Friendship.friend_id == self.id)
+                        .filter(Friendship.request_accepted == False)
                         .statement.with_only_columns([func.count()]).order_by(None)
                     ).scalar()
         return k
