@@ -4,7 +4,7 @@ from api.map.models import Map, MapMode
 
 
 def add_all_ow_maps():
-    control = MapMode(name='Control', max_score=100)
+    control = MapMode(name='Control', max_score=1)
     hybrid = MapMode(name='Hybrid', max_score = 3)
     escort = MapMode(name='Escort', max_score = 3)
     assault = MapMode(name='Assault', max_score = 2)
@@ -55,9 +55,18 @@ def add_all_ow_maps():
     eichenwalde = Map(name='EICHENWALDE', map_mode=hybrid)
     db.session.add(eichenwalde)
 
-    rome = Map(name='ROME', map_mode=push)
-    db.session.add(rome)
-    toronto = Map(name='TORONTO', map_mode=push)
-    db.session.add(toronto)
+    colosseo = Map(name='COLOSSEO', map_mode=push)
+    db.session.add(colosseo)
+    new_queen_street = Map(name='NEW QUEEN STREET', map_mode=push)
+    db.session.add(new_queen_street)
+
+    circuit_royal = Map(name='CIRCUIT ROYAL', map_mode=escort)
+    db.session.add(circuit_royal)
+
+    midtown = Map(name='MIDTOWN', map_mode=hybrid)
+    db.session.add(midtown)
+
+    paraiso = Map(name='PARAISO', map_mode=hybrid)
+    db.session.add(paraiso)
 
     db.session.commit()

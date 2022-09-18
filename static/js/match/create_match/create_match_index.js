@@ -7,7 +7,7 @@ class Match {
 		this.total_enemy_team_score = 0;
 		this.current_map_id = null;
 		this.current_map_selected = null;
-		this.add_round();
+		this.add_round('ATTACK', 0);
 
 		this.tagged_friend_count = 0;
 		this.tagged_friend_id_count = 0;
@@ -39,7 +39,7 @@ class Match {
 		return friends_options_str
 	}
 
-	add_round() {
+	add_round(phase, score) {
 		this.round_count++;
 		$('.match-round-list').append(`
 		<li class="list-group-item">
@@ -47,29 +47,31 @@ class Match {
 				<div class="col-4">
 					<h6><i>Phase</i></h6>
 					<input type="radio" 
-						   class="btn-check"
+						   class="btn-check attack-btn"
 						   name="match_rounds-${this.round_id_count}-phase"
 						   id="match_rounds-${this.round_id_count}-phase-attack"
 						   autocomplete="off"
 						   value="ATTACK"
-						   checked>
-					<label class="btn btn-outline-danger" for="match_rounds-${this.round_id_count}-phase-attack">Attack</label>
+						   data-round-id="${this.round_id_count}"
+						   ${phase=="ATTACK" ? "checked": ""}>
+					<label class="btn btn-outline-primary" for="match_rounds-${this.round_id_count}-phase-attack">Attack</label>
 
 					<input type="radio" 
-						   class="btn-check" 
+						   class="btn-check defend-btn" 
 						   name="match_rounds-${this.round_id_count}-phase" 
 						   id="match_rounds-${this.round_id_count}-phase-defend"
 						   autocomplete="off"
-						   value="DEFEND"  
-						   >
-					<label class="btn btn-outline-info" for="match_rounds-${this.round_id_count}-phase-defend">Defend</label>
+						   value="DEFEND"
+						   data-round-id="${this.round_id_count}"
+						   ${phase=="DEFEND" ? "checked": ""}>
+					<label class="btn btn-outline-primary" for="match_rounds-${this.round_id_count}-phase-defend">Defend</label>
 				</div>
 				<div class="col-6">
-					<h6><i><span id="match_rounds-${this.round_id_count}-score-text"></span> Score</i></h6>
+					<h6><i><span id="match_rounds-${this.round_id_count}-score-text">${phase=="ATTACK" ? "Team Score": "Enemy Score"}</span></i></h6>
 					<div class="input-group">
-						<button class="btn btn-primary" type="button" id="button-addon1">-</button>
-						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" value="0" required>
-						<button class="btn btn-primary" type="button" id="button-addon1">+</button>
+						<button class="btn btn-primary minus-btn" type="button" data-round-id="${this.round_id_count}">-</button>
+						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" value="${score}" required>
+						<button class="btn btn-primary plus-btn" type="button" data-round-id="${this.round_id_count}">+</button>
 					</div>
 				</div>
 				<div class="col-2">
@@ -245,7 +247,25 @@ $(document).ready(function() {
 	});
 
 	$('.add-round-btn').on('click', function() {
-		match.add_round();
+		match.add_round('ATTACK', 0);
+	});
+
+	$(document).on('click', '.minus-btn', function() {
+		let round_id = $(this).data('round-id');
+		let score = parseInt($(`#match_rounds-${round_id}-score-obtained`).val());
+		if(score - 1 >= 0){
+			$(`#match_rounds-${round_id}-score-obtained`).val(score - 1);
+		}
+		console.log(score)
+	});
+
+	$(document).on('click', '.plus-btn', function() {
+		let round_id = $(this).data('round-id');
+		let score = parseInt($(`#match_rounds-${round_id}-score-obtained`).val());
+		if(score + 1 <= match.current_map_selected.max_score){
+			$(`#match_rounds-${round_id}-score-obtained`).val(score + 1);
+		}
+		console.log(score)
 	});
 
 	$('.add_tagged-friend-btn').on('click', function() {
@@ -265,6 +285,21 @@ $(document).ready(function() {
 		console.log('clicked')
 		match.remove_tagged_friend($(this).parent().parent().parent());
 	});
+
+	$(document).on('click', '.attack-btn', function() {
+		let round_id = $(this).data('round-id');
+		console.log(round_id);
+		$(`#match_rounds-${round_id}-score-text`).text('Team Score')
+	});
+
+	$(document).on('click', '.defend-btn', function() {
+		let round_id = $(this).data('round-id');
+		console.log(round_id);
+		$(`#match_rounds-${round_id}-score-text`).text('Enemy Score')
+	});
+
+
+	
 
 	$('#ow_map_select').on('change', function() {
 		console.log($( "#ow_map_select option:selected" ).text())

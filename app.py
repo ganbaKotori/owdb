@@ -35,6 +35,7 @@ from client.routes import client
 
 from api.map.utils import add_all_ow_maps
 from api.hero.utils import add_all_ow_heroes
+from api.user.utils import add_all_user_avatars
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -72,8 +73,9 @@ app.register_blueprint(api)
 app.register_blueprint(client)
 db.create_all()  
 
-#add_all_ow_maps()
-#add_all_ow_heroes()
+# add_all_ow_maps()
+# add_all_ow_heroes()
+# add_all_user_avatars()
 
 if __name__ == '__main__':
     app.run()

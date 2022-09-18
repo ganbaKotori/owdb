@@ -1,7 +1,7 @@
 from flask import request, flash, render_template, redirect, url_for, Blueprint
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, logout_user
-from api.user.models import User
+from api.user.models import User, UserAvatar
 from app import db
 
 auth = Blueprint('auth', __name__, url_prefix='/auth')
@@ -65,7 +65,7 @@ def register():
 
         if error is None :
             try :
-                new_user = User(email=new_email, username=new_username, password=hashed_password)
+                new_user = User(email=new_email, username=new_username, password=hashed_password, user_avatar_id=1)
                 db.session.add(new_user)
                 db.session.commit()
 

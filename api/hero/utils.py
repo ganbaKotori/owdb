@@ -78,4 +78,7 @@ def add_all_ow_heroes():
     zen = Hero(name='Zenyatta', hero_role=support)
     db.session.add(zen)
 
+    kiriko = Hero(name='Kiriko', hero_role=support)
+    db.session.add(kiriko)
+
     db.session.commit()

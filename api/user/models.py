@@ -57,7 +57,7 @@ class User(UserMixin, db.Model):
     
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    username = db.Column(db.String(12), unique=True)
+    username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(256), server_default='')
 
     matches = db.relationship('Match', backref='original_user')

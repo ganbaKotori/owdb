@@ -203,7 +203,7 @@
   const ow_maps_data = {{ ow_maps|tojson|safe }};
   const current_user_friends = {{ friends|tojson|safe }};
 
-  console.log(current_user_friends);
+  console.log(ow_maps_data);
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>

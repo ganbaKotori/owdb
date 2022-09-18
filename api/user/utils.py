@@ -1,6 +1,6 @@
 from flask import make_response, jsonify, redirect, url_for, Blueprint, request
 from flask_login import current_user
-from api.user.models import User, Friendship
+from api.user.models import User, Friendship, UserAvatar
 from app import db
 from sqlalchemy import or_, and_
 
@@ -40,3 +40,18 @@ def get_current_user_relationship_status(user_id):
     relationship["following_friendship_id"] = following_status.id if following_status else False
     relationship["followed_by_friendship_id"] = followed_by_status.id if followed_by_status else False
     return relationship
+
+def add_all_user_avatars():
+    default = UserAvatar(id=0, title='Default', image_location='\\static\\assets\\img\\ow_avatar\\default.jpg')
+    db.session.add(default)
+    dva = UserAvatar(title='D.Va', image_location='\\static\\assets\\img\\ow_avatar\\dva-ow1.jpg')
+    db.session.add(dva)
+    mercy = UserAvatar(title='Mercy', image_location='\\static\\assets\\img\\ow_avatar\\mercy-ow2.jpg')
+    db.session.add(mercy)
+    brigitte = UserAvatar(title='Brigitte', image_location='\\static\\assets\\img\\ow_avatar\\brigitte-ow1.jpg')
+    db.session.add(brigitte)
+
+    db.session.commit()
+
+
+
