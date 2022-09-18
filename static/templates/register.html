@@ -15,14 +15,14 @@
             <label for="email" style="display: inline-block; width: 110px;">Email</label>
             {% if form_data %}
                 {% if form_data['email'] %}
-                    <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;" value="{{form_data['email']}}"><br>
+                    <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;" value="{{form_data['email']}}" maxlength="50"><br>
                 {% endif %}
             {% else %}
-                <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;">
+                <input type="email" id="email" name="email" placeholder="abc123@gmail.com" style="padding: 5px 10px;" maxlength="50">
             {% endif %}
             <br>
             <label for="username" style="display: inline-block; width: 110px;">Username</label>
-            <input type="text" id="username" name="username" placeholder="noobmaster69" style="padding: 5px 10px"><br>
+            <input type="text" id="username" name="username" placeholder="noobmaster69" style="padding: 5px 10px" maxlength="20"><br>
             <label for="password" style="display: inline-block; width: 110px;">Password</label>
             <input type="password" id="password" name="password" placeholder="Password" style="padding: 5px 10px;"><br>
             <label for="confirm-password" style="display: inline-block; width: 110px;">Retype password</label>

@@ -1,7 +1,7 @@
 {% if current_user.is_authenticated %}
 {% extends "layouts/base.html" %}
 {% else %}
-{% extends "layouts/base-fullscreen.html" %}
+{% extends "layouts/base-public.html" %}
 {% endif %}
 
 {% block title %} Your Friends {% endblock %}
@@ -40,7 +40,7 @@
                 <div class="card shadow border-0 text-center p-0">
                     <div class="profile-cover rounded-top" data-background="/static/assets/img/ow_map_img/default.jpg"></div>
                     <div class="card-body pb-5">
-                        <img src="{{current_user.user_avatar_image.image_location}}" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
+                        <img src="{{user.user_avatar_image.image_location}}" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
                         <h4 class="h3">
                             {{ user.username }}
                         </h4>

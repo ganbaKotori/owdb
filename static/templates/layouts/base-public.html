@@ -23,7 +23,7 @@
 <!-- Primary Meta Tags -->
 
 <title>
-    {% block title %}{% endblock %}
+    Flask Volt Dashboard - {% block title %}{% endblock %} | AppSeed
 </title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -67,11 +67,11 @@
 </head>
 <body>
 
-    {% include 'includes/sidebar.html' %}
+    {% include 'includes/sidebar-public.html' %}
     
     <main class="content">
 
-      {% include 'includes/navigation.html' %}
+      {% include 'includes/navigation-public.html' %}
 
       {% block content %}{% endblock content %} 
 

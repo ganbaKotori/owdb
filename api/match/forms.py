@@ -11,7 +11,7 @@ class MatchRound(Form):
 
 class TaggedUser(Form):
     role = RadioField(u'Role', choices=[('DAMAGE', 'Damage'), ('TANK', 'Tank'),('SUPPORT', 'Support')])
-    username = SelectField('Friend', choices=[])
+    username = SelectField('Friend', choices=[""])
     #NOTE: when validating friends, you need to iterate through tagged_friends because it is a fieldlist thus it will be a list!
     #TODO: use hero roles' id instead of hardcoded strings!
 

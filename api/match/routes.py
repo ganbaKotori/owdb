@@ -15,11 +15,11 @@ match = Blueprint('match', __name__, url_prefix='/match')
 @match.post('')
 @login_required
 def add_match():
-    #print(request.form)
+    print(request.form)
     form = CreateMatchForm()
-    current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()] + [None]
+    current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
     for f in form.tagged_friends:
-        f.username.choices = current_user_friends
+        f.username.choices += current_user_friends
     if form.validate_on_submit():
         print(form.data)
         hero_role = int(request.form.get('ow_hero_role'))
@@ -45,8 +45,9 @@ def add_match():
             elif ['role'] == 'TANK':
                 hero_role = 3
 
-            friend = User.query.filter(User.username==friend['username']).first_or_404()
-            new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)
+            friend = User.query.filter(User.username==friend['username']).first()
+            if friend:
+                new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)
         db.session.add(new_match)
         db.session.commit()
         return redirect(url_for('client.dashboard.user_dashboard')) 

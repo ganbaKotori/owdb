@@ -121,6 +121,7 @@ class Match {
 							class="form-select form-select-lg tagged-friend-select"
 							id="tagged_friends-${this.tagged_friend_id_count}-username"
 							name="tagged_friends-${this.tagged_friend_id_count}-username">
+								<option value="">Select Friend</option>
 								${this.get_friends_options()}
 						</select>
 					</div>
