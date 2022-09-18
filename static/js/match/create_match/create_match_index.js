@@ -239,7 +239,6 @@ const get_friends_options = friends => {
 $(document).ready(function() {
 	var date = new Date();
 	$('.ow-hero-check').hide();
-	$('#date-match-played').val(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
 
 	$('.ow-hero-role-radio-btn').on('change', function() {
 		console.log($(this).val());

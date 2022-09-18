@@ -149,11 +149,11 @@
                       <div class="row">
                         <div class="col">
                           <h6>Select Mode</h6>
-                          <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
-                          <label class="btn btn-outline-primary" for="success-outlined">Competitive</label>
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-comp" autocomplete="off" checked value=1>
+                          <label class="btn btn-outline-primary" for="match-mode-comp">Competitive</label>
                           
-                          <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
-                          <label class="btn btn-outline-primary" for="danger-outlined">Quick Play</label>
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-qp" autocomplete="off" value=0>
+                          <label class="btn btn-outline-primary" for="match-mode-qp">Quick Play</label>
                         </div>
                       </div>
                       <hr/>
@@ -204,6 +204,11 @@
   const current_user_friends = {{ friends|tojson|safe }};
 
   console.log(ow_maps_data);
+  $(document).ready(function() {
+	var date = new Date();
+	$('#date-match-played').val(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
+
+  })
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>

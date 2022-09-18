@@ -26,8 +26,12 @@ def add_match():
         ow_map = request.form.get('ow_map')
         heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
         date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
+        match_mode = int(request.form.get('match-mode'))
+        if match_mode == 1:
+            ranked_flag = True
+        else: ranked_flag = False
         map_played = Map.query.filter(Map.id==int(ow_map)).first_or_404()
-        new_match = Match(created_by_user_id=current_user.id, ranked_flag=True, map_played=map_played, date_match_played=date_match_played)
+        new_match = Match(created_by_user_id=current_user.id, ranked_flag=ranked_flag, map_played=map_played, date_match_played=date_match_played)
         for hero in heroes:
             a = MatchHero()
             a.hero = Hero.query.filter(Hero.id==int(hero)).first_or_404()
@@ -59,9 +63,14 @@ def add_match():
 @login_required
 def update_match(match_id):
     print(request.form)
+    match_mode = int(request.form.get('match-mode'))
+    if match_mode == 1:
+        ranked_flag = True
+    else: ranked_flag = False
     match = Match.query.filter(Match.id==match_id).first_or_404()
     match.set_ow_map(int(request.form.get('ow_map')))
-    match.date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
+    match.date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y')
+    match.ranked_flag = ranked_flag
     c_u_match_info = MatchUser.query.filter(and_(MatchUser.match_id==match_id, MatchUser.user_id==current_user.id)).first_or_404()
     c_u_match_info.heroes_played = []
     for hero in [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]:

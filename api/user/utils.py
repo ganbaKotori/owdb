@@ -42,7 +42,7 @@ def get_current_user_relationship_status(user_id):
     return relationship
 
 def add_all_user_avatars():
-    default = UserAvatar(id=0, title='Default', image_location='\\static\\assets\\img\\ow_avatar\\default.jpg')
+    default = UserAvatar(title='Default', image_location='\\static\\assets\\img\\ow_avatar\\default.jpg')
     db.session.add(default)
     dva = UserAvatar(title='D.Va', image_location='\\static\\assets\\img\\ow_avatar\\dva-ow1.jpg')
     db.session.add(dva)

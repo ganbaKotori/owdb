@@ -44,7 +44,7 @@
 
     <div class="pb-4">
         <div class="dropdown">
-            <a href="/match/create">
+            <a href="/m/create">
             <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" aria-expanded="false">
                 <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                 New Match
@@ -62,7 +62,7 @@
                             <h2 class="fs-5 fw-bold mb-0">Last 5 Matches</h2>
                         </div>
                         <div class="col text-end">
-                            <a href="/match/all" class="btn btn-sm btn-primary">See all</a>
+                            <a href="/m/all" class="btn btn-sm btn-primary">See all</a>
                         </div>
                     </div>
                 </div>
@@ -124,8 +124,8 @@
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                <a href="/match/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
-                                <a href="/match/{{match.match_id}}"><button class="btn btn-info" type="button">Details</button></a>
+                                <a href="/m/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
+                                <a href="/m/{{match.match_id}}"><button class="btn btn-info" type="button">Details</button></a>
                             </td>
                         </tr>
                         {% endfor %}

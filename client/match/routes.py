@@ -12,13 +12,13 @@ from api.user.models import User
 from sqlalchemy import and_
 import api.match.utils as match_utils
 
-match = Blueprint('match', __name__, url_prefix='/match')
+match = Blueprint('match', __name__, url_prefix='/m')
 
 @match.get('/create')
 @login_required
 def get_create_match_page():
-    ow_maps = Map.query.all()
-    ow_heroes = Hero.query.all()
+    ow_maps = Map.query.order_by(Map.name.asc()).all()
+    ow_heroes = Hero.query.order_by(Hero.name.asc()).all()
     ow_hero_roles = HeroRole.query.all()
     friends = user_utils.get_current_user_friends()
     print(friends)
@@ -38,8 +38,8 @@ def get_view_match_page(match_id):
 @match.get('/<int:match_id>/edit')
 @login_required
 def get_edit_match_page(match_id):
-    ow_maps = Map.query.all()
-    ow_heroes = Hero.query.all()
+    ow_maps = Map.query.order_by(Map.name.asc()).all()
+    ow_heroes = Hero.query.order_by(Hero.name.asc()).all()
     ow_hero_roles = HeroRole.query.all()
     form = CreateMatchForm()
     match = Match.query.join(MatchUser, Match.users)\

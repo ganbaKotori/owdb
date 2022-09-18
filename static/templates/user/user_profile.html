@@ -98,7 +98,7 @@
                         <h2 class="fs-5 fw-bold mb-0">Last 5 Matches</h2>
                     </div>
                     <div class="col text-end">
-                        <!-- <a href="/match/all" class="btn btn-sm btn-primary">See all</a> -->
+                        <!-- <a href="/m/all" class="btn btn-sm btn-primary">See all</a> -->
                     </div>
                 </div>
             </div>
@@ -160,8 +160,8 @@
                             </div>
                         </td>
                         <td class="fw-bolder text-gray-500">
-                            <a href="/match/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
-                            <a href="/match/{{match.match_id}}"><button class="btn btn-info" type="button">View</button></a>
+                            <a href="/m/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
+                            <a href="/m/{{match.match_id}}"><button class="btn btn-info" type="button">View</button></a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -173,9 +173,8 @@
 </div>
 
 {% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
 <script>
     let get_avatar_icon_locations = async () => {
@@ -186,7 +185,8 @@
     }
 
     $(document).ready(function() {
-        $('.avatar-model-btn').on('click', async () => {
+
+        $(document).on('click', '.avatar-model-btn', async () => {
             $('.avatar-modal-body').html(`
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">

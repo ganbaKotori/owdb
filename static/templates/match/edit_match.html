@@ -182,18 +182,44 @@
                     </ul> -->
                     <div class="card-body">
                       <div class="row">
+                        <div class="col">
+                          <h6>Select Mode</h6>
+                          {% if match.ranked_flag == True %}
+
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-comp" autocomplete="off" checked value=1>
+                          <label class="btn btn-outline-primary" for="match-mode-comp">Competitive</label>
+                          
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-qp" autocomplete="off" value=0>
+                          <label class="btn btn-outline-primary" for="match-mode-qp">Quick Play</label>
+
+                          {% else %}
+
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-comp" autocomplete="off"  value=1>
+                          <label class="btn btn-outline-primary" for="match-mode-comp">Competitive</label>
+                          
+                          <input type="radio" class="btn-check" name="match-mode" id="match-mode-qp" autocomplete="off" checked value=0>
+                          <label class="btn btn-outline-primary" for="match-mode-qp">Quick Play</label>
+
+                          {% endif %}
+                        </div>
+                      </div>
+                      <hr/>
+                      <div class="row mt-2">
                         <div class="col d-grid gap-2">
                           <div class="input-group">
                               <span class="input-group-text">
-                                  Match Played On
+                                  Match Date
                               </span>
-                              <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required>
+                              <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required value="{{match.date_match_played_formatted}}">
                           </div>
                         </div>
-                        <div class="col">
-                          <button type="button" class="btn btn-primary">Today</button>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="col d-grid gap-2">
+                          <button type="button" class="btn btn-primary btn-block today-btn">Today</button>
                         </div>
                       </div>
+                      <hr/>
                       <div class="row mt-3">
                         <div class="col d-grid gap-2">
                             <button type="submit" class="btn btn-success btn-block text-white">Submit Match</button>
