@@ -70,7 +70,7 @@ class Match {
 					<h6><i><span id="match_rounds-${this.round_id_count}-score-text">${phase=="ATTACK" ? "Team Score": "Enemy Score"}</span></i></h6>
 					<div class="input-group">
 						<button class="btn btn-primary minus-btn" type="button" data-round-id="${this.round_id_count}">-</button>
-						<input type="text" class="form-control match-round-score" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" value="${score}" required>
+						<input type="text" class="form-control match-round-score ${phase=="ATTACK" ? "match-round-score-attack": "match-round-score-defend"}" id="match_rounds-${this.round_id_count}-score-obtained" name="match_rounds-${this.round_id_count}-score" value="${score}" required>
 						<button class="btn btn-primary plus-btn" type="button" data-round-id="${this.round_id_count}">+</button>
 					</div>
 				</div>
@@ -236,6 +236,40 @@ const get_friends_options = friends => {
 	return friends_options_str
 }
 
+let get_total_team_score = () => {
+	console.log('GETTING TEAM SCORE')
+	let total_team_score = 0;
+	$(".match-round-score-attack").each(function () {
+		if($(this).val() != null){
+			total_team_score += parseInt($(this).val());
+		}
+	})
+	$('#team-score-total').text(total_team_score);
+	$('#team-score-total').addClass("confirm_selection");
+	$('#team-score-total').on("animationend", function(){
+		$(this).removeClass('confirm_selection');
+	  });
+	return total_team_score;
+}
+
+let get_total_enemy_score = () => {
+	let total_enemy_score = 0;
+	$(".match-round-score-defend").each(function () {
+		if($(this).val() != null){
+			total_enemy_score += parseInt($(this).val());
+		}
+	});
+	console.log(total_enemy_score, 'DEEND')
+	$('#enemy-score-total').text(total_enemy_score);
+	$('#enemy-score-total').addClass("confirm_selection");
+	$('#enemy-score-total').on("animationend", function(){
+		$(this).removeClass('confirm_selection');
+	  });
+	return total_enemy_score;
+}
+
+
+
 $(document).ready(function() {
 	var date = new Date();
 	$('.ow-hero-check').hide();
@@ -256,7 +290,9 @@ $(document).ready(function() {
 		if(score - 1 >= 0){
 			$(`#match_rounds-${round_id}-score-obtained`).val(score - 1);
 		}
-		console.log(score)
+		console.log(score);
+		// get_total_team_score();
+		update_match_final_results();
 	});
 
 	$(document).on('click', '.plus-btn', function() {
@@ -265,7 +301,9 @@ $(document).ready(function() {
 		if(score + 1 <= match.current_map_selected.max_score){
 			$(`#match_rounds-${round_id}-score-obtained`).val(score + 1);
 		}
-		console.log(score)
+		console.log(score);
+		// get_total_team_score();
+		update_match_final_results();
 	});
 
 	$('.add_tagged-friend-btn').on('click', function() {
@@ -289,13 +327,23 @@ $(document).ready(function() {
 	$(document).on('click', '.attack-btn', function() {
 		let round_id = $(this).data('round-id');
 		console.log(round_id);
-		$(`#match_rounds-${round_id}-score-text`).text('Team Score')
+		$(`#match_rounds-${round_id}-score-text`).text('Team Score');
+		$(`#match_rounds-${round_id}-score-obtained`).removeClass('match-round-score-defend');
+		$(`#match_rounds-${round_id}-score-obtained`).addClass('match-round-score-attack');
+		// get_total_enemy_score();
+		// get_total_team_score();
+		update_match_final_results();
 	});
 
 	$(document).on('click', '.defend-btn', function() {
 		let round_id = $(this).data('round-id');
-		console.log(round_id);
-		$(`#match_rounds-${round_id}-score-text`).text('Enemy Score')
+		console.log(round_id, 'defend');
+		$(`#match_rounds-${round_id}-score-text`).text('Enemy Score');
+		$(`#match_rounds-${round_id}-score-obtained`).removeClass('match-round-score-attack');
+		$(`#match_rounds-${round_id}-score-obtained`).addClass('match-round-score-defend');
+		// get_total_enemy_score();
+		// get_total_team_score();
+		update_match_final_results();
 	});
 
 
@@ -320,7 +368,20 @@ $(document).ready(function() {
 		if (current_score > current_max_score){
 			$(this).val(current_max_score)
 		}
+		//get_total_team_score();
 
+	});
+
+	$(document).on('change', '.match-round-score-attack',function() {
+		//get_total_team_score();
+		//get_total_enemy_score();
+		update_match_final_results();
+	});
+
+	$(document).on('change', '.match-round-score-defend', function() {
+		console.log('match round score deend is changed')
+		//get_total_enemy_score();
+		update_match_final_results();
 	});
 
 	$('.tag-friends-btn').on('click', async function() {
@@ -334,3 +395,15 @@ $(document).ready(function() {
 	});
 	
 });
+
+let update_match_final_results = () => {
+	let total_enemy_score = get_total_enemy_score();
+	let total_team_score = get_total_team_score();
+	if (total_team_score > total_enemy_score){
+		$('#match-final-result').text('VICTORY');
+	} else if(total_team_score < total_enemy_score){
+		$('#match-final-result').text('DEFEAT');
+	} else {
+		$('#match-final-result').text('DRAW');
+	}
+}

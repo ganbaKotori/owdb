@@ -29,10 +29,10 @@ class FriendshipSchema(Schema):
 
 class Friendship(db.Model):
     __tablename__ = 'friendship'
+    user_id = db.Column(db.ForeignKey('user.id') , autoincrement=False,primary_key=True)
+    friend_id = db.Column(db.ForeignKey('user.id'), autoincrement=False, primary_key=True)
+    id = db.Column(db.Integer, autoincrement=True, primary_key=False, unique=True, nullable=False)
 
-    id = db.Column(db.Integer, autoincrement= True, nullable=False)
-    user_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
-    friend_id = db.Column(db.ForeignKey('user.id'), primary_key=True)
     request_accepted = db.Column(db.Boolean, nullable=False, default=False)
 
     user = db.relationship('User',primaryjoin="User.id == Friendship.user_id")

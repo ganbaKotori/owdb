@@ -19,6 +19,62 @@
     .accordian-button {
       content: '' !important;
     }
+
+    .score {
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow:
+    0 0 60px 30px #fff,
+    0 0 100px 60px #f0f,
+    0 0 140px 90px #0ff;
+}
+
+.confirm_selection {
+    animation: glow2 0.4s alternate;
+}
+
+@keyframes glow {
+    to {
+        text-shadow: 0 0 10px red;
+    }
+}
+
+@keyframes mymove {
+  50% {font-size: 40px;}
+}
+
+@keyframes glow2 {
+
+    20% {
+
+  border-radius: 75%;
+  background-color: #fff;
+  box-shadow:
+    0 0 15px 8px #fff,
+    0 0 25px 15px #f0f,
+    0 0 35px 28px #0ff;
+    
+    }
+    35% {
+      font-size: 50px;
+    }
+
+
+}
+
+#myDIV {
+  border: 1px solid black;
+  width: 400px;
+  height: 100px;
+  animation: mymove 5s infinite;
+}
+
+
+.confirm_selection {
+    font-family: sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+}
 </style>
 {% endblock stylesheets %}
 
@@ -132,7 +188,23 @@
                     <div class="card bg-dark text-white">
                         <img id="map-image" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" src="\static\assets\img\ow_map_img\default.jpg" class="card-img" alt="...">
                         <div class="card-img-overlay">
-                          <h5 class="card-title" id="map-title-text">Select Map</h5>
+                          <h4 class="card-title"><span id="map-title-text" style="padding: 7px;">Select Map</span></h4>
+                          <div class="row">
+                            <div class="col text-center" >
+                              <span style="background-color: rgba(0, 0, 0, 0.605); padding: 4px;">Final Score</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col text-center" style="background-color: rgba(0, 0, 255, 0.5); padding-top: 5px;">
+                              <h2 id="team-score-total">0</h2>
+                            </div>
+                            <div class="col">
+                              <h6 id="match-final-result" class="text-center mt-3">DRAW</h6>
+                            </div>
+                            <div class="col text-center" style="background-color: rgba(255, 0, 0, 0.5); padding-top: 5px;">
+                              <h2 id="enemy-score-total">0</h2>
+                            </div>
+                          </div>
                           <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
                         </div>
                       </div>
