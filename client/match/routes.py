@@ -65,7 +65,7 @@ def get_edit_match_page(match_id):
 @match.get('/all')
 @login_required
 def get_all_matches_page():
-    all_matches = match_utils.get_current_user_matches(match_count=5, user_id=current_user.id)
+    all_matches = match_utils.get_current_user_matches(user_id=current_user.id)
     return render_template('match/all_matches.html', current_user_matches=[], all_matches=all_matches)
 
 @match.get('/invites')
