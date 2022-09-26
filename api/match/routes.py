@@ -19,7 +19,7 @@ def add_match():
     form = CreateMatchForm()
     current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
     for f in form.tagged_friends:
-        f.username.choices += current_user_friends
+        f.username.choices = current_user_friends
     if form.validate_on_submit():
         print(form.data)
         hero_role = int(request.form.get('ow_hero_role'))
