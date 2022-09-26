@@ -50,7 +50,7 @@ def get_edit_match_page(match_id):
     c_u_hero_role_id = c_u_match_info.hero_role.id
     match_map_id = match.map_played.id
     print(c_u_heroes)
-    print(c_u_hero_role_id)
+    print(c_u_hero_role_id)#
     
     return render_template('match/edit_match.html',
                             match=match,
@@ -61,6 +61,7 @@ def get_edit_match_page(match_id):
                             c_u_heroes=c_u_heroes,
                             c_u_hero_role_id=c_u_hero_role_id,
                             match_map_id=match_map_id)
+
 
 @match.get('/all')
 @login_required
