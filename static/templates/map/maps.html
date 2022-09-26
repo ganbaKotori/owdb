@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Maps {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col">
+                <h2>Map Insights</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="ow_map_select">
+                <option value="" selected>Select Map</option>
+                {% for map in ow_maps %}
+                    <option value="{{map.id}}">{{map.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="ow_map" required id="hero_role_select">
+                <option value="" selected>Select Role</option>
+                {% for role in ow_hero_roles %}
+                    <option value="{{role.id}}">{{role.title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h4 class="text-center">Top Winning Heroes</h4>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <ol class="list-group list-group-numbered" id="top-heroes-list">
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+    let render_map_stats = map_stats => {
+        if(map_stats==null){
+            return;
+        }
+        else {
+            console.log('rendering list');
+            $('#top-heroes-list').empty()
+            map_stats.forEach(hero => {
+                $('#top-heroes-list').append(`
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">${hero.hero_name}</div>
+                    </div>
+                    <h4><span class="badge bg-primary rounded-pill">${hero.win_rate.toFixed(1)}%</span></h4>
+                    </li>
+                `)
+            });
+
+        }
+    }
+    let get_map_stats = async(map_id, hero_role_id) => {
+        const response = await fetch(`/api/map/${map_id}/${hero_role_id}`, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        });
+        return response.json();
+    }
+
+    let update_map_stats = async (map_id, hero_role_id) => {
+        if(!Number.isInteger(parseInt(map_id)) || !Number.isInteger(parseInt(hero_role_id))){
+            return null;
+        }
+        else {
+            console.log("getting map info!");
+            let map_stats = await get_map_stats(map_id, hero_role_id);
+            render_map_stats(map_stats);
+            console.log(map_stats);
+        }
+    }
+    $(document).ready( function () {
+        $('#ow_map_select').on('change', function() {
+            update_map_stats($(this).val(), $('#hero_role_select').val());
+        });
+
+        $('#hero_role_select').on('change', function() {
+            update_map_stats($('#ow_map_select').val(), $(this).val());
+        });
+    });
+</script>
+
+{% endblock javascripts %}

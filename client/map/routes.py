@@ -11,3 +11,11 @@ from sqlalchemy.orm import joinedload
 from api.user.models import User
 
 ow_map = Blueprint('ow_map', __name__, url_prefix='/map')
+
+
+@ow_map.get('')
+@login_required
+def get_ow_maps_page():
+    ow_maps = Map.query.order_by(Map.name.asc()).all()
+    ow_hero_roles = HeroRole.query.all()
+    return render_template('map/maps.html', ow_maps=ow_maps, ow_hero_roles=ow_hero_roles)
