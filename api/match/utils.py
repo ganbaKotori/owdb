@@ -14,7 +14,7 @@ def get_current_user_matches(user_id, match_count = None):
                 Match.id == MatchUser.match_id
                 )\
             .filter(MatchUser.user_id==user_id)\
-            .order_by(Match.date_match_played.desc())\
+            .order_by(Match.id.desc())\
             .limit(match_count).subquery()
     else:
         subq = db.session.query(MatchUser.id)\
@@ -23,7 +23,7 @@ def get_current_user_matches(user_id, match_count = None):
                 Match.id == MatchUser.match_id
                 )\
             .filter(MatchUser.user_id==user_id)\
-            .order_by(Match.date_match_played.desc())\
+            .order_by(Match.id.desc())\
             .subquery() 
 
     match_results = db.session.query(Match.id, Map.name, Match.match_result, Match.ranked_flag, Match.date_match_played, User.username, HeroRole.title)\
