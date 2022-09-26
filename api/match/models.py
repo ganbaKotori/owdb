@@ -4,6 +4,7 @@ from sqlalchemy import Enum
 from app import db
 from api.hero.models import Hero
 from api.map.models import Map
+from sqlalchemy.sql.functions import coalesce
 
 
 from typing import List
@@ -246,8 +247,8 @@ class Match(db.Model):
     @match_result.expression
     def match_result(cls):
         return case([
-            (cls.team_score > cls.enemy_team_score, MatchResult.VICTORY),
-            (cls.team_score < cls.enemy_team_score, MatchResult.DEFEAT),
+            (coalesce(cls.team_score, 0) > coalesce(cls.enemy_team_score, 0) , MatchResult.VICTORY),
+            (coalesce(cls.team_score, 0)  < coalesce(cls.enemy_team_score, 0) , MatchResult.DEFEAT),
         ], else_ = MatchResult.DRAW)
 
     def set_ow_map(self, map_id):
