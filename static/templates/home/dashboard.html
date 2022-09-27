@@ -81,7 +81,7 @@
                         </thead>
                         <tbody>
                             {% for match in current_user_matches %}
-                        <tr>
+                        <tr id="match-{{match.match_id}}-tr">
                             <th class="text-gray-900" scope="row">
                                 <a href="/m/{{match.match_id}}">{{match.map_name}}</a> 
                             </th>
@@ -119,6 +119,9 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <a href="/m/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
+                                <!-- <p>
+                                    <button type="button" class="delete-match-btn" data-match-id="{{match.match_id}}">Delete</button>
+                                </p> -->
                             </td>
                         </tr>
                         {% endfor %}
@@ -132,4 +135,6 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="{{ url_for('static', filename='js/match/match_index.js') }}"></script>
+{% endblock javascripts %}

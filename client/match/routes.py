@@ -32,7 +32,7 @@ def get_create_match_page():
 @match.get('/<int:match_id>')
 @login_required
 def get_view_match_page(match_id):
-    match = Match.query.join(MatchUser, Match.users).first_or_404()
+    match = Match.query.filter(Match.id==match_id).first_or_404()
     return render_template('match/view_match.html', match=match)
 
 @match.get('/<int:match_id>/edit')

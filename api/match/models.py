@@ -46,8 +46,7 @@ class MatchUser(db.Model):
     #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
     hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
 
-    heroes_played = db.relationship("MatchUserHero",cascade="save-update, merge, "
-                                                "delete, delete-orphan")
+    heroes_played = db.relationship("MatchUserHero",cascade="save-update, merge, ""delete, delete-orphan")
     hero_role = db.relationship("HeroRole")
 
     def add_hero(self, hero_id):
@@ -85,10 +84,10 @@ class Match(db.Model):
     ranked_flag = db.Column(db.Boolean, nullable=False, default=True)
 
     map_played = db.relationship("Map")
-    rounds = db.relationship('MatchRound', backref='match')
+    rounds = db.relationship('MatchRound', backref='match', cascade="save-update, merge, ""delete, delete-orphan")
     
-    heroes_played = db.relationship("MatchHero")
-    users = db.relationship("MatchUser")
+    heroes_played = db.relationship("MatchHero", cascade="save-update, merge, ""delete, delete-orphan")
+    users = db.relationship("MatchUser", cascade="save-update, merge, ""delete, delete-orphan")
     created_by_user = db.relationship("User")
 
     @property
@@ -127,7 +126,7 @@ class Match(db.Model):
 
     @hybrid_property
     def tank_hero_count(self):
-        return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Tank"])   # @note: use when non-dynamic relationship
+        return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Tank"])
 
     @tank_hero_count.expression
     def tank_hero_count(cls):
@@ -138,7 +137,7 @@ class Match(db.Model):
 
     @hybrid_property
     def damage_hero_count(self):
-        return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Damage"])   # @note: use when non-dynamic relationship
+        return sum([1 for p in self.heroes_played if p.hero.hero_role.title == "Damage"])
 
     @damage_hero_count.expression
     def damage_hero_count(cls):

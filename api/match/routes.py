@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for,  jsonify
+from flask import Blueprint, request, redirect, url_for, make_response, jsonify
 from app import db
 from api.match.models import Match, MatchPhase, MatchResult, MatchRound, MatchHero, MatchUser
 from api.map.models import Map
@@ -117,11 +117,11 @@ def update_match(match_id):
     #     print(form.errors) 
     #     return 'not validated'
 
-@match.get('')
-@login_required
-def get_matches():
-    current_user_matches = Match.query.filter(MatchUser.user_id==current_user.id).all()
-    return jsonify(current_user_matches)
+# @match.get('')
+# @login_required
+# def get_matches():
+#     current_user_matches = Match.query.filter(MatchUser.user_id==current_user.id).all()
+#     return jsonify(current_user_matches)
 
 @match.post('/<int:match_id>/accept')
 @login_required
@@ -139,3 +139,13 @@ def decline_match_invite(match_id):
     db.session.delete(match_user)
     db.session.commit()
     return redirect(request.referrer)
+
+@match.delete('/<int:match_id>')
+@login_required
+def delete_match(match_id):
+    match = Match.query.join(MatchUser, Match.users)\
+                       .filter(and_(Match.id==match_id, MatchUser.user_id==current_user.id, MatchUser.accepted_flag==True))\
+                       .first_or_404()
+    db.session.delete(match)
+    db.session.commit()
+    return make_response(jsonify({'MESSAGE': 'MATCH DELETED!'}),200)
