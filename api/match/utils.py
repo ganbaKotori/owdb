@@ -14,6 +14,7 @@ def get_current_user_matches(user_id, match_count = None):
                 Match.id == MatchUser.match_id
                 )\
             .filter(MatchUser.user_id==user_id)\
+            .filter(MatchUser.accepted_flag==True)\
             .order_by(Match.id.desc())\
             .limit(match_count).subquery()
     else:
@@ -23,6 +24,7 @@ def get_current_user_matches(user_id, match_count = None):
                 Match.id == MatchUser.match_id
                 )\
             .filter(MatchUser.user_id==user_id)\
+            .filter(MatchUser.accepted_flag==True)\
             .order_by(Match.id.desc())\
             .subquery() 
 

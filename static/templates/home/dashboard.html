@@ -59,7 +59,7 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h2 class="fs-5 fw-bold mb-0">Last 5 Matches</h2>
+                            <h2 class="fs-5 fw-bold mb-0">Last 10 Matches</h2>
                         </div>
                         <div class="col text-end">
                             <a href="/m/all" class="btn btn-sm btn-primary">See all</a>
@@ -74,7 +74,6 @@
                             <th class="border-bottom" scope="col">Role</th>
                             <th class="border-bottom" scope="col">Heroes</th>
                             <th class="border-bottom" scope="col">Result</th>
-                            <th class="border-bottom" scope="col">Ranked</th>
                             <th class="border-bottom" scope="col">Date</th>
                             <th class="border-bottom" scope="col">Submitted By</th>
                             <th class="border-bottom" scope="col"></th>
@@ -84,7 +83,7 @@
                             {% for match in current_user_matches %}
                         <tr>
                             <th class="text-gray-900" scope="row">
-                                {{match.map_name}}
+                                <a href="/m/{{match.match_id}}">{{match.map_name}}</a> 
                             </th>
                             <td class="fw-bolder text-gray-500">
                                 {{match.hero_role}}
@@ -110,11 +109,6 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <div class="d-flex">
-                                    {{match.ranked_flag}}
-                                </div>
-                            </td>
-                            <td class="fw-bolder text-gray-500">
-                                <div class="d-flex">
                                     {{match.date_match_played}}
                                 </div>
                             </td>
@@ -125,7 +119,6 @@
                             </td>
                             <td class="fw-bolder text-gray-500">
                                 <a href="/m/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
-                                <a href="/m/{{match.match_id}}"><button class="btn btn-info" type="button">Details</button></a>
                             </td>
                         </tr>
                         {% endfor %}

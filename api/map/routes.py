@@ -9,6 +9,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import func, select
 from sqlalchemy import case, cast, Float
 map = Blueprint('map', __name__, url_prefix='/map')
+#
 
 
 @map.post('')
