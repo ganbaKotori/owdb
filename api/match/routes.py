@@ -16,6 +16,7 @@ match = Blueprint('match', __name__, url_prefix='/match')
 @login_required
 def add_match():
     print(request.form)
+    print(request.form.get('datetime-match-played'))
     form = CreateMatchForm()
     current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
     for f in form.tagged_friends:
@@ -25,7 +26,9 @@ def add_match():
         hero_role = int(request.form.get('ow_hero_role'))
         ow_map = request.form.get('ow_map')
         heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
-        date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
+        #date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
+        date_match_played = datetime.strptime(request.form.get('datetime-match-played'), '%Y-%m-%d %H:%M') 
+        #2022-09-27 13:33
         match_mode = int(request.form.get('match-mode'))
         if match_mode == 1:
             ranked_flag = True

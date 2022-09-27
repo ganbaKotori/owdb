@@ -4,6 +4,7 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
 	/* Custom style */
     .accordion-button::after {
@@ -229,13 +230,23 @@
                         </div>
                       </div>
                       <hr/>
-                      <div class="row mt-2">
+                      <!-- <div class="row mt-2">
                         <div class="col d-grid gap-2">
                           <div class="input-group">
                               <span class="input-group-text">
                                   Match Date
                               </span>
                               <input data-datepicker="" class="form-control" id="date-match-played" name="date-match-played" type="text" placeholder="" required>
+                          </div>
+                        </div>
+                      </div> -->
+                      <div class="row mt-2">
+                        <div class="col d-grid gap-2">
+                          <div class="input-group">
+                              <span class="input-group-text">
+                                  Match Date
+                              </span>
+                              <input type="text" class="form-control" id="datetime" name="datetime-match-played" required>
                           </div>
                         </div>
                       </div>
@@ -284,4 +295,37 @@
 </script>
 <script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+  
+  function formatDate(date) {
+    return (
+      [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+      ].join('-') +
+      ' ' +
+      [
+        padTo2Digits(date.getHours()),
+        padTo2Digits(date.getMinutes())
+      ].join(':')
+    );
+  }
+
+  console.log(formatDate(new Date()));
+  
+    flatpickr("#datetime", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+      altInput: true,
+      altFormat: "F j, Y @ h:i K",
+      defaultDate: '2022-09-27 13:33',
+      minuteIncrement: 1
+    });
+</script>
 {% endblock javascripts %}
