@@ -1,3 +1,4 @@
+import math
 from flask_login import current_user
 from api.map.models import Map
 from api.hero.models import Hero, HeroRole
@@ -7,6 +8,15 @@ from api.user.models import User
 from sqlalchemy import and_
 
 def get_current_user_matches(user_id, match_count = None):
+    match_query = db.session.query(Match.id, Match.date_match_played)\
+            .join(MatchUser, Match.users)\
+            .filter(MatchUser.user_id==user_id)\
+            .filter(MatchUser.accepted_flag==True)\
+            .order_by(Match.date_match_played.desc())\
+            .limit(match_count).all()
+
+    for x in match_query:
+        print(x[0], x[1])
     if match_count:
         subq = db.session.query(MatchUser.id)\
             .join(
