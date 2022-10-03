@@ -1,3 +1,44 @@
+class User {
+	constructor(id) {
+		this.id = id;
+		this.heroes_played = [];
+		this.hero_role = null;
+
+	}
+
+	// constructor(id, heroes_played, hero_role) {
+	// 	this.id = id;
+	// 	this.heroes_played = heroes_played;
+	// 	this.hero_role = hero_role;
+	// }
+	add_hero(hero_id){
+		this.heroes_played.push(hero_id);
+	}
+}
+
+class Hero {
+	constructor(id){
+		this.id = id;
+	}
+}
+
+class MatchRound {
+	constructor(id, phase, score) {
+		this.id = id;
+		this.phase = phase;
+		this.score = score;
+	}
+}
+
+class OverwatchMap {
+	constructor(id, name, map_mode, max_score) {
+		this.id = id;
+		this.name = name;
+		this.map_mode = map_mode;
+		this.max_score = max_score;
+	}
+}
+
 class Match {
 	constructor(friends) {
 		this.round_count = 0;
@@ -13,23 +54,31 @@ class Match {
 		this.tagged_friend_count = 0;
 		this.tagged_friend_id_count = 0;
 		this.all_friends = friends;
-
-		
+	
 	}
 
 	set_current_ow_map(ow_map) {
 		if(this.current_map_selected != null && this.current_map_selected.map_mode != ow_map.map_mode){
-			console.log('this is a different map mode');
-			this.remove_all_rounds();
+            if (confirm("Changing to a different Match Mode will reset Match Rounds. Continue?") == true) {
+                this.remove_all_rounds();
+                this.current_map_selected = ow_map;
+                update_match_final_results();
+                if (ow_map.map_mode == 'Control'){
+                    this.show_contol_rounds();
+                } else {
+                }
+            } else {
 
-		}
-		console.log(ow_map.map_mode);
-		if (ow_map.map_mode == 'Control'){
-			this.show_contol_rounds();
+            }
 		} else {
+            this.current_map_selected = ow_map;
+            update_match_final_results();
+            if (ow_map.map_mode == 'Control'){
+                this.show_contol_rounds();
+            } else {
+            }
 
-		}
-		this.current_map_selected = ow_map;
+        }
 	}
 	
 	get_friends_options() {
