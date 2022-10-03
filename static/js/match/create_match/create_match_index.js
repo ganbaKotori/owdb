@@ -1,4 +1,4 @@
-const MAX_TAGGED_FRIENDS = 5;
+const MAX_TAGGED_FRIENDS = 4;
 class Match {
 	constructor(friends) {
 		this.round_count = 0;
@@ -7,15 +7,30 @@ class Match {
 		this.total_enemy_team_score = 0;
 		this.current_map_id = null;
 		this.current_map_selected = null;
+		this.current_map_mode = null;
+		this.rounds = [];
 		this.add_round('ATTACK', 0);
 
 		this.tagged_friend_count = 0;
 		this.tagged_friend_id_count = 0;
 		//this.tagged_friends = tagged_friends;
 		this.all_friends = friends;
+
+		
 	}
 
 	set_current_ow_map(ow_map) {
+		if(this.current_map_selected != null && this.current_map_selected.map_mode != ow_map.map_mode){
+			console.log('this is a different map mode');
+			this.remove_all_rounds();
+
+		}
+		console.log(ow_map.map_mode);
+		if (ow_map.map_mode == 'Control'){
+			this.show_contol_rounds();
+		} else {
+
+		}
 		this.current_map_selected = ow_map;
 	}
 	
@@ -42,7 +57,7 @@ class Match {
 	add_round(phase, score) {
 		this.round_count++;
 		$('.match-round-list').append(`
-		<li class="list-group-item">
+		<li class="list-group-item" id="match-round-${this.round_id_count}">
 			<div class="row ml-2">
 				<div class="col-4">
 					<h6><i>Phase</i></h6>
@@ -79,7 +94,11 @@ class Match {
 				</div>
 			</div>
 	  	</li>`);
+		this.rounds.push(new MatchRound(this.round_id_count,phase,score));
 		this.round_id_count++;
+
+		
+		console.log(this.rounds)
 	}
 
 	add_tagged_friend() {
@@ -135,24 +154,35 @@ class Match {
 		}
 	}
 
-	remove_round(round) {
+	show_contol_rounds(){
+		$('.match-row').hide();
+		$('.control-match-row').show();
+	}
+
+	remove_round(round){
 		if (this.round_count > 1) {
 			this.round_count--;
 			round.remove();
 		}
 	}
 
-	remove_tagged_friend(tagged_friend) {
+	remove_tagged_friend(tagged_friend){
 		tagged_friend.remove();
 		this.tagged_friend_count--;
 
 	}
 
-	_check_round_count() {
+	_check_round_count(){
 		if (this.round_count == 0) {
 			console.log('no rounds!');
 		}
 	}
+
+	remove_all_rounds(){
+		this.round_count = 0;
+		$('.match-round-list').empty();
+	}
+
 }
 
 class User {
@@ -180,7 +210,8 @@ class Hero {
 }
 
 class MatchRound {
-	constructor(phase, score) {
+	constructor(id, phase, score) {
+		this.id = id;
 		this.phase = phase;
 		this.score = score;
 	}
@@ -346,9 +377,6 @@ $(document).ready(function() {
 		update_match_final_results();
 	});
 
-
-	
-
 	$('#ow_map_select').on('change', function() {
 		console.log($( "#ow_map_select option:selected" ).text())
 		$('#map-image').attr('src',map_images[$( "#ow_map_select option:selected" ).text()]);
@@ -393,6 +421,16 @@ $(document).ready(function() {
 	$('.today-btn').on('click', async function() {
 		$('#date-match-played').val(((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear());
 	});
+
+	$(document).on('click', '.control-player-plus', function() {
+		match.add_round(phase="ATTACK", score=1);
+		update_match_final_results();
+	})
+
+	$(document).on('click', '.control-enemy-plus', function() {
+		match.add_round(phase="DEFEND", score=1);
+		update_match_final_results();
+	})
 	
 });
 
