@@ -118,10 +118,16 @@
                                 </div>
                             </td>
                             <td class="fw-bolder text-gray-500">
-                                <a href="/m/{{match.match_id}}/edit"><button class="btn btn-info" type="button">Edit</button></a>
-                                <!-- <p>
-                                    <button type="button" class="delete-match-btn" data-match-id="{{match.match_id}}">Delete</button>
-                                </p> -->
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Options
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="/m/{{match.match_id}}">View</a></li>
+                                      <li><a class="dropdown-item" href="/m/{{match.match_id}}/edit">Edit</a></li>
+                                      <li><a class="dropdown-item delete-match-btn" href="#" data-match-id="{{match.match_id}}">Delete</a></li>
+                                    </ul>
+                                  </div>
                             </td>
                         </tr>
                         {% endfor %}
