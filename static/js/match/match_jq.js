@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $('.ow-hero-check').hide();
-  
+
   $(".ow-hero-role-radio-btn").on("change", function () {
     console.log($(this).val());
     $(".ow-hero-check").hide();
@@ -148,14 +148,19 @@ $(document).ready(function () {
   });
 
   $(".today-btn").on("click", async function () {
-    $("#date-match-played").val(
-      (date.getMonth() > 8
-        ? date.getMonth() + 1
-        : "0" + (date.getMonth() + 1)) +
-        "/" +
-        (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
-        "/" +
-        date.getFullYear()
-    );
+    fp.setDate(new Date())
+  });
+
+  $(".delete-match-btn").on("click", async function () {
+    if (confirm("Are you sure you want to delete this match?") == true) {
+      let match_id = $(this).data("match-id");
+      let delete_match_response = await delete_match(match_id);
+      if (delete_match_response.status == 200) {
+        alert("Match Deleted!");
+        $(`#match-${match_id}-tr`).slideUp();
+      }
+      console.log(delete_match_response.status);
+    } else {
+    }
   });
 });
