@@ -48,6 +48,7 @@ class MatchUser(db.Model):
 
     heroes_played = db.relationship("MatchUserHero",cascade="save-update, merge, ""delete, delete-orphan")
     hero_role = db.relationship("HeroRole")
+    user = db.relationship("User")
 
     def add_hero(self, hero_id):
         match_user_hero = MatchUserHero()

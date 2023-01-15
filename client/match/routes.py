@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 from api.user.models import User
 from sqlalchemy import and_
 import api.match.utils as match_utils
+from api.match.schema import MatchSchema
 
 match = Blueprint('match', __name__, url_prefix='/m')
 
@@ -45,6 +46,9 @@ def get_edit_match_page(match_id):
     match = Match.query.join(MatchUser, Match.users)\
                        .filter(and_(Match.id==match_id, MatchUser.user_id==current_user.id, MatchUser.accepted_flag==True))\
                        .first_or_404()
+    match_schema = MatchSchema()
+    match_json = match_schema.dump(match)
+    
     c_u_match_info = next(user for user in match.users if user.user_id == current_user.id)
     c_u_heroes = [match_hero.hero.id for match_hero in c_u_match_info.heroes_played]
     c_u_hero_role_id = c_u_match_info.hero_role.id
@@ -60,7 +64,8 @@ def get_edit_match_page(match_id):
                             form=form,
                             c_u_heroes=c_u_heroes,
                             c_u_hero_role_id=c_u_hero_role_id,
-                            match_map_id=match_map_id)
+                            match_map_id=match_map_id,
+                            match_json=match_json)
 
 
 @match.get('/all')

@@ -236,12 +236,31 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/match/match.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/user/friends.manager.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/user/user.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/match/match_round_manager.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/ow_map/ow_map.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/ow_map/ow_map_manager.class.js') }}"></script>
 <script type=text/javascript>
   const ow_maps_data = {{ ow_maps|tojson|safe }};
   const ow_match_data = {{ match|tojson|safe }};
+  const ow_match_json = {{ match_json|tojson|safe }};
   const current_user_friends = [];
-  console.log(ow_match_data);
+  console.log("match_json", ow_match_json);
+  const match_users_data = ow_match_json.users;
+  let match_users = []
+  match_users_data.forEach(match_user_data=> {
+    let { id } = match_user_data;
+    let user = new User(id);
+    match_users.push(user);
+  })
+
+  let match_friends_manager = new FriendsManager(match_users);
+  let match_round_manager = new MatchRoundManager();
+  let match_map_manager = new OverwatchMapManager();
+  let match = new Match(match_friends_manager, match_round_manager, match_map_manager);
+  console.log("match_class", match);
 </script>
-<script src="{{ url_for('static', filename='js/match/create_match/create_match_index.js') }}"></script>
-<script src="{{ url_for('static', filename='js/user/friendship.js') }}"></script>
+
 {% endblock javascripts %}
