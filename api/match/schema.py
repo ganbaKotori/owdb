@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields
 
 from api.user.schema import UserSchema
+from api.match.models import MatchPhase
 
 class MatchUserSchema(Schema):
     '''    __tablename__ = "ow_match_user"
@@ -17,6 +18,18 @@ class MatchUserSchema(Schema):
     id = fields.Integer()
     user = fields.Nested(UserSchema)
 
+class MatchRoundSchema(Schema):
+    '''    __tablename__ = "ow_match_round"
+    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
+    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
+    phase = db.Column(Enum(MatchPhase))
+
+    score = db.Column(db.Integer, nullable=False, default=0)'''
+    id = fields.Integer()
+    score = fields.Integer()
+    phase = fields.String()
+
+
 
 class MatchSchema(Schema):
     username = fields.String()
@@ -32,5 +45,9 @@ class MatchSchema(Schema):
     
     date_match_played_formatted = fields.String()
     users = fields.List(fields.Nested(MatchUserSchema))
+    rounds = fields.List(fields.Nested(MatchRoundSchema))
+
+
+
 
     

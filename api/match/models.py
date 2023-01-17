@@ -23,6 +23,9 @@ class MatchPhase(enum.Enum):
     ATTACK = "ATTACK"
     DEFEND = "DEFEND"
 
+    def __str__(self):
+        return self.value
+
 @dataclass
 class MatchUserHero(db.Model):
     hero : Hero

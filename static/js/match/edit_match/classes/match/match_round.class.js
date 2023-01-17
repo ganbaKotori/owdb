@@ -1,5 +1,5 @@
 class MatchRound {
-	constructor(id, phase, score) {
+	constructor(phase="ATTACK", score=0, id=null) {
 		this.id = id;
 		this.phase = phase;
 		this.score = score;
