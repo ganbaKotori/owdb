@@ -1,6 +1,7 @@
 class User {
-	constructor(id, hero_manager=null) {
+	constructor(id, username, hero_manager=null) {
 		this.id = id;
+		this.username = username;
         this.hero_manager = hero_manager;
 	}
 

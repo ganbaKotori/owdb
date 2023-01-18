@@ -17,7 +17,7 @@ class MapMode(db.Model):
     
     __tablename__ = "ow_map_mode"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    max_score =  db.Column(db.Integer) #
+    max_score =  db.Column(db.Integer)
     name = db.Column(db.String(25))
 
 @dataclass

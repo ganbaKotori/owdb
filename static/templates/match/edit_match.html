@@ -243,20 +243,26 @@
 <script src="{{ url_for('static', filename='js/match/edit_match/classes/match/match_round.class.js') }}"></script>
 <script src="{{ url_for('static', filename='js/match/edit_match/classes/match/match_round_phase.class.js') }}"></script>
 <script src="{{ url_for('static', filename='js/match/edit_match/classes/ow_map/ow_map.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/ow_map/ow_map_mode.class.js') }}"></script>
 <script src="{{ url_for('static', filename='js/match/edit_match/classes/ow_map/ow_map_manager.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/hero/hero.class.js') }}"></script>
+<script src="{{ url_for('static', filename='js/match/edit_match/classes/hero/hero_manager.class.js') }}"></script>
 <script type=text/javascript>
   const ow_maps_data = {{ ow_maps|tojson|safe }};
   const ow_match_data = {{ match|tojson|safe }};
   const ow_match_json = {{ match_json|tojson|safe }};
   const current_user_friends = [];
-  console.log("match_json", ow_match_json);
+  console.log("match_json 1", ow_match_json);
   const match_users_data = ow_match_json.users;
   const match_rounds_data = ow_match_json.rounds;
+  const match_ow_map = ow_match_json.map_played;
+
   let match_users = [];
   let match_rounds = [];
   match_users_data.forEach(match_user_data=> {
-    let { id } = match_user_data;
-    let user = new User(id);
+    let { id, username } = match_user_data;
+    let hero_manager = new HeroManager();
+    let user = new User(id, username, hero_manager);
     match_users.push(user);
   })
   match_rounds_data.forEach((match_round_data,index)=> {
@@ -265,9 +271,20 @@
     match_rounds.push(match_round);
   })
 
+  let map_id = match_ow_map.id;
+  let map_name = match_ow_map.name;
+
+  let map_mode_id = match_ow_map.map_mode.id;
+  let map_mode_name = match_ow_map.map_mode.name;
+  let map_mode_max_score = match_ow_map.map_mode.max_score;
+
+  let ow_map_mode = new OverwatchMapMode(map_mode_id, map_mode_name, map_mode_max_score)
+  let ow_map = new OverwatchMap(map_id, map_name, ow_map_mode);
+
+
   let match_friends_manager = new FriendsManager(match_users);
   let match_round_manager = new MatchRoundManager(match_rounds);
-  let match_map_manager = new OverwatchMapManager();
+  let match_map_manager = new OverwatchMapManager(ow_map);
   let match = new Match(match_friends_manager, match_round_manager, match_map_manager);
   console.log("match_class", match);
 </script>

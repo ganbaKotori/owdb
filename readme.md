@@ -25,7 +25,7 @@ flask run
 ### Windows (Powershell)
 ```sh
 owdb-env\Scripts\activate
-$env:FLASK_ENV = "development"
-$env FLASK_APP=app
+$env:FLASK_ENV="development"
+$env:FLASK_APP="app"
 flask run
 ```

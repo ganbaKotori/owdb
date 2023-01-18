@@ -1,5 +1,5 @@
 class Match {
-	constructor(friends_manager, match_round_manager, match_map_manager) {
+	constructor(friends_manager, match_round_manager, match_map_manager, comp_flag=true, match_date=new Date()) {
         this.friends_manager = friends_manager;
         this.match_round_manager = match_round_manager;
         this.match_map_manager = match_map_manager;
