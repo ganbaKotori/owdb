@@ -1,7 +1,7 @@
 from urllib import request
 from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
-from api.map.models import Map
+from api.map.models import Map, MapMode
 from api.hero.models import Hero, HeroRole
 from api.match.models import Match, MatchUser, MatchUserHero, Hero, MatchResult
 from api.match.forms import CreateMatchForm
@@ -12,6 +12,7 @@ from api.user.models import User
 from sqlalchemy import and_
 import api.match.utils as match_utils
 from api.match.schema import MatchSchema
+from api.map.schema import MapSchema
 
 match = Blueprint('match', __name__, url_prefix='/m')
 
@@ -42,6 +43,7 @@ def get_edit_match_page(match_id):
     ow_maps = Map.query.order_by(Map.name.asc()).all()
     ow_heroes = Hero.query.order_by(Hero.name.asc()).all()
     ow_hero_roles = HeroRole.query.all()
+    ow_map_modes = MapMode.query.order_by().all()
     form = CreateMatchForm()
     match = Match.query.join(MatchUser, Match.users)\
                        .filter(and_(Match.id==match_id, MatchUser.user_id==current_user.id, MatchUser.accepted_flag==True))\
@@ -61,6 +63,7 @@ def get_edit_match_page(match_id):
                             ow_maps=ow_maps,
                             ow_heroes=ow_heroes,
                             ow_hero_roles=ow_hero_roles,
+                            ow_map_modes=ow_map_modes,
                             form=form,
                             c_u_heroes=c_u_heroes,
                             c_u_hero_role_id=c_u_hero_role_id,

@@ -4,4 +4,8 @@ class OverwatchMapMode {
 		this.name = name;
 		this.max_score = max_score;
 	}
+
+	get_id() {
+		return this.id;
+	}
 }

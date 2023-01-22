@@ -12,6 +12,7 @@ class MapPre(db.Model):
 
 @dataclass
 class MapMode(db.Model):
+    id : int
     max_score : int
     name : str
     
