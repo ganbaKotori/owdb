@@ -1,9 +1,8 @@
-from flask import Flask, session, render_template, redirect, url_for
-from flask_login import LoginManager, login_required, logout_user
+from flask import Flask, render_template
+from flask_login import LoginManager
 import pymysql, os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-#from secret import DB_USERNAME, DB_PASSWORD, DB_URI, DB_SCHEMA, SECRET_KEY
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -29,13 +28,7 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
-from api.user.models import User
-from api.routes import api
-from client.routes import client
 
-from api.map.utils import add_all_ow_maps
-from api.hero.utils import add_all_ow_heroes
-from api.user.utils import add_all_user_avatars
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -67,6 +60,13 @@ where TABLE_NAME = 'user';
 
 Flask-Migrate only gets changes in columns but not for Table Create/Deletions
 '''
+
+from routes.api.routes import api
+from routes.client.routes import client
+
+from routes.api.map.utils import add_all_ow_maps
+from routes.api.hero.utils import add_all_ow_heroes
+from routes.api.user.utils import add_all_user_avatars
 
 login_manager.init_app(app)
 app.register_blueprint(api)
