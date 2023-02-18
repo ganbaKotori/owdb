@@ -6,7 +6,7 @@ from typing import List
 from sqlalchemy import and_, func, or_
 from marshmallow import Schema, fields
 from flask import redirect
-from routes.api.match.models import Match, MatchUser
+from models.match.Match import Match, MatchUser
 
 # @dataclass
 # class Friendship(db.Model):

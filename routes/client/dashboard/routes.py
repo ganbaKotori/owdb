@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint
 from flask_login import login_required, current_user
-from routes.api.match.models import Match
+from models.match.Match import Match
 from routes.api.user.models import User
 from app import db
 from sqlalchemy import desc

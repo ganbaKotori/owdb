@@ -14,57 +14,12 @@ from datetime import datetime
 from sqlalchemy.sql import case
 from flask_login import current_user
 
-class MatchResult(enum.Enum):
-    VICTORY = "VICTORY"
-    DEFEAT = "DEFEAT"
-    DRAW = "DRAW"
-
-class MatchPhase(enum.Enum):
-    ATTACK = "ATTACK"
-    DEFEND = "DEFEND"
-
-    def __str__(self):
-        return self.value
-
-@dataclass
-class MatchUserHero(db.Model):
-    hero : Hero
-
-    __tablename__ = 'ow_match_user_hero'
-    #id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    #match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
-    match_user_id = db.Column(db.Integer, db.ForeignKey('ow_match_user.id'), primary_key=True)
-    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
-
-    hero = db.relationship("Hero")
-
-@dataclass
-class MatchUser(db.Model):
-
-    __tablename__ = "ow_match_user"
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    accepted_flag = db.Column(db.Boolean, nullable=False, default=False)
-    #match_owner_flag = db.Column(db.Boolean, nullable=False, default=False)
-    hero_role_id = db.Column(db.Integer, db.ForeignKey('ow_hero_role.id'))
-
-    heroes_played = db.relationship("MatchUserHero",cascade="save-update, merge, ""delete, delete-orphan")
-    hero_role = db.relationship("HeroRole")
-    user = db.relationship("User")
-
-    def add_hero(self, hero_id):
-        match_user_hero = MatchUserHero()
-        match_user_hero.hero = Hero.query.filter(Hero.id==int(hero_id)).first_or_404()
-        self.heroes_played.append(match_user_hero)
-
 @dataclass
 class Match(db.Model):
     id: int
     map_played : Map
     heroes_played : List[Hero]
     ranked_flag : bool
-    # result : MatchResult
     result_formatted : str
     date_match_played : datetime
     datetime_match_played_formatted : str
@@ -175,24 +130,6 @@ class Match(db.Model):
         new_round = MatchRound(score=score, phase=phase_value)
         self.rounds.append(new_round)
 
-    # @hybrid_property
-    # def result(self):
-    #     user_team_score = 0
-    #     enemy_team_score = 0
-    #     for round in self.rounds:
-    #         if round.phase == MatchPhase.ATTACK:
-    #             user_team_score += round.score
-    #         elif round.phase == MatchPhase.DEFEND:
-    #             enemy_team_score += round.score
-        
-
-    # @result.expression
-    # def result(cls):
-    #     return (select([func.count(MatchHero.hero_id)]).
-    #             where(MatchHero.match_id == cls.id).
-    #             label("support_hero_count")
-    #             )   
-
     @hybrid_property
     def team_score(self):
         user_team_score = 0
@@ -200,8 +137,6 @@ class Match(db.Model):
             if round.phase == MatchPhase.ATTACK:
                 user_team_score += round.score
         return user_team_score
-        
-    #team score and enemy score
     
     @team_score.expression
     def team_score(cls):
@@ -222,8 +157,6 @@ class Match(db.Model):
             if round.phase == MatchPhase.DEFEND:
                 enemy_team_score += round.score
         return enemy_team_score
-        
-    #team score and enemy score
     
     @enemy_team_score.expression
     def enemy_team_score(cls):
@@ -244,8 +177,6 @@ class Match(db.Model):
         elif self.team_score < self.enemy_team_score:
             return MatchResult.DEFEAT
         else: return MatchResult.DRAW
-        
-    #team score and enemy score
     
     @match_result.expression
     def match_result(cls):
@@ -256,22 +187,3 @@ class Match(db.Model):
 
     def set_ow_map(self, map_id):
         self.map_played = Map.query.filter(Map.id==map_id).first_or_404()
-
-
-@dataclass
-class MatchRound(db.Model):
-    __tablename__ = "ow_match_round"
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'))
-    phase = db.Column(Enum(MatchPhase))
-
-    score = db.Column(db.Integer, nullable=False, default=0)
-
-@dataclass
-class MatchHero(db.Model):
-    hero : Hero
-
-    __tablename__ = 'ow_match_hero'
-    hero_id = db.Column(db.Integer, db.ForeignKey('ow_hero.id'), primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('ow_match.id'), primary_key=True)
-    hero = db.relationship("Hero")

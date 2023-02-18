@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, make_response, jsonify
 from app import db
-from routes.api.match.models import Match, MatchPhase, MatchResult, MatchRound, MatchHero, MatchUser
+from models.match.Match import Match, MatchPhase, MatchResult, MatchRound, MatchHero, MatchUser
 from routes.api.map.models import Map
 from routes.api.hero.models import Hero
 from routes.api.user.models import User
@@ -22,13 +22,10 @@ def add_match():
     for f in form.tagged_friends:
         f.username.choices = current_user_friends
     if form.validate_on_submit():
-        print(form.data)
         hero_role = int(request.form.get('ow_hero_role'))
         ow_map = request.form.get('ow_map')
         heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
-        #date_match_played = datetime.strptime(request.form.get('date-match-played'), '%m/%d/%Y') 
         date_match_played = datetime.strptime(request.form.get('datetime-match-played'), '%Y-%m-%d %H:%M') 
-        #2022-09-27 13:33
         match_mode = int(request.form.get('match-mode'))
         if match_mode == 1:
             ranked_flag = True
@@ -41,8 +38,6 @@ def add_match():
             new_match.heroes_played.append(a)
         for round in form.data['match_rounds']:
             new_match.add_round(phase=round['phase'], score=round['score'])
-            #objectives_captured=round['result']
-        #new_match.rounds[0].score = 1
         new_match.add_user(user=current_user, accepted_flag=True, hero_role_id=hero_role, heroes_played=heroes)
         for friend in form.data['tagged_friends']:
             if friend['role'] == 'DAMAGE':
@@ -51,7 +46,6 @@ def add_match():
                 hero_role = 2
             elif ['role'] == 'TANK':
                 hero_role = 3
-
             friend = User.query.filter(User.username==friend['username']).first()
             if friend:
                 new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)

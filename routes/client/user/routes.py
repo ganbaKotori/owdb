@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
 
-from routes.api.match.models import Match
+from models.match.Match import Match
 from routes.api.user.models import User
 import routes.api.user.utils as user_utils
 import routes.api.match.utils as match_utils

@@ -2,7 +2,7 @@ import math
 from flask_login import current_user
 from routes.api.map.models import Map
 from routes.api.hero.models import Hero, HeroRole
-from routes.api.match.models import Match, MatchUser, MatchUserHero, Hero
+from models.match.Match import Match, MatchUser, MatchUserHero, Hero
 from app import db
 from routes.api.user.models import User
 from sqlalchemy import and_
