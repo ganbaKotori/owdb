@@ -1,6 +1,7 @@
 from flask import make_response, jsonify, redirect, url_for, Blueprint, request, flash
 from flask_login import current_user
-from routes.api.user.models import User, UserAvatar
+from models.user.User import User
+from models.user.UserAvatar import UserAvatar
 from app import db
 import routes.api.user.utils as utils
 from routes.api.user.schema import UserSchema

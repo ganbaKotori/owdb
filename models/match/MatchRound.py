@@ -1,9 +1,8 @@
 import enum
-from dataclasses import dataclass
 from sqlalchemy import Enum
 from app import db
+from models.match.MatchPhase import MatchPhase
 
-@dataclass
 class MatchRound(db.Model):
     __tablename__ = "ow_match_round"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)

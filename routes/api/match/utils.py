@@ -1,11 +1,16 @@
 import math
 from flask_login import current_user
-from routes.api.map.models import Map
-from routes.api.hero.models import Hero, HeroRole
-from models.match.Match import Match, MatchUser, MatchUserHero, Hero
+from models.match.Match import Match
 from app import db
-from routes.api.user.models import User
 from sqlalchemy import and_
+from models.map.Map import Map
+from models.hero.Hero import Hero
+from models.hero.HeroRole import HeroRole
+from models.user.User import User
+from models.match.MatchUser import MatchUser
+from models.match.MatchUserHero import MatchUserHero
+from models.hero.Hero import Hero
+
 
 def get_current_user_matches(user_id, match_count = None):
     match_query = db.session.query(Match.id, Match.date_match_played)\

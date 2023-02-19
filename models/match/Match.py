@@ -1,9 +1,5 @@
-import enum
-from dataclasses import dataclass
-from sqlalchemy import Enum
 from app import db
-from routes.api.hero.models import Hero
-from routes.api.map.models import Map
+from models.map.Map import Map
 from sqlalchemy.sql.functions import coalesce
 
 
@@ -14,26 +10,7 @@ from datetime import datetime
 from sqlalchemy.sql import case
 from flask_login import current_user
 
-@dataclass
 class Match(db.Model):
-    id: int
-    map_played : Map
-    heroes_played : List[Hero]
-    ranked_flag : bool
-    result_formatted : str
-    date_match_played : datetime
-    datetime_match_played_formatted : str
-    date_match_played_formatted : str
-
-    roles : List[str]
-
-    users : MatchUser
-
-    current_user_heroes: List[MatchUserHero]
-
-    team_score_formatted : int
-    enemy_score_formatted : int
-
     __tablename__ = "ow_match"
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     map_played_id = db.Column(db.Integer, db.ForeignKey('ow_map.id'))

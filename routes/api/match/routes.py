@@ -1,9 +1,15 @@
 from flask import Blueprint, request, redirect, url_for, make_response, jsonify
 from app import db
-from models.match.Match import Match, MatchPhase, MatchResult, MatchRound, MatchHero, MatchUser
-from routes.api.map.models import Map
-from routes.api.hero.models import Hero
-from routes.api.user.models import User
+from models.match.Match import Match
+from models.match.MatchPhase import MatchPhase
+from models.match.MatchResult import MatchResult
+from models.match.MatchRound import MatchRound
+from models.match.MatchHero import MatchHero
+from models.match.MatchUser import MatchUser
+from models.map.Map import Map
+
+from models.hero.Hero import Hero
+from models.user.User import User
 from flask_login import current_user, login_required
 from routes.api.match.forms import CreateMatchForm
 import routes.api.user.utils as user_utils

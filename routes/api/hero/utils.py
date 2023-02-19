@@ -1,5 +1,6 @@
 from app import db
-from routes.api.hero.models import Hero, HeroRole
+from models.hero.Hero import Hero
+from models.hero.HeroRole import HeroRole
 
 def add_all_ow_heroes():
     '''

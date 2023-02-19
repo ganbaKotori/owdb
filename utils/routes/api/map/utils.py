@@ -1,7 +1,13 @@
-from routes.api.map.models import Map
-from models.match.Match import Match, MatchUser, MatchUserHero, MatchResult
-from routes.api.hero.models import Hero, HeroRole
-from routes.api.user.models import User
+
+from models.map.Map import Map
+
+from models.match.Match import Match
+from models.match.MatchUser import MatchUser
+from models.match.MatchUserHero import MatchUserHero
+from models.match.MatchResult import MatchResult
+from models.hero.Hero import Hero
+from models.hero.HeroRole import HeroRole
+from models.user.User import User
 from app import db
 from sqlalchemy import func
 

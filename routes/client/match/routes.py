@@ -1,18 +1,20 @@
 from urllib import request
 from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
-from routes.api.map.models import Map, MapMode
-from routes.api.hero.models import Hero, HeroRole
-from models.match.Match import Match, MatchUser, MatchUserHero, Hero, MatchResult
+from models.map.Map import Map
+from models.map.MapMode import MapMode
+from models.hero.Hero import Hero
+from models.hero.HeroRole import HeroRole
+from models.match.Match import Match
+from models.match.MatchUser import MatchUser
 from routes.api.match.forms import CreateMatchForm
 import routes.api.user.utils as user_utils
 from app import db
 from sqlalchemy.orm import joinedload
-from routes.api.user.models import User
+from models.user.User import User
 from sqlalchemy import and_
 import routes.api.match.utils as match_utils
 from routes.api.match.schema import MatchSchema
-from routes.api.map.schema import MapSchema
 
 match = Blueprint('match', __name__, url_prefix='/m')
 

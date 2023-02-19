@@ -1,5 +1,5 @@
 from flask import make_response, jsonify, redirect, url_for, Blueprint, flash
-from routes.api.hero.models import Hero
+from models.hero.Hero import Hero
 from routes.api.hero.utils import add_all_ow_heroes
 
 hero = Blueprint('hero', __name__, url_prefix='/hero')

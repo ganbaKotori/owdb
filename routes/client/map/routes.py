@@ -1,14 +1,12 @@
 from urllib import request
 from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
-from routes.api.map.models import Map
-from routes.api.hero.models import Hero, HeroRole
-from models.match.Match import Match, MatchUser, MatchUserHero, Hero
-from routes.api.match.forms import CreateMatchForm
-import routes.api.user.utils as user_utils
+from models.map.Map import Map
+from models.hero.HeroRole import HeroRole
+
 from app import db
 from sqlalchemy.orm import joinedload
-from routes.api.user.models import User
+from models.user.User import User
 
 ow_map = Blueprint('ow_map', __name__, url_prefix='/map')
 

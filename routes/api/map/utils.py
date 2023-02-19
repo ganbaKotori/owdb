@@ -1,5 +1,6 @@
 from app import db
-from routes.api.map.models import Map, MapMode
+from models.map.Map import Map
+from models.map.MapMode import MapMode
 
 
 

@@ -6,7 +6,9 @@ from typing import List
 from sqlalchemy import and_, func, or_
 from marshmallow import Schema, fields
 from flask import redirect
-from models.match.Match import Match, MatchUser
+from models.match.Match import Match
+from models.match.MatchUser import MatchUser
+from models.user.Friendship import Friendship
 
 # @dataclass
 # class Friendship(db.Model):
@@ -20,23 +22,6 @@ from models.match.Match import Match, MatchUser
 #                             ['user.id', 'user.id']), 
 #                   )
 
-class UserSchema(Schema):
-    username = fields.String()
-    
-class FriendshipSchema(Schema):
-    id = fields.Integer()
-    user = fields.Nested(UserSchema)
-
-class Friendship(db.Model):
-    __tablename__ = 'friendship'
-    user_id = db.Column(db.ForeignKey('user.id') , autoincrement=False,primary_key=True)
-    friend_id = db.Column(db.ForeignKey('user.id'), autoincrement=False, primary_key=True)
-    id = db.Column(db.Integer, autoincrement=True, primary_key=False, unique=True, nullable=False)
-
-    request_accepted = db.Column(db.Boolean, nullable=False, default=False)
-
-    user = db.relationship('User',primaryjoin="User.id == Friendship.user_id")
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -46,14 +31,8 @@ def load_user(user_id):
 def unauthorized_callback():
     return redirect('/login')
 
-@dataclass
 class User(UserMixin, db.Model):
     __tablename__ = "user"
-    id : int
-    email : str
-    username : str
-    requested_friends : List[Friendship]
-    requested_friends : List[Friendship]
     
     id = db.Column(db.Integer, primary_key=True, autoincrement= True)
     email = db.Column(db.String(50), nullable=False, unique=True)
@@ -121,35 +100,4 @@ class User(UserMixin, db.Model):
                     ).scalar()
         return k
 
-
-
-    
-
-    #active = db.Column(db.Boolean(), nullable=False, server_default='0')
-
-    # friends = db.relationship("User", secondary=Friendship, 
-    #                        primaryjoin=id==Friendship.friend_a_id,
-    #                        secondaryjoin=id==Friendship.friend_b_id)
-
-    # def befriend(self, friend):
-    #     if friend not in self.friends:
-    #         self.friends.append(friend)
-    #         friend.friends.append(self)
-
-    # def unfriend(self, friend):
-    #     if friend in self.friends:
-    #         self.friends.remove(friend)
-    #         friend.friends.remove(self)
-
-@dataclass
-class UserAvatar(db.Model):
-    __tablename__ = "user_avatar"
-
-    id : int
-    title : str
-    image_location : str
-    
-    id = db.Column(db.Integer, primary_key=True, autoincrement= True)
-    title = db.Column(db.String(50), nullable=False, unique=True)
-    image_location = db.Column(db.String(200), nullable=False)
 
