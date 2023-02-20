@@ -1,6 +1,7 @@
+
 // src/App.js
 import React from "react";
-import Table from "./Table";
+import Table, {SelectColumnFilter} from "./Table";
 
 const getData = () => [
   {
@@ -83,6 +84,8 @@ function App() {
       {
         Header: "Role",
         accessor: "role",
+        Filter: SelectColumnFilter,  // new
+        filter: 'includes',  // new
       },
     ],
     []
@@ -90,12 +93,15 @@ function App() {
 
   const data = React.useMemo(() => getData(), []);
 
+
+
   return (
     <>
       <h1>Hello React!</h1>
       <div>
         <Table columns={columns} data={data} />
       </div>
+
     </>
   );
 }

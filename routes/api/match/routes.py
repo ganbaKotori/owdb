@@ -1,9 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, make_response, jsonify
 from app import db
 from models.match.Match import Match
-from models.match.MatchPhase import MatchPhase
-from models.match.MatchResult import MatchResult
-from models.match.MatchRound import MatchRound
 from models.match.MatchHero import MatchHero
 from models.match.MatchUser import MatchUser
 from models.map.Map import Map
@@ -15,14 +12,48 @@ from routes.api.match.forms import CreateMatchForm
 import routes.api.user.utils as user_utils
 from datetime import datetime
 from sqlalchemy import and_
+from utils.match.utils import add_match_to_db
 
 match = Blueprint('match', __name__, url_prefix='/match')
 
 @match.post('')
 @login_required
 def add_match():
-    print(request.form)
-    print(request.form.get('datetime-match-played'))
+    # form = CreateMatchForm()
+    # current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
+    # for f in form.tagged_friends:
+    #     f.username.choices = current_user_friends
+    # if form.validate_on_submit():
+    #     hero_role = int(request.form.get('ow_hero_role'))
+    #     ow_map = request.form.get('ow_map')
+    #     heroes = [int(hero_id) for hero_id in request.form.getlist('ow_heroes')]
+    #     date_match_played = datetime.strptime(request.form.get('datetime-match-played'), '%Y-%m-%d %H:%M') 
+    #     match_mode = int(request.form.get('match-mode'))
+    #     if match_mode == 1:
+    #         ranked_flag = True
+    #     else: ranked_flag = False
+    #     map_played = Map.query.filter(Map.id==int(ow_map)).first_or_404()
+    #     new_match = Match(created_by_user_id=current_user.id, ranked_flag=ranked_flag, map_played=map_played, date_match_played=date_match_played)
+    #     for hero in heroes:
+    #         a = MatchHero()
+    #         a.hero = Hero.query.filter(Hero.id==int(hero)).first_or_404()
+    #         new_match.heroes_played.append(a)
+    #     for round in form.data['match_rounds']:
+    #         new_match.add_round(phase=round['phase'], score=round['score'])
+    #     new_match.add_user(user=current_user, accepted_flag=True, hero_role_id=hero_role, heroes_played=heroes)
+    #     for friend in form.data['tagged_friends']:
+    #         if friend['role'] == 'DAMAGE':
+    #             hero_role = 1
+    #         elif friend['role'] == 'SUPPORT':
+    #             hero_role = 2
+    #         elif ['role'] == 'TANK':
+    #             hero_role = 3
+    #         friend = User.query.filter(User.username==friend['username']).first()
+    #         if friend:
+    #             new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)
+    #     db.session.add(new_match)
+    #     db.session.commit()
+
     form = CreateMatchForm()
     current_user_friends = [(f, f) for f in user_utils.get_current_user_friends()]
     for f in form.tagged_friends:
@@ -55,8 +86,9 @@ def add_match():
             friend = User.query.filter(User.username==friend['username']).first()
             if friend:
                 new_match.add_user(user=friend,accepted_flag=False,hero_role_id=hero_role)
-        db.session.add(new_match)
-        db.session.commit()
+
+        match_users = []
+        add_match_to_db(created_by_user=current_user, map_played=map_played, date_match_played=date_match_played, match_users=match_users)
         return redirect(url_for('client.dashboard.user_dashboard')) 
     else:
         print(form.errors) 

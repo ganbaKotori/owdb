@@ -16,12 +16,14 @@ from sqlalchemy import and_
 import routes.api.match.utils as match_utils
 from routes.api.match.schema import MatchSchema
 
+from utils.map.utils import get_all_map_json
+
 match = Blueprint('match', __name__, url_prefix='/m')
 
 @match.get('/create')
 @login_required
 def get_create_match_page():
-    ow_maps = Map.query.order_by(Map.name.asc()).all()
+    ow_maps = get_all_map_json()
     ow_heroes = Hero.query.order_by(Hero.name.asc()).all()
     ow_hero_roles = HeroRole.query.all()
     friends = user_utils.get_current_user_friends()

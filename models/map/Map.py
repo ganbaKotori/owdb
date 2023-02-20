@@ -6,5 +6,3 @@ class Map(db.Model):
     name = db.Column(db.String(25))
     map_mode_id = db.Column(db.Integer, db.ForeignKey('ow_map_mode.id'))
     map_mode = db.relationship("MapMode")
-
-    map_stages = db.relationship('MapStage', backref='ow_map')

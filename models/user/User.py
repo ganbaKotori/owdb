@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 
-from dataclasses import dataclass
 from app import db, login_manager    
 from typing import List
 from sqlalchemy import and_, func, or_

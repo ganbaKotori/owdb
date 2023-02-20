@@ -9,6 +9,9 @@ from sqlalchemy import select, func
 from datetime import datetime
 from sqlalchemy.sql import case
 from flask_login import current_user
+from models.match.MatchRound import MatchRound
+from models.match.MatchPhase import MatchPhase
+from models.match.MatchResult import MatchResult
 
 class Match(db.Model):
     __tablename__ = "ow_match"
