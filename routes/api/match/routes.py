@@ -13,8 +13,15 @@ import routes.api.user.utils as user_utils
 from datetime import datetime
 from sqlalchemy import and_
 from utils.match.utils import add_match_to_db
+import routes.api.match.utils as match_utils
 
 match = Blueprint('match', __name__, url_prefix='/match')
+
+@match.get('')
+def get_matches():
+    matches = match_utils.get_current_user_matches(3)
+    return make_response(jsonify(matches),200)
+
 
 @match.post('')
 @login_required

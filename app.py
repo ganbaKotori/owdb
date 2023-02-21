@@ -4,6 +4,7 @@ import pymysql, os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv, find_dotenv
+from flask_cors import CORS, cross_origin
 
 load_dotenv(find_dotenv())
 DB_USERNAME =os.getenv('DB_USERNAME')
@@ -16,6 +17,8 @@ conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(DB_USERNAME,DB_PASSWORD,DB_URI,D
 login_manager = LoginManager()
 
 app = Flask(__name__, template_folder='static/templates')
+
+CORS(app, supports_credentials=True) 
 
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
