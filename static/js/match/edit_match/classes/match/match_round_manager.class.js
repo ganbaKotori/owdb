@@ -5,8 +5,12 @@ class MatchRoundManager {
 		this.match_rounds = match_rounds;
 	}
 
-	add_round(match_round) {
-		this.match_rounds.push(match_round);
+	get_rounds() {
+		return this.match_rounds;
+	}
+
+	add_round(phase = MatchRoundPhase.Attack, score = 0) {
+		this.match_rounds.push(new MatchRound(phase, score, this.get_next_match_round_iteration()));
 	}
 
 	remove_round_by_id(match_round_id) {

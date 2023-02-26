@@ -13,6 +13,14 @@ class Match {
 		return this.match_user_manager.get_tagged_friends();
 	}
 
+	get_rounds() {
+		return this.match_round_manager.get_rounds();
+	}
+
+	get_match_round_manager() {
+		return this.match_round_manager;
+	}
+
 	// set_current_ow_map(ow_map) {
 	// 	if(this.current_map_selected != null && this.current_map_selected.map_mode != ow_map.map_mode){
 	//         if (confirm("Changing to a different Match Mode will reset Match Rounds. Continue?") == true) {

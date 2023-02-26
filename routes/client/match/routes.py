@@ -14,9 +14,10 @@ from sqlalchemy.orm import joinedload
 from models.user.User import User
 from sqlalchemy import and_
 import routes.api.match.utils as match_utils
-from routes.api.match.schema import MatchSchema
+from schema.match.MatchSchema import MatchSchema
 
 from utils.map.utils import get_all_map_json
+from utils.hero.utils import get_all_heroes_json
 
 match = Blueprint('match', __name__, url_prefix='/m')
 
@@ -44,8 +45,8 @@ def get_view_match_page(match_id):
 @match.get('/<int:match_id>/edit')
 @login_required
 def get_edit_match_page(match_id):
-    ow_maps = Map.query.order_by(Map.name.asc()).all()
-    ow_heroes = Hero.query.order_by(Hero.name.asc()).all()
+    ow_maps = get_all_map_json()
+    ow_heroes = get_all_heroes_json()
     ow_hero_roles = HeroRole.query.all()
     ow_map_modes = MapMode.query.order_by().all()
     form = CreateMatchForm()
@@ -63,7 +64,7 @@ def get_edit_match_page(match_id):
     print(c_u_hero_role_id)#
     
     return render_template('match/edit_match.html',
-                            match=match,
+                            match=match_json,
                             ow_maps=ow_maps,
                             ow_heroes=ow_heroes,
                             ow_hero_roles=ow_hero_roles,
