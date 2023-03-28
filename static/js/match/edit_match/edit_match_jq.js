@@ -2,15 +2,15 @@ $(document).ready(function() {
 	let jq2 = () => {
 		$('.ow-hero-check').hide();
 
-		$('.ow-hero-role-radio-btn').on('change', function() {
-			console.log($(this).val());
-			$('.ow-hero-check').hide();
-			$(`.ow-hero-check-role-${$(this).val()}`).show();
-		});
+		// $('.ow-hero-role-radio-btn').on('change', function() {
+		// 	console.log($(this).val());
+		// 	$('.ow-hero-check').hide();
+		// 	$(`.ow-hero-check-role-${$(this).val()}`).show();
+		// });
 
-		$('.add-round-btn').on('click', function() {
-			match.add_round('ATTACK', 0);
-		});
+		// $('.add-round-btn').on('click', function() {
+		// 	match.add_round('ATTACK', 0);
+		// });
 
 		$(document).on('click', '.minus-btn', function() {
 			let round_id = $(this).data('round-id');
@@ -164,10 +164,23 @@ const render_all = (match_manager, render_manager) => {
 };
 
 const jq = (match_manager, render_manager) => {
+	$('.ow-hero-role-radio-btn').on('change', function() {
+		console.log($(this).val());
+		$('.ow-hero-check').hide();
+		$(`.ow-hero-check-role-${$(this).val()}`).show();
+	});
+
 	$('.add-round-btn').on('click', render_all, function() {
 		console.log('render');
 		match_manager.get_match().get_match_round_manager().add_round();
 		//render_manager.render_match_round(MATCH_ROUND_LIST_CLASSNAME);
 		render_all(match_manager, render_manager);
+	});
+
+	$(document).on('click', '.delete-round-btn', function() {
+		const round_id = parseInt($(this).data('round-id'));
+		match_manager.get_match().get_match_round_manager().delete_round(round_id);
+		console.log(round_id);
+		//match.remove_round($(this).parent().parent().parent());
 	});
 };

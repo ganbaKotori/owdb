@@ -12,6 +12,12 @@ class MatchRoundManager {
 	add_round(phase = MatchRoundPhase.Attack, score = 0) {
 		this.match_rounds.push(new MatchRound(phase, score, this.get_next_match_round_iteration()));
 	}
+	//NOTE: FIX THIS
+	delete_round(round_id) {
+		var round = homes.filter(function(r) {
+			return r.price === 1000;
+		});
+	}
 
 	remove_round_by_id(match_round_id) {
 		let match_round_index = this.match_rounds.findIndex((mr) => {
