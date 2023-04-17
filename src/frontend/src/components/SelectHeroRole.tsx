@@ -19,15 +19,18 @@ const SelectField: React.FC<SelectFieldProps> = ({ options, label, value, onChan
 	};
 
 	return (
-		<div>
-			<select value={selectedValue} onChange={handleValueChange}>
+		<>
+		<label>
+			Hero Role:
+		</label>
+		<select value={selectedValue} onChange={handleValueChange}>
 				{options.map((option, index) => (
 					<option key={index} value={option}>
 						{option}
 					</option>
 				))}
 			</select>
-		</div>
+		</>
 	);
 };
 
